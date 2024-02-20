@@ -13,6 +13,18 @@ public partial class Game : Node
     public static float Time { get; private set; }
     public static float FixedTime { get; private set; }
 
+    // MOUSE
+    public static bool MouseLocked
+    {
+        get => _mouseLocked;
+        set {
+            _mouseLocked = value;
+            Input.MouseMode = value ? 
+                Input.MouseModeEnum.Captured : Input.MouseModeEnum.Visible;
+        }
+    }
+    private static bool _mouseLocked;
+
     public override void _EnterTree()
     {
         if (Instance != null)
@@ -28,6 +40,11 @@ public partial class Game : Node
         ProcessPriority = (int)NodeProcessOrder.Game;
     }
 
+    public override void _Ready()
+    {
+        MouseLocked = true;
+    }
+
     public override void _Process(double delta)
     {
         DeltaTime = (float) delta;
@@ -35,6 +52,10 @@ public partial class Game : Node
 
         if (Input.IsActionJustPressed("quit")) {
             GetTree().Quit();
+        }
+
+        if (Input.IsActionJustPressed("unfocus")) {
+            MouseLocked = !MouseLocked;
         }
     }
 

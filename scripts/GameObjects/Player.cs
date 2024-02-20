@@ -13,7 +13,7 @@ public partial class Player : RigidBody3D
 {
     [ExportGroup("References")]
     [Export] private PlayerInput _input;
-    [Export] private GroundCheck _groundCheck;
+    [Export] private GroundCheckComponent _groundCheck;
 
     [Node("Head")] private Node3D _head;
     [Node("Head/Camera")] private Camera3D _camera;
@@ -23,9 +23,7 @@ public partial class Player : RigidBody3D
 
     [ExportSubgroup("Run")]
     [Export] private float RunSpeed;
-    [Export] private float RunAccel;
     [Export] private float AirAccelMult;
-    [Export] private float AirDecelMult;
 
     [ExportSubgroup("Jump")]
     [Export] private float JumpForce;
@@ -48,19 +46,22 @@ public partial class Player : RigidBody3D
     public override void _Ready()
     {
         ProcessPriority = (int)NodeProcessOrder.Player;
+        AddToGroup("player");
 
         _groundCheck.OnIsNotGrounded += () => {
             IsJumping = false;
         };
-
-        Input.MouseMode = Input.MouseModeEnum.Captured;
     }
 
     public override void _Input(InputEvent e)
     {
+        if (!Game.MouseLocked) {
+            return;
+        }
+
         if (e is InputEventMouseMotion motion) {
-            _head.RotateY(-motion.Relative.X * Sensitivity / 10000f);
-            _camera.RotateX(motion.Relative.Y * Sensitivity / 10000f);
+            _head.RotateY(-motion.Relative.X * (Sensitivity - 40) / 10000f);
+            _camera.RotateX(motion.Relative.Y * (Sensitivity - 40) / 10000f);
             
             const float MIN_ROT = -80f * (Mathf.Pi / 180f);
             const float MAX_ROT = 80f * (Mathf.Pi / 180f);
@@ -83,6 +84,8 @@ public partial class Player : RigidBody3D
         _moveDir = (forward + right).Normalized();
     }
 
+    private Vector3 _diffDir;
+    private bool _diff;
     public override void _IntegrateForces(PhysicsDirectBodyState3D state)
     {
         _moveDir2 = _moveDir * Game.FixedDeltaTime * RunSpeed;
@@ -95,6 +98,8 @@ public partial class Player : RigidBody3D
             
             state.LinearVelocity = new(state.LinearVelocity.X, y, state.LinearVelocity.Z);
             state.SetConstantForce(Vector3.Zero);
+
+            _diff = false;
         }
         else {
             GravityScale = 1;
@@ -104,6 +109,32 @@ public partial class Player : RigidBody3D
             var cZ = (_moveDir2.Z > 0 && vel.Z < _moveDir2.Z) || (_moveDir2.Z < 0 && vel.Z > _moveDir2.Z);
 
             var airForce = new Vector3(cX ? _moveDir2.X : 0, _moveDir2.Y, cZ ? _moveDir2.Z : 0) * AirAccelMult;
+
+            var vel0 = state.LinearVelocity.WithY(0);
+            if (vel0.Normalized().DotLess(_moveDir, 0.25f)) {
+                var f = -vel0 / Game.FixedDeltaTime * 0.25f;
+                state.ApplyForce(f);
+            }
+            if (vel0.Normalized().DotLess(_moveDir, 0.9f)) {
+                var f = _moveDir2 - vel0;
+                state.ApplyForce(f);
+            }
+            // if (_diff) {
+            //     var vel0Norm = vel0.Normalized();
+            //     if (vel0Norm.DotLess(_diffDir, 0.75f) || vel0Norm.DotGreater(_moveDir, 0.75f, false)) {
+            //         _diff = false;
+            //     }
+            // } else {
+            //     if (vel0.Normalized().DotLess(_moveDir, 0.25f)) {
+            //         _diff = true;
+            //         _diffDir = vel0;
+            //     }
+            // }
+            // if (_diff) {
+            //     var f = -_diffDir / Game.FixedDeltaTime * 0.25f;
+            //     state.ApplyForce(f);
+            // }
+
             state.ApplyForce(airForce);
         }
     }

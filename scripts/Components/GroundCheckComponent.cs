@@ -8,7 +8,7 @@ using Yellow.Resources;
 namespace Yellow.Components;
 
 [GlobalClass]
-public partial class GroundCheck : Area3D
+public partial class GroundCheckComponent : Area3D
 {
     [ExportGroup("Settings")]
     [Export(PropertyHint.Layers3DPhysics)] private int LayerMask;
@@ -70,7 +70,7 @@ public partial class GroundCheck : Area3D
 
     private void OnBodyEntered(Node3D body)
     {
-        if (body is not PhysicsBody3D pBody || !IsCheckable(pBody)) {
+        if (body is not PhysicsBody3D pBody || !IsCheckable(pBody) || pBody.IsInGroup("player")) {
             return;
         }
         _colls.Add(pBody);
@@ -90,7 +90,7 @@ public partial class GroundCheck : Area3D
 
     private void OnBodyExited(Node3D body)
     {
-        if (body is not PhysicsBody3D pBody || !IsCheckable(pBody)) {
+        if (body is not PhysicsBody3D pBody || !IsCheckable(pBody) || pBody.IsInGroup("player")) {
             return;
         }
         _colls.Remove(pBody);

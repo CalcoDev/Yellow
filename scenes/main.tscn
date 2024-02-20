@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://7vap7yixm4ha"]
+[gd_scene load_steps=22 format=3 uid="uid://7vap7yixm4ha"]
 
 [ext_resource type="Script" path="res://addons/qodot/src/nodes/qodot_map.gd" id="1_4c04o"]
 [ext_resource type="Script" path="res://scripts/Managers/Game.cs" id="1_xylgx"]
@@ -7,39 +7,35 @@
 [ext_resource type="Resource" uid="uid://yf2osyn4pvt3" path="res://resources/player_input.tres" id="3_10npm"]
 [ext_resource type="Texture2D" uid="uid://13tqnnnqhojk" path="res://textures/grid/dark/texture_01.png" id="3_h5tko"]
 [ext_resource type="Script" path="res://scripts/GameObjects/Player.cs" id="3_rc2ke"]
-[ext_resource type="Script" path="res://scripts/Components/GroundCheck.cs" id="6_1pmot"]
-[ext_resource type="Script" path="res://scripts/Components/GroundPropertiesComponent.cs" id="6_swj6s"]
+[ext_resource type="Script" path="res://scripts/Components/GroundCheckComponent.cs" id="6_1pmot"]
 [ext_resource type="Resource" uid="uid://okxparq80j4b" path="res://resources/ground_properties/default_ground_props.tres" id="9_ge3qk"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q8w2k"]
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_cp5nm"]
-friction = 0.0
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lh82m"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2oiva"]
 albedo_texture = ExtResource("3_h5tko")
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_56jtu"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_ejw5b"]
 _surfaces = [{
-"aabb": AABB(0, -2, 0, 30, 2.00001, 32),
-"attribute_data": PackedByteArray(0, 0, 0, 189, 0, 0, 128, 61, 0, 0, 0, 189, 0, 0, 64, 62, 0, 0, 244, 191, 0, 0, 64, 62, 0, 0, 244, 191, 0, 0, 128, 61, 0, 0, 0, 0, 0, 0, 128, 61, 0, 0, 0, 64, 0, 0, 128, 61, 0, 0, 0, 64, 0, 0, 64, 62, 0, 0, 0, 0, 0, 0, 64, 62, 0, 0, 0, 0, 0, 0, 244, 191, 0, 0, 0, 0, 0, 0, 0, 189, 0, 0, 0, 192, 0, 0, 0, 189, 0, 0, 0, 192, 0, 0, 244, 191, 0, 0, 0, 0, 0, 0, 244, 191, 0, 0, 0, 64, 0, 0, 244, 191, 0, 0, 0, 64, 0, 0, 0, 189, 0, 0, 0, 0, 0, 0, 0, 189, 0, 0, 0, 0, 0, 0, 128, 61, 0, 0, 0, 0, 0, 0, 64, 62, 0, 0, 0, 192, 0, 0, 64, 62, 0, 0, 0, 192, 0, 0, 128, 61, 0, 0, 0, 61, 0, 0, 128, 61, 0, 0, 244, 63, 0, 0, 128, 61, 0, 0, 244, 63, 0, 0, 64, 62, 0, 0, 0, 61, 0, 0, 64, 62),
+"aabb": AABB(0, -2, 0, 60, 2.00001, 64),
+"attribute_data": PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 62, 0, 0, 240, 191, 0, 0, 0, 62, 0, 0, 240, 191, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 64, 0, 0, 0, 0, 0, 0, 0, 64, 0, 0, 0, 62, 0, 0, 0, 0, 0, 0, 0, 62, 0, 0, 0, 0, 0, 0, 240, 191, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 192, 0, 0, 0, 0, 0, 0, 0, 192, 0, 0, 240, 191, 0, 0, 0, 0, 0, 0, 240, 191, 0, 0, 0, 64, 0, 0, 240, 191, 0, 0, 0, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 62, 0, 0, 0, 192, 0, 0, 0, 62, 0, 0, 0, 192, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 240, 63, 0, 0, 0, 0, 0, 0, 240, 63, 0, 0, 0, 62, 0, 0, 0, 0, 0, 0, 0, 62),
 "format": 34359742487,
 "index_count": 36,
 "index_data": PackedByteArray(0, 0, 1, 0, 2, 0, 0, 0, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0, 4, 0, 6, 0, 7, 0, 8, 0, 9, 0, 10, 0, 8, 0, 10, 0, 11, 0, 12, 0, 13, 0, 14, 0, 12, 0, 14, 0, 15, 0, 16, 0, 17, 0, 18, 0, 16, 0, 18, 0, 19, 0, 20, 0, 21, 0, 22, 0, 20, 0, 22, 0, 23, 0),
-"material": SubResource("StandardMaterial3D_lh82m"),
+"material": SubResource("StandardMaterial3D_2oiva"),
 "name": "grid/dark/texture_01",
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 24,
-"vertex_data": PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 192, 0, 0, 0, 0, 0, 0, 240, 65, 0, 0, 0, 192, 0, 0, 0, 0, 0, 0, 240, 65, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 66, 0, 0, 0, 0, 0, 0, 0, 192, 0, 0, 0, 66, 0, 0, 0, 0, 0, 0, 0, 192, 0, 0, 0, 0, 0, 0, 240, 65, 0, 0, 0, 192, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 192, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 192, 0, 0, 0, 66, 0, 0, 240, 65, 0, 0, 0, 192, 0, 0, 0, 66, 0, 0, 240, 65, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 240, 65, 0, 0, 0, 0, 0, 0, 0, 66, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 66, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 240, 65, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 240, 65, 0, 0, 0, 192, 0, 0, 0, 0, 0, 0, 240, 65, 0, 0, 0, 192, 0, 0, 0, 66, 0, 0, 240, 65, 0, 0, 0, 0, 0, 0, 0, 66, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 66, 0, 0, 240, 65, 0, 0, 0, 0, 0, 0, 0, 66, 0, 0, 240, 65, 0, 0, 0, 192, 0, 0, 0, 66, 0, 0, 0, 0, 0, 0, 0, 192, 0, 0, 0, 66, 255, 255, 255, 255, 0, 0, 255, 191, 255, 255, 255, 255, 0, 0, 255, 191, 255, 255, 255, 255, 0, 0, 255, 191, 255, 255, 255, 255, 0, 0, 255, 191, 0, 0, 255, 127, 255, 127, 255, 191, 0, 0, 255, 127, 255, 127, 255, 191, 0, 0, 255, 127, 255, 127, 255, 191, 0, 0, 255, 127, 255, 127, 255, 191, 255, 127, 0, 0, 255, 255, 255, 255, 255, 127, 0, 0, 255, 255, 255, 255, 255, 127, 0, 0, 255, 255, 255, 255, 255, 127, 0, 0, 255, 255, 255, 255, 255, 127, 255, 255, 255, 127, 255, 191, 255, 127, 255, 255, 255, 127, 255, 191, 255, 127, 255, 255, 255, 127, 255, 191, 255, 127, 255, 255, 255, 127, 255, 191, 255, 255, 255, 127, 255, 255, 255, 255, 255, 255, 255, 127, 255, 255, 255, 255, 255, 255, 255, 127, 255, 255, 255, 255, 255, 255, 255, 127, 255, 255, 255, 255, 255, 127, 255, 127, 255, 255, 255, 191, 255, 127, 255, 127, 255, 255, 255, 191, 255, 127, 255, 127, 255, 255, 255, 191, 255, 127, 255, 127, 255, 255, 255, 191)
+"vertex_data": PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 192, 0, 0, 0, 0, 0, 0, 112, 66, 0, 0, 0, 192, 0, 0, 0, 0, 0, 0, 112, 66, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 66, 0, 0, 0, 0, 0, 0, 0, 192, 0, 0, 128, 66, 0, 0, 0, 0, 0, 0, 0, 192, 0, 0, 0, 0, 0, 0, 112, 66, 0, 0, 0, 192, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 192, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 192, 0, 0, 128, 66, 0, 0, 112, 66, 0, 0, 0, 192, 0, 0, 128, 66, 0, 0, 112, 66, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 112, 66, 0, 0, 0, 0, 0, 0, 128, 66, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 66, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 112, 66, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 112, 66, 0, 0, 0, 192, 0, 0, 0, 0, 0, 0, 112, 66, 0, 0, 0, 192, 0, 0, 128, 66, 0, 0, 112, 66, 0, 0, 0, 0, 0, 0, 128, 66, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 66, 0, 0, 112, 66, 0, 0, 0, 0, 0, 0, 128, 66, 0, 0, 112, 66, 0, 0, 0, 192, 0, 0, 128, 66, 0, 0, 0, 0, 0, 0, 0, 192, 0, 0, 128, 66, 255, 255, 255, 255, 0, 0, 255, 191, 255, 255, 255, 255, 0, 0, 255, 191, 255, 255, 255, 255, 0, 0, 255, 191, 255, 255, 255, 255, 0, 0, 255, 191, 0, 0, 255, 127, 255, 127, 255, 191, 0, 0, 255, 127, 255, 127, 255, 191, 0, 0, 255, 127, 255, 127, 255, 191, 0, 0, 255, 127, 255, 127, 255, 191, 255, 127, 0, 0, 255, 255, 255, 255, 255, 127, 0, 0, 255, 255, 255, 255, 255, 127, 0, 0, 255, 255, 255, 255, 255, 127, 0, 0, 255, 255, 255, 255, 255, 127, 255, 255, 255, 127, 255, 191, 255, 127, 255, 255, 255, 127, 255, 191, 255, 127, 255, 255, 255, 127, 255, 191, 255, 127, 255, 255, 255, 127, 255, 191, 255, 255, 255, 127, 255, 255, 255, 255, 255, 255, 255, 127, 255, 255, 255, 255, 255, 255, 255, 127, 255, 255, 255, 255, 255, 255, 255, 127, 255, 255, 255, 255, 255, 127, 255, 127, 255, 255, 255, 191, 255, 127, 255, 127, 255, 255, 255, 191, 255, 127, 255, 127, 255, 255, 255, 191, 255, 127, 255, 127, 255, 255, 255, 191)
 }]
 
-[sub_resource type="ArrayOccluder3D" id="ArrayOccluder3D_tpqei"]
-vertices = PackedVector3Array(0, 0, 0, 0, -2, 0, 30, -2, 0, 30, 0, 0, 0, 0, 0, 0, 0, 32, 0, -2, 32, 0, -2, 0, 30, -2, 0, 0, -2, 0, 0, -2, 32, 30, -2, 32, 30, 0, 0, 30, 0, 32, 0, 0, 32, 0, 0, 0, 30, 0, 0, 30, -2, 0, 30, -2, 32, 30, 0, 32, 0, 0, 32, 30, 0, 32, 30, -2, 32, 0, -2, 32)
+[sub_resource type="ArrayOccluder3D" id="ArrayOccluder3D_7pgi6"]
+vertices = PackedVector3Array(0, 0, 0, 0, -2, 0, 60, -2, 0, 60, 0, 0, 0, 0, 0, 0, 0, 64, 0, -2, 64, 0, -2, 0, 60, -2, 0, 0, -2, 0, 0, -2, 64, 60, -2, 64, 60, 0, 0, 60, 0, 64, 0, 0, 64, 0, 0, 0, 60, 0, 0, 60, -2, 0, 60, -2, 64, 60, 0, 64, 0, 0, 64, 60, 0, 64, 60, -2, 64, 0, -2, 64)
 indices = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, 8, 9, 10, 8, 10, 11, 12, 13, 14, 12, 14, 15, 16, 17, 18, 16, 18, 19, 20, 21, 22, 20, 22, 23)
 
-[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_0iqmc"]
-points = PackedVector3Array(0, 0, 0, 0, -2, 0, 30, -2, 0, 30, 0, 0, 0, 0, 32, 0, -2, 32, 30, -2, 32, 30, 0, 32)
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_crxld"]
+points = PackedVector3Array(0, 0, 0, 0, -2, 0, 60, -2, 0, 60, 0, 0, 0, 0, 64, 0, -2, 64, 60, -2, 64, 60, 0, 64)
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_xms1l"]
 
@@ -83,33 +79,27 @@ _update = true
 
 [node name="QodotMap" type="Node3D" parent="."]
 script = ExtResource("1_4c04o")
-map_file = "C:/Users/calco/Documents/Calcopod/Development/GameDev/Godot/Yellow/maps/sandbox.map"
+map_file = "res://maps/sandbox.map"
 entity_fgd = ExtResource("2_el4fi")
 texture_file_extensions = PackedStringArray("png", "jpg", "jpeg", "bmp")
 default_material = SubResource("StandardMaterial3D_q8w2k")
 
 [node name="entity_0_worldspawn" type="StaticBody3D" parent="QodotMap"]
-collision_mask = 0
-physics_material_override = SubResource("PhysicsMaterial_cp5nm")
-
-[node name="GroundProperties" type="Node" parent="QodotMap/entity_0_worldspawn"]
-script = ExtResource("6_swj6s")
-Properties = ExtResource("9_ge3qk")
 
 [node name="entity_0_mesh_instance" type="MeshInstance3D" parent="QodotMap/entity_0_worldspawn"]
-mesh = SubResource("ArrayMesh_56jtu")
+mesh = SubResource("ArrayMesh_ejw5b")
 
 [node name="entity_0_occluder_instance" type="OccluderInstance3D" parent="QodotMap/entity_0_worldspawn"]
-occluder = SubResource("ArrayOccluder3D_tpqei")
+occluder = SubResource("ArrayOccluder3D_7pgi6")
 
 [node name="entity_0_brush_0_collision_shape" type="CollisionShape3D" parent="QodotMap/entity_0_worldspawn"]
-shape = SubResource("ConvexPolygonShape3D_0iqmc")
+shape = SubResource("ConvexPolygonShape3D_crxld")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_lntm0")
 camera_attributes = SubResource("CameraAttributesPractical_1keek")
 
-[node name="Player" type="RigidBody3D" parent="." node_paths=PackedStringArray("_groundCheck")]
+[node name="Player" type="RigidBody3D" parent="." node_paths=PackedStringArray("_groundCheck") groups=["player"]]
 transform = Transform3D(-1.74846e-07, 0, -1, 0, 1, 0, 1, 0, -1.74846e-07, 26.9463, -0.197784, 3.95836)
 collision_layer = 1056
 can_sleep = false
@@ -118,10 +108,10 @@ continuous_cd = true
 script = ExtResource("3_rc2ke")
 _input = ExtResource("3_10npm")
 _groundCheck = NodePath("GroundCheck")
-Sensitivity = 30.0
+Sensitivity = 60.0
 RunSpeed = 1000.0
-AirAccelMult = 2.25
-JumpForce = 20.0
+AirAccelMult = 10.0
+JumpForce = 30.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Player"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -136,6 +126,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 
 [node name="Camera" type="Camera3D" parent="Player/Head"]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0)
+fov = 105.0
 
 [node name="GroundCheck" type="Area3D" parent="Player"]
 transform = Transform3D(8.74228e-08, 0, -1, 0, 1, 0, 1, 0, 8.74228e-08, 0, 0, 0)
