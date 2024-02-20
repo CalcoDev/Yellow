@@ -15,10 +15,16 @@ public partial class Player : RigidBody3D
     [Export] private PlayerInput _input;
     [Export] private GroundCheckComponent _groundCheck;
 
+    [ExportSubgroup("UI")]
+    [Export] private PlayerUIManager _ui;
+
     [Node("Head")] private Node3D _head;
 
     [ExportGroup("Movement")]
+    // TODO(calco): Move this to game manage or sth
     [Export] private float Sensitivity;
+
+    [Export] private float MaxStamina = 3f;
 
     [ExportSubgroup("Run")]
     [Export] private float RunSpeed;
@@ -28,12 +34,27 @@ public partial class Player : RigidBody3D
     [Export] private float JumpForce;
     [Export] private float JumpReleaseMult;
 
+    [ExportSubgroup("Dash")]
+    [Export] private float DashStaminaCost = 1f;
+    [Export] private float DashDuration = 0.2f;
+    [Export] private float DashSpeed;
+    [Export] private float DashEndSpeed;
+    // [Export] private float 
+
     // States
     public bool IsJumping { get; private set; } = false;
+    public bool IsDashing { get; private set; } = false;
 
     // Input
     private Vector3 _moveDir;
     private Vector3 _moveDir2;
+
+    // Stamina
+    private float _stamina;
+
+    // Dash
+    private Vector3 _dashDir;
+    private float _dashTimer;
 
     public override void _Notification(int what)
     {
@@ -69,21 +90,51 @@ public partial class Player : RigidBody3D
     }
     public override void _Process(double delta)
     {
-        if (_input.Jump == KeyState.Pressed) {
-            ApplyImpulse(Vector3.Up * JumpForce);
-            IsJumping = true;
+        _stamina = Mathf.Clamp(_stamina + Game.DeltaTime, 0f, MaxStamina);
+
+        // Jump
+        if (_groundCheck.IsOnGround && !IsJumping && _input.Jump == KeyState.Pressed) {
+            Jump();
         }
+
+        // TODO(calco): Variable jump
+
+        // Dash
+        if (IsDashing) {
+            _dashTimer -= Game.DeltaTime;
+            if (_dashTimer < 0f) {
+                StopDash();
+            }
+        } else if (_input.Dash == KeyState.Pressed && _stamina > DashStaminaCost) {
+            _stamina -= DashStaminaCost;
+            StartDash();
+        }
+
+        // Slide
 
         var right = _head.GlobalTransform.Basis.X * -_input.Movement.X;
         var forward = _head.GlobalTransform.Basis.Z * _input.Movement.Y;
         _moveDir = (forward + right).Normalized();
+
+        _ui.DisplayStamina(_stamina);
     }
 
     private Vector3 _diffDir;
     private bool _diff;
+    private bool _wasDashing;
     public override void _IntegrateForces(PhysicsDirectBodyState3D state)
     {
         _moveDir2 = _moveDir * Game.FixedDeltaTime * RunSpeed;
+        if (IsDashing) {
+            GravityScale = 0f;
+            state.LinearVelocity = _dashDir * DashSpeed;
+        } 
+        else if (_wasDashing) {
+            _wasDashing = false;
+            GravityScale = 1f;
+            state.LinearVelocity = _dashDir * DashEndSpeed;
+        }
+
         if (_groundCheck.IsOnGround && !IsJumping) {
             GravityScale = _moveDir.LengthSquared() < 0.01f ? 0 : 1;
 
@@ -119,5 +170,25 @@ public partial class Player : RigidBody3D
 
     public override void _PhysicsProcess(double delta)
     {
+    }
+
+    // MOVEMENT
+    private void Jump()
+    {
+        ApplyImpulse(Vector3.Up * JumpForce);
+        IsJumping = true;
+    }
+
+    private void StartDash()
+    {
+        IsDashing = true;
+        _wasDashing = true;
+        _dashDir = _moveDir.LengthSquared() > 0.01f ? _moveDir : _head.Forward();
+        _dashTimer = DashDuration;
+    }
+
+    private void StopDash()
+    {
+        IsDashing = false;
     }
 }
