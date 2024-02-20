@@ -1,0 +1,14 @@
+[remap]
+
+importer="qodot.map"
+type="Resource"
+uid="uid://b0lqk8nekqk4i"
+path="res://.godot/imported/sandbox.map-ff533d24f7e69c9522aca4b5837ef716.tres"
+
+[deps]
+
+source_file="res://maps/sandbox.map"
+dest_files=["res://.godot/imported/sandbox.map-ff533d24f7e69c9522aca4b5837ef716.tres"]
+
+[params]
+

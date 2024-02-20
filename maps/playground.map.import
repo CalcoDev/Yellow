@@ -1,0 +1,14 @@
+[remap]
+
+importer="qodot.map"
+type="Resource"
+uid="uid://ctlv1xxapl0hk"
+path="res://.godot/imported/playground.map-469e48cdd7e399b86e7b593272608dac.tres"
+
+[deps]
+
+source_file="res://maps/playground.map"
+dest_files=["res://.godot/imported/playground.map-469e48cdd7e399b86e7b593272608dac.tres"]
+
+[params]
+

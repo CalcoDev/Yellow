@@ -1,0 +1,14 @@
+[remap]
+
+importer="qodot.map"
+type="Resource"
+uid="uid://37hc7rcewfpb"
+path="res://.godot/imported/playground.1.map-a3d7f77306f32d042c0cde04f6a2b88d.tres"
+
+[deps]
+
+source_file="res://maps/autosave/playground.1.map"
+dest_files=["res://.godot/imported/playground.1.map-a3d7f77306f32d042c0cde04f6a2b88d.tres"]
+
+[params]
+

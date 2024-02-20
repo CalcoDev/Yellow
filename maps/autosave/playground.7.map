@@ -1,0 +1,17 @@
+// Game: Yellow
+// Format: Valve
+// entity 0
+{
+"mapversion" "220"
+"classname" "worldspawn"
+"_tb_textures" "textures/grid/dark"
+// brush 0
+{
+( -64 -32 -16 ) ( -64 -31 -16 ) ( -64 -32 -15 ) grid/dark/texture_01 [ 0 -1 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( -64 -32 -16 ) ( -64 -32 -15 ) ( -63 -32 -16 ) grid/dark/texture_01 [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( -64 -32 -16 ) ( -63 -32 -16 ) ( -64 -31 -16 ) grid/dark/texture_01 [ -1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
+( 32 96 0 ) ( 32 97 0 ) ( 33 96 0 ) grid/dark/texture_01 [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
+( 32 96 0 ) ( 33 96 0 ) ( 32 96 1 ) grid/dark/texture_01 [ -1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 32 96 0 ) ( 32 96 1 ) ( 32 97 0 ) grid/dark/texture_01 [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
+}
+}
