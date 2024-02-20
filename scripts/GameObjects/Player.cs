@@ -16,7 +16,6 @@ public partial class Player : RigidBody3D
     [Export] private GroundCheckComponent _groundCheck;
 
     [Node("Head")] private Node3D _head;
-    [Node("Head/Camera")] private Camera3D _camera;
 
     [ExportGroup("Movement")]
     [Export] private float Sensitivity;
@@ -60,16 +59,12 @@ public partial class Player : RigidBody3D
         }
 
         if (e is InputEventMouseMotion motion) {
-            _head.RotateY(-motion.Relative.X * (Sensitivity - 40) / 10000f);
-            _camera.RotateX(motion.Relative.Y * (Sensitivity - 40) / 10000f);
+            var sens = Mathf.Lerp(0f, 1f, Sensitivity / 100f) / 350f;
+            var x = -motion.Relative.X * sens;
+            var y = motion.Relative.Y * sens;
             
-            const float MIN_ROT = -80f * (Mathf.Pi / 180f);
-            const float MAX_ROT = 80f * (Mathf.Pi / 180f);
-            _camera.Rotation = new (
-                Mathf.Clamp(_camera.Rotation.X, MIN_ROT, MAX_ROT),
-                _camera.Rotation.Y,
-                _camera.Rotation.Z
-            );
+            _head.RotateY(x);
+            CameraManager.Instance.DoRotation(x, y);
         }
     }
     public override void _Process(double delta)
@@ -110,32 +105,15 @@ public partial class Player : RigidBody3D
 
             var airForce = new Vector3(cX ? _moveDir2.X : 0, _moveDir2.Y, cZ ? _moveDir2.Z : 0) * AirAccelMult;
 
-            var vel0 = state.LinearVelocity.WithY(0);
-            if (vel0.Normalized().DotLess(_moveDir, 0.25f)) {
-                var f = -vel0 / Game.FixedDeltaTime * 0.25f;
-                state.ApplyForce(f);
-            }
-            if (vel0.Normalized().DotLess(_moveDir, 0.9f)) {
-                var f = _moveDir2 - vel0;
-                state.ApplyForce(f);
-            }
-            // if (_diff) {
-            //     var vel0Norm = vel0.Normalized();
-            //     if (vel0Norm.DotLess(_diffDir, 0.75f) || vel0Norm.DotGreater(_moveDir, 0.75f, false)) {
-            //         _diff = false;
-            //     }
-            // } else {
-            //     if (vel0.Normalized().DotLess(_moveDir, 0.25f)) {
-            //         _diff = true;
-            //         _diffDir = vel0;
-            //     }
-            // }
-            // if (_diff) {
-            //     var f = -_diffDir / Game.FixedDeltaTime * 0.25f;
-            //     state.ApplyForce(f);
-            // }
-
             state.ApplyForce(airForce);
+            // Try to 0 out movement and only move in target direction
+            if (_moveDir.LengthSquared() > 0.01) {
+                var vel0 = state.LinearVelocity.WithY(0);
+                var dot = 0.5f - _head.Transform.Basis.Z.Normalized().Dot(_moveDir2.Normalized()) / 2f;
+                var t = _moveDir2 * dot / 2f;
+                var f = t - vel0;
+                state.ApplyForce(f);
+            }
         }
     }
 

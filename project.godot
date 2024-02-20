@@ -86,6 +86,7 @@ unfocus={
 
 [layer_names]
 
+3d_render/layer_20="NO RENDER CAMERA"
 3d_physics/layer_1="LevelGeometry"
 3d_physics/layer_6="Entities"
 3d_physics/layer_11="Player"
@@ -93,7 +94,8 @@ unfocus={
 [physics]
 
 3d/physics_engine="JoltPhysics3D"
-3d/default_gravity=39.0
+3d/default_gravity=30.0
+common/default_gravity=30.0
 jolt_3d/collisions/areas_detect_static_bodies=true
 
 [rendering]

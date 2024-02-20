@@ -6,5 +6,6 @@ public enum NodeProcessOrder
     PlayerInput = -900,
     GroundChecks = -800,
     Player = -700,
-    Default = 0
+    Default = 0,
+    InterpolationComponents = 100,
 }
