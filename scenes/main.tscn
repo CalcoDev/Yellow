@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://7vap7yixm4ha"]
+[gd_scene load_steps=24 format=3 uid="uid://7vap7yixm4ha"]
 
 [ext_resource type="Script" path="res://addons/qodot/src/nodes/qodot_map.gd" id="1_4c04o"]
 [ext_resource type="Script" path="res://scripts/Managers/Game.cs" id="1_xylgx"]
@@ -8,8 +8,13 @@
 [ext_resource type="Texture2D" uid="uid://13tqnnnqhojk" path="res://textures/grid/dark/texture_01.png" id="3_h5tko"]
 [ext_resource type="Script" path="res://scripts/GameObjects/Player.cs" id="3_rc2ke"]
 [ext_resource type="Script" path="res://scripts/Components/GroundCheck.cs" id="6_1pmot"]
+[ext_resource type="Script" path="res://scripts/Components/GroundPropertiesComponent.cs" id="6_swj6s"]
+[ext_resource type="Resource" uid="uid://okxparq80j4b" path="res://resources/ground_properties/default_ground_props.tres" id="9_ge3qk"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q8w2k"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_cp5nm"]
+friction = 0.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lh82m"]
 albedo_texture = ExtResource("3_h5tko")
@@ -84,6 +89,12 @@ texture_file_extensions = PackedStringArray("png", "jpg", "jpeg", "bmp")
 default_material = SubResource("StandardMaterial3D_q8w2k")
 
 [node name="entity_0_worldspawn" type="StaticBody3D" parent="QodotMap"]
+collision_mask = 0
+physics_material_override = SubResource("PhysicsMaterial_cp5nm")
+
+[node name="GroundProperties" type="Node" parent="QodotMap/entity_0_worldspawn"]
+script = ExtResource("6_swj6s")
+Properties = ExtResource("9_ge3qk")
 
 [node name="entity_0_mesh_instance" type="MeshInstance3D" parent="QodotMap/entity_0_worldspawn"]
 mesh = SubResource("ArrayMesh_56jtu")
@@ -99,14 +110,18 @@ environment = SubResource("Environment_lntm0")
 camera_attributes = SubResource("CameraAttributesPractical_1keek")
 
 [node name="Player" type="RigidBody3D" parent="." node_paths=PackedStringArray("_groundCheck")]
-transform = Transform3D(8.74228e-08, 0, 1, 0, 1, 0, -1, 0, 8.74228e-08, 26.9463, 0.802216, 3.95836)
+transform = Transform3D(-1.74846e-07, 0, -1, 0, 1, 0, 1, 0, -1.74846e-07, 26.9463, -0.197784, 3.95836)
+collision_layer = 1056
 can_sleep = false
+lock_rotation = true
+continuous_cd = true
 script = ExtResource("3_rc2ke")
 _input = ExtResource("3_10npm")
 _groundCheck = NodePath("GroundCheck")
-
-[node name="Camera3D" type="Camera3D" parent="Player"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+Sensitivity = 30.0
+RunSpeed = 1000.0
+AirAccelMult = 2.25
+JumpForce = 20.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Player"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -116,10 +131,17 @@ mesh = SubResource("CapsuleMesh_0m1ta")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_bh7jh")
 
+[node name="Head" type="Node3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+
+[node name="Camera" type="Camera3D" parent="Player/Head"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0)
+
 [node name="GroundCheck" type="Area3D" parent="Player"]
 transform = Transform3D(8.74228e-08, 0, -1, 0, 1, 0, 1, 0, 8.74228e-08, 0, 0, 0)
 script = ExtResource("6_1pmot")
 LayerMask = 33
+DefaultGroundProperties = ExtResource("9_ge3qk")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Player/GroundCheck"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0822754, 0)

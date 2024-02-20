@@ -13,11 +13,11 @@ public partial class PlayerInput : Resource
         Up
     }
 
-    [Export] public Vector2 Movement;
-    [Export] public KeyState Jump;
-    [Export] public KeyState Slide;
-    [Export] public KeyState Dash;
+    [Export] public Vector2 Movement = Vector2.Zero;
+    [Export] public KeyState Jump = KeyState.Up;
+    [Export] public KeyState Slide = KeyState.Up;
+    [Export] public KeyState Dash = KeyState.Up;
 
-    [Export] public KeyState LMB;
-    [Export] public KeyState RMB;
+    [Export] public KeyState LMB = KeyState.Up;
+    [Export] public KeyState RMB = KeyState.Up;
 }

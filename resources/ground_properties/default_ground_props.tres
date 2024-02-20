@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="GroundProperties" load_steps=2 format=3 uid="uid://okxparq80j4b"]
+
+[ext_resource type="Script" path="res://scripts/Resources/GroundProperties.cs" id="1_rwd5c"]
+
+[resource]
+script = ExtResource("1_rwd5c")
+Friction = 1.0
+SpeedMultiplier = 1.0
+AllowJump = true
+AllowSlide = true
+AllowDash = true
+OverrideFootstep = false

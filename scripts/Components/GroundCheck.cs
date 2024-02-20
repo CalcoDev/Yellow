@@ -11,13 +11,26 @@ namespace Yellow.Components;
 public partial class GroundCheck : Area3D
 {
     [ExportGroup("Settings")]
-    [Export(PropertyHint.Layers2DPhysics)] private int LayerMask;
+    [Export(PropertyHint.Layers3DPhysics)] private int LayerMask;
+    [Export] private GroundProperties DefaultGroundProperties;
 
     [ExportGroup("Debug View")]
-    [Export] public bool OnGround { get; private set; }
+    [Export] public bool IsOnGround { get; private set; }
     [Export] public bool OnSlope { get; private set; }
     [Export] public float SlopeAngle { get; private set; }
     [Export] public GroundProperties GroundProperties { get; private set; }
+
+    [Signal]
+    public delegate void OnEnterGroundEventHandler(PhysicsBody3D ground);
+
+    [Signal]
+    public delegate void OnExitGroundEventHandler(PhysicsBody3D ground);
+
+    [Signal]
+    public delegate void OnIsGroundedEventHandler();
+
+    [Signal]
+    public delegate void OnIsNotGroundedEventHandler();
 
     private bool _touchingGround = false;
 
@@ -29,13 +42,16 @@ public partial class GroundCheck : Area3D
         BodyExited += OnBodyExited;
 
         ProcessPriority = (int)NodeProcessOrder.GroundChecks;
+
+        GroundProperties = DefaultGroundProperties;
     }
 
     public override void _Process(double delta)
     {
         // NOTE(calco): Cringe, I know, but it allows for better frame control
-        if (OnGround != _touchingGround) {
-            OnGround = _touchingGround;
+        if (IsOnGround != _touchingGround) {
+            IsOnGround = _touchingGround;
+            EmitSignal(IsOnGround ? SignalName.OnIsGrounded : SignalName.OnIsNotGrounded);
         }
 
         // TODO(calco): Maybe add some logic to remove unusable bodies.
@@ -65,6 +81,8 @@ public partial class GroundCheck : Area3D
             GroundProperties = groundProps.Properties;
         }
 
+        EmitSignal(SignalName.OnEnterGround, pBody);
+
         // TODO(calco): Figure out if slope and the slope angle.
         
         // TODO(calco): Handle moving platforms
@@ -77,7 +95,7 @@ public partial class GroundCheck : Area3D
         }
         _colls.Remove(pBody);
 
-        for (int i = _colls.Count; i >= 0; --i) {
+        for (int i = _colls.Count - 1; i >= 0; --i) {
             if (IsStillUsable(_colls[i])) {
                 var groundProps = _colls[i].GetFirstNodeOfType<GroundPropertiesComponent>();
                 if (groundProps != null) {
@@ -86,10 +104,12 @@ public partial class GroundCheck : Area3D
                 }
             }
         }
+        
+        EmitSignal(SignalName.OnExitGround, pBody);
 
         if (_colls.Count == 0) {
             _touchingGround = false;
-            GroundProperties = null;
+            GroundProperties = DefaultGroundProperties;
         }
 
         // TODO(calco): Handle moving platforms

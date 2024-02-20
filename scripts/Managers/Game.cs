@@ -32,6 +32,10 @@ public partial class Game : Node
     {
         DeltaTime = (float) delta;
         Time += DeltaTime;
+
+        if (Input.IsActionJustPressed("quit")) {
+            GetTree().Quit();
+        }
     }
 
     public override void _PhysicsProcess(double delta)
