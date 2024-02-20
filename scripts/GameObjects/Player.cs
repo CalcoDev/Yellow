@@ -1,6 +1,7 @@
 using Godot;
 using Yellow.Components;
 using Yellow.Managers;
+using Yellow.Misc;
 using Yellow.Resources;
 
 namespace Yellow.GameObjects;
@@ -10,7 +11,6 @@ public partial class Player : RigidBody3D
     [ExportGroup("References")]
     [Export] private PlayerInput _input;
     [Export] private GroundCheck _groundCheck;
-    [Export] private GroundCheck _slopeCheck;
 
     [ExportGroup("Movement")]
     [ExportSubgroup("Run")]
@@ -36,6 +36,7 @@ public partial class Player : RigidBody3D
 
     public override void _Ready()
     {
+        ProcessPriority = (int)NodeProcessOrder.Player;
     }
 
     public override void _Process(double delta)

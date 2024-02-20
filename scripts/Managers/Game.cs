@@ -1,4 +1,5 @@
 using Godot;
+using Yellow.Misc;
 
 namespace Yellow.Managers;
 
@@ -22,6 +23,9 @@ public partial class Game : Node
         }
 
         Instance = this;
+
+        // Make this node execute first, always.
+        ProcessPriority = (int)NodeProcessOrder.Game;
     }
 
     public override void _Process(double delta)

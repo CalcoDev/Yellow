@@ -1,5 +1,6 @@
 using Godot;
 using Godot.NativeInterop;
+using Yellow.Misc;
 using Yellow.Resources;
 
 namespace Yellow.Managers;
@@ -13,6 +14,11 @@ public partial class InputManager : Node
 
     [ExportGroup("Settings")]
     [Export] private bool _update;
+
+    public override void _Ready()
+    {
+        ProcessPriority = (int)NodeProcessOrder.PlayerInput;
+    }
 
     public override void _Process(double delta)
     {

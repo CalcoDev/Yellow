@@ -74,6 +74,12 @@ slide={
 ]
 }
 
+[layer_names]
+
+2d_physics/layer_1="LevelGeometry"
+2d_physics/layer_6="Entities"
+2d_physics/layer_11="Player"
+
 [physics]
 
 3d/default_gravity=39.2
