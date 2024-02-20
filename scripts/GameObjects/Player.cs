@@ -184,11 +184,11 @@ public partial class Player : RigidBody3D
             state.ApplyForce(airForce);
             // Try to 0 out movement and only move in target direction
             var vel0 = state.LinearVelocity.WithY(0);
-            if (_moveDir.LengthSquared() > 0.01 && vel0.Normalized().DotLess(_moveDir, 0.85f)) {
-                var dot = Mathf.Clamp(0.5f - _head.Transform.Basis.Z.Normalized().Dot(_moveDir2.Normalized()) / 2f, 0f, 1f);
+            if (_moveDir.LengthSquared() > 0.01 && vel0.Normalized().DotLess(_moveDir, 0.99f, false)) {
+                var v = Mathf.Abs(_head.Transform.Basis.Z.Normalized().Dot(_moveDir2.Normalized()));;
                 var t = _moveDir2;
                 var f = t - vel0;
-                var mult = (IsJumping && IsDashJump ? 8f : 2f) * (1f + 0.5f * dot);
+                var mult = (IsJumping && IsDashJump ? 2f : 1f) * (1f + 0.25f * v) * AirAccelMult;
                 state.ApplyForce(f * mult);
             }
         }

@@ -43,8 +43,8 @@ public partial class CameraManager : Node3D
         RotateY(x);
         _cam.RotateZ(y);
         
-        const float MIN_ROT = -80f * (Mathf.Pi / 180f);
-        const float MAX_ROT = 80f * (Mathf.Pi / 180f);
+        const float MIN_ROT = -90f * (Mathf.Pi / 180f);
+        const float MAX_ROT = 90f * (Mathf.Pi / 180f);
         _cam.Rotation = new (
             Mathf.Clamp(_cam.Rotation.X, MIN_ROT, MAX_ROT),
             _cam.Rotation.Y,
