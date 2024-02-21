@@ -294,6 +294,7 @@ _ui = NodePath("../PlayerUI")
 Sensitivity = 44.0
 RunSpeed = 600.0
 AirAccelMult = 1.5
+MaxFallSpeed = 40.0
 JumpForce = 17.75
 DashDuration = 0.175
 DashSpeed = 35.0
@@ -306,6 +307,9 @@ SlideDirChangeMult = 0.2
 SlideSpeedReduce = 0.75
 SlideLeapMultiplier = 0.75
 SlideHopForce = 17.0
+ThwompDownForce = 60.0
+ThwompJumpBuffer = 0.1
+ThwompForceTimeMult = 2.0
 
 [node name="Head" type="Node3D" parent="Player"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
@@ -354,11 +358,158 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("9_rg4o0")
 
-[node name="PlayerUI" type="CanvasLayer" parent="." node_paths=PackedStringArray("_staminaBars")]
+[node name="PlayerUI" type="CanvasLayer" parent="." node_paths=PackedStringArray("_staminaBars", "_w", "_a", "_s", "_d", "_shift", "_lctrl", "_space")]
 script = ExtResource("13_0m6b1")
-_staminaBars = [NodePath("UI/GridContainer/ProgressBar"), NodePath("UI/GridContainer/ProgressBar2"), NodePath("UI/GridContainer/ProgressBar3")]
+_staminaBars = [NodePath("Grid/GridContainer/ProgressBar"), NodePath("Grid/GridContainer/ProgressBar2"), NodePath("Grid/GridContainer/ProgressBar3")]
+_w = NodePath("Keystrokes/W")
+_a = NodePath("Keystrokes/A")
+_s = NodePath("Keystrokes/S")
+_d = NodePath("Keystrokes/D")
+_shift = NodePath("Keystrokes/Shift")
+_lctrl = NodePath("Keystrokes/LCTRL")
+_space = NodePath("Keystrokes/Space")
 
-[node name="UI" type="ColorRect" parent="PlayerUI"]
+[node name="Keystrokes" type="ColorRect" parent="PlayerUI"]
+offset_right = 286.0
+offset_bottom = 411.0
+color = Color(0, 0, 0, 0.243137)
+
+[node name="W" type="ColorRect" parent="PlayerUI/Keystrokes"]
+layout_mode = 0
+offset_left = 106.0
+offset_top = 25.0
+offset_right = 173.0
+offset_bottom = 92.0
+
+[node name="Label" type="Label" parent="PlayerUI/Keystrokes/W"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "W"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="A" type="ColorRect" parent="PlayerUI/Keystrokes"]
+layout_mode = 0
+offset_left = 27.0
+offset_top = 99.0
+offset_right = 94.0
+offset_bottom = 166.0
+
+[node name="Label" type="Label" parent="PlayerUI/Keystrokes/A"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "A"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="S" type="ColorRect" parent="PlayerUI/Keystrokes"]
+layout_mode = 0
+offset_left = 105.0
+offset_top = 100.0
+offset_right = 172.0
+offset_bottom = 167.0
+
+[node name="Label" type="Label" parent="PlayerUI/Keystrokes/S"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "S
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="D" type="ColorRect" parent="PlayerUI/Keystrokes"]
+layout_mode = 0
+offset_left = 187.0
+offset_top = 101.0
+offset_right = 254.0
+offset_bottom = 168.0
+
+[node name="Label" type="Label" parent="PlayerUI/Keystrokes/D"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "D"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Shift" type="ColorRect" parent="PlayerUI/Keystrokes"]
+layout_mode = 0
+offset_left = 28.0
+offset_top = 179.0
+offset_right = 254.0
+offset_bottom = 242.0
+
+[node name="Label" type="Label" parent="PlayerUI/Keystrokes/Shift"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Shift
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LCTRL" type="ColorRect" parent="PlayerUI/Keystrokes"]
+layout_mode = 0
+offset_left = 28.0
+offset_top = 254.0
+offset_right = 254.0
+offset_bottom = 317.0
+
+[node name="Label" type="Label" parent="PlayerUI/Keystrokes/LCTRL"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "LCTRL"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Space" type="ColorRect" parent="PlayerUI/Keystrokes"]
+layout_mode = 0
+offset_left = 28.0
+offset_top = 330.0
+offset_right = 254.0
+offset_bottom = 393.0
+
+[node name="Label" type="Label" parent="PlayerUI/Keystrokes/Space"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Space"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Grid" type="ColorRect" parent="PlayerUI"]
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -367,7 +518,7 @@ offset_right = 480.0
 grow_vertical = 0
 color = Color(0, 0, 0, 0.243137)
 
-[node name="GridContainer" type="GridContainer" parent="PlayerUI/UI"]
+[node name="GridContainer" type="GridContainer" parent="PlayerUI/Grid"]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -378,20 +529,20 @@ grow_horizontal = 2
 grow_vertical = 0
 columns = 3
 
-[node name="ProgressBar" type="ProgressBar" parent="PlayerUI/UI/GridContainer"]
+[node name="ProgressBar" type="ProgressBar" parent="PlayerUI/Grid/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 max_value = 1.0
 value = 0.42
 
-[node name="ProgressBar2" type="ProgressBar" parent="PlayerUI/UI/GridContainer"]
+[node name="ProgressBar2" type="ProgressBar" parent="PlayerUI/Grid/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 7
 size_flags_vertical = 3
 max_value = 1.0
 
-[node name="ProgressBar3" type="ProgressBar" parent="PlayerUI/UI/GridContainer"]
+[node name="ProgressBar3" type="ProgressBar" parent="PlayerUI/Grid/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 7
 size_flags_vertical = 3

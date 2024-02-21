@@ -31,6 +31,7 @@ public partial class Player : RigidBody3D
     [Export] private float AirAccelMult;
 
     [ExportSubgroup("Jump")]
+    [Export] private float MaxFallSpeed;
     [Export] private float JumpForce;
     [Export] private float JumpReleaseMult;
 
@@ -53,14 +54,23 @@ public partial class Player : RigidBody3D
     [Export] private float SlideHopForce;
     [Export] private float SlideMaxSpeedBuffer = 0.1f;
 
-    // States
-    public bool IsJumping { get; private set; } = false;
-    public bool IsDashJump { get; private set; } = false;
-    private bool CanJump => _groundCheck.IsOnGround && !IsJumping;
+    [ExportSubgroup("Thwomp")]
+    [Export] private float ThwompDownForce;
+    [Export] private float ThwompJumpBuffer = 0.05f;
+    [Export] private float ThwompForceTimeMult;
+    // [Export] private float ThwompForce
 
-    public bool IsDashing { get; private set; } = false;
+    // States
+    private bool CanJump => _groundCheck.IsOnGround && !IsJumping;
+    public bool IsJumping { get; private set; } = false;
     
+    public bool IsDashJump { get; private set; } = false;
+    public bool IsDashing { get; private set; } = false;
+   
     public bool IsSliding { get; private set; } = false;
+  
+    private bool CanTwhomp => !_groundCheck.IsOnGround && !IsSliding;
+    public bool IsThwomping { get; private set; } = false;
 
     // Input
     private Vector3 _moveDir;
@@ -80,7 +90,13 @@ public partial class Player : RigidBody3D
     private float _maxSlideSpeedBuffer;
     private float _maxSlideSpeedBufferTimer;
 
+    // Thwomp
+    private float _thwompForce;
+    private float _thwompJumpBufferTimer;
+
     private bool _boost = false;
+    private bool _falling = false;
+    private bool _heavyFall = false;
 
     public override void _Notification(int what)
     {
@@ -94,12 +110,19 @@ public partial class Player : RigidBody3D
         ProcessPriority = (int)NodeProcessOrder.Player;
         AddToGroup("player");
 
-        _groundCheck.OnIsNotGrounded += () => {
+        _groundCheck.OnIsGrounded += () => {
+            if (IsThwomping) {
+                EndThwomp();
+            }
+
             IsJumping = false;
+            
             _boost = false;
+            _falling = false;
+            _heavyFall = false;
         };
 
-        _groundCheck.OnIsGrounded += () => {
+        // _groundCheck.OnIsGrounded += () => {
             // TODO(calco): ground thing
             // if (LinearVelocity.Y > 5f) {
                 // var twen = CreateTween();
@@ -110,7 +133,7 @@ public partial class Player : RigidBody3D
                 // twen.Play();
                 // twen.Finished += () => twen.Free();
             // }
-        };
+        // };
     }
 
     public override void _Input(InputEvent e)
@@ -151,9 +174,19 @@ public partial class Player : RigidBody3D
             EndSlide();
         }
 
+        // Thwomp
+        if (CanTwhomp && _input.Slide == KeyState.Pressed) {
+            GroundThwomp();
+        }
+        _thwompJumpBufferTimer -= Game.DeltaTime;
+
         // Jump and all the other variations
         if (CanJump && _input.Jump == KeyState.Pressed) {
-            if (IsDashing) {
+            if (_thwompJumpBufferTimer > 0f) {
+                GD.Print("SUUUUUUUPA JUAMP!");
+                SuperJump();
+            }
+            else if (IsDashing) {
                 DashJump(_stamina < DashJumpStaminaCost);
                 // TODO(calco): Maybe move this to dashjump() ???
                 _stamina -= DashJumpStaminaCost;
@@ -181,6 +214,10 @@ public partial class Player : RigidBody3D
                 // TODO(calco): Maybe scale this some way
                 _maxSlideSpeedBuffer = LinearVelocity.Length();
             }
+        }
+
+        if (IsThwomping) {
+            _thwompForce += Game.DeltaTime * ThwompForceTimeMult;
         }
 
         var right = _head.GlobalTransform.Basis.X * -_input.Movement.X;
@@ -234,7 +271,20 @@ public partial class Player : RigidBody3D
             _diff = false;
         }
         else {
-            GravityScale = 1;
+            GravityScale = _heavyFall ? 2f : 1f;
+
+            // Limit velocity
+            var maxFall = MaxFallSpeed * GravityScale;
+            if (state.LinearVelocity.Y < -maxFall) {
+                state.LinearVelocity = state.LinearVelocity.WithY(-maxFall);
+            }
+
+            // TODO(calco): Maybe don't do this lol
+            if (IsThwomping) {
+                state.LinearVelocity = Vector3.Down * ThwompDownForce;
+                return;
+            }
+
             var vel = state.LinearVelocity;
 
             var cX = (_moveDir2.X > 0 && vel.X < _moveDir2.X) || (_moveDir2.X < 0 && vel.X > _moveDir2.X);
@@ -267,12 +317,18 @@ public partial class Player : RigidBody3D
     {
         IsJumping = true;
         IsDashJump = false;
+        _falling = true;
+        _heavyFall = false;
+        _boost = false;
         // TODO(calco): Set other default state, isslidejump?
         ApplyImpulse(Vector3.Up * (force == -1f ? JumpForce : force));
     }
 
     private void StartDash()
     {
+        IsThwomping = false;
+        _heavyFall = false;
+        _falling = false;
         _boost = true;
         IsDashing = true;
         IsJumping = false;
@@ -285,6 +341,8 @@ public partial class Player : RigidBody3D
     {
         IsDashing = false;
         _boost = false;
+        
+        _falling = true;
     }
 
     private void DashJump(bool halfJump)
@@ -343,5 +401,32 @@ public partial class Player : RigidBody3D
         var f = Mathf.Clamp(_slideSpeed * SlideLeapMultiplier, 0f, 20f) * mult;
         // GD.Print("F: ", f);
         ApplyImpulse(_slideDir * f);
+    }
+
+    private void GroundThwomp()
+    {
+        IsThwomping = true;
+        _falling = true;
+        _heavyFall = true;
+        _thwompForce = 0;
+    }
+
+    private void EndThwomp()
+    {
+        IsThwomping = false;
+        _thwompJumpBufferTimer = ThwompJumpBuffer;
+
+        // TODO(calco): More visuals, just like the rest of "end"...
+
+        if (_input.Slide == KeyState.Down) {
+            // TODO(calco): Add a sort of slam
+        }
+    }
+
+    private void SuperJump()
+    {
+        GD.Print("SUPER JUMP: ", _thwompForce);
+        Jump(JumpForce * 1.5f + _thwompForce * 4f);
+        _thwompForce = 0f;
     }
 }

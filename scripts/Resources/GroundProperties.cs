@@ -9,6 +9,8 @@ public partial class GroundProperties : Resource
     [ExportSubgroup("Run")]
     [Export] public float Friction = 1f;
     [Export] public float SpeedMultiplier = 1f;
+
+    // TODO(calco): JUMP FORCE MULTIPLIER
     
     [ExportSubgroup("Abilities")]
     [Export] public bool AllowJump = true;
