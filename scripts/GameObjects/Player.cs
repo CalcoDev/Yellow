@@ -151,10 +151,6 @@ public partial class Player : RigidBody3D
             EndSlide();
         }
 
-        if (_input.Slide == KeyState.Pressed) {
-            GD.Print("CAN JUMP: ", CanJump);
-        }
-
         // Jump and all the other variations
         if (CanJump && _input.Jump == KeyState.Pressed) {
             if (IsDashing) {
@@ -333,11 +329,19 @@ public partial class Player : RigidBody3D
         Jump(SlideHopForce);
         _boost = true;
         
-        GD.Print("V: ", LinearVelocity.Length());
-        if (LinearVelocity.Length() < 40f) {
-            var f = Mathf.Clamp(_slideSpeed * SlideLeapMultiplier, 0f, 40f);
-            GD.Print("F: ", f);
-            ApplyImpulse(_slideDir * f);
-        }
+        // GD.Print("V: ", LinearVelocity.Length());
+        var l = LinearVelocity.Length();
+        var mult = 1f;
+        // TODO(calco): MATH FORMULA THIS LMAO
+        if (l > 15) mult = 0.95f;
+        else if (l > 20) mult = 0.85f;
+        else if (l > 25) mult = 0.7f;
+        else if (l > 40) mult = 0.5f;
+        else if (l > 50) mult = 0.25f;
+        else if (l > 55) mult = 0.1f;
+    
+        var f = Mathf.Clamp(_slideSpeed * SlideLeapMultiplier, 0f, 20f) * mult;
+        // GD.Print("F: ", f);
+        ApplyImpulse(_slideDir * f);
     }
 }
