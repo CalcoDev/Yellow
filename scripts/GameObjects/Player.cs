@@ -45,7 +45,13 @@ public partial class Player : RigidBody3D
     [Export] private float DashJumpHopForce;
     [Export] private float DashJumpLeapForce;
 
-    // [Export] private float 
+    [ExportSubgroup("Slide")]
+    [Export] private float SlideBaseSpeed;
+    [Export] private float SlideDirChangeMult;
+    [Export] private float SlideSpeedReduce;
+    [Export] private float SlideLeapMultiplier;
+    [Export] private float SlideHopForce;
+    [Export] private float SlideMaxSpeedBuffer = 0.1f;
 
     // States
     public bool IsJumping { get; private set; } = false;
@@ -53,6 +59,8 @@ public partial class Player : RigidBody3D
     private bool CanJump => _groundCheck.IsOnGround && !IsJumping;
 
     public bool IsDashing { get; private set; } = false;
+    
+    public bool IsSliding { get; private set; } = false;
 
     // Input
     private Vector3 _moveDir;
@@ -64,6 +72,13 @@ public partial class Player : RigidBody3D
     // Dash
     private Vector3 _dashDir;
     private float _dashTimer;
+
+    // Slide
+    private Vector3 _slideDir;
+    private float _slideSpeed;
+
+    private float _maxSlideSpeedBuffer;
+    private float _maxSlideSpeedBufferTimer;
 
     private bool _boost = false;
 
@@ -82,6 +97,19 @@ public partial class Player : RigidBody3D
         _groundCheck.OnIsNotGrounded += () => {
             IsJumping = false;
             _boost = false;
+        };
+
+        _groundCheck.OnIsGrounded += () => {
+            // TODO(calco): ground thing
+            // if (LinearVelocity.Y > 5f) {
+                // var twen = CreateTween();
+                // var start = Vector3.Zero;
+                // var final = Vector3.Down * 0.5f;
+                // twen.TweenProperty(_head, "position", final, 0.1f);
+                // twen.Chain().TweenProperty(_head, "position", start, 0.1f);
+                // twen.Play();
+                // twen.Finished += () => twen.Free();
+            // }
         };
     }
 
@@ -115,20 +143,49 @@ public partial class Player : RigidBody3D
             StartDash();
         }
 
-        // Dash Jump
-        if (IsDashing && CanJump && _input.Jump == KeyState.Pressed) {
-            StopDash();
-            DashJump(_stamina < DashJumpStaminaCost);
-            _stamina -= DashJumpStaminaCost;
+        // Slide
+        if (!IsSliding && _groundCheck.IsOnGround && _input.Slide == KeyState.Pressed) {
+            StartSlide();
+        }
+        if (IsSliding && _input.Slide == KeyState.Released) {
+            EndSlide();
         }
 
-        // Jump
+        if (_input.Slide == KeyState.Pressed) {
+            GD.Print("CAN JUMP: ", CanJump);
+        }
+
+        // Jump and all the other variations
         if (CanJump && _input.Jump == KeyState.Pressed) {
-            Jump();
+            if (IsDashing) {
+                DashJump(_stamina < DashJumpStaminaCost);
+                // TODO(calco): Maybe move this to dashjump() ???
+                _stamina -= DashJumpStaminaCost;
+            }
+            else if (IsSliding) {
+                SlideJump();
+            } else {
+                Jump();
+            }
         }
         // TODO(calco): Variable jump
 
-        // Slide
+        if (IsSliding) {
+            var sign = _slideSpeed < SlideBaseSpeed ? -1f : 1f;
+            _slideSpeed -= sign * Game.DeltaTime * SlideSpeedReduce;
+
+            // TODO(calco): Temporary, just showcasing slide
+            var d = CameraManager.Instance.Rotation;
+            d.X = Mathf.DegToRad(5 * Mathf.Sign(_input.Movement.X));
+            CameraManager.Instance.Rotation = d;
+        } else {
+            _maxSlideSpeedBufferTimer -= Game.DeltaTime;
+            if (_maxSlideSpeedBufferTimer < 0f) {
+                _maxSlideSpeedBufferTimer = SlideMaxSpeedBuffer;
+                // TODO(calco): Maybe scale this some way
+                _maxSlideSpeedBuffer = LinearVelocity.Length();
+            }
+        }
 
         var right = _head.GlobalTransform.Basis.X * -_input.Movement.X;
         var forward = _head.GlobalTransform.Basis.Z * _input.Movement.Y;
@@ -144,6 +201,14 @@ public partial class Player : RigidBody3D
     public override void _IntegrateForces(PhysicsDirectBodyState3D state)
     {
         _moveDir2 = _moveDir * Game.FixedDeltaTime * RunSpeed;
+
+        if (IsSliding) {
+            GravityScale = _groundCheck.IsOnGround ? 1f : 0f;
+            var slideDir2 = (_slideDir + _moveDir * SlideDirChangeMult).Normalized();
+            state.LinearVelocity = slideDir2 * _slideSpeed;
+            return;
+        }
+
         if (IsDashing) {
             GravityScale = 0f;
             state.LinearVelocity = _dashDir * DashSpeed;
@@ -186,9 +251,12 @@ public partial class Player : RigidBody3D
             var vel0 = state.LinearVelocity.WithY(0);
             if (_moveDir.LengthSquared() > 0.01 && vel0.Normalized().DotLess(_moveDir, 0.99f, false)) {
                 var v = Mathf.Abs(_head.Transform.Basis.Z.Normalized().Dot(_moveDir2.Normalized()));;
-                var t = _moveDir2;
+                var t = Mathf.Max(RunSpeed * Game.FixedDeltaTime, vel0.Length()) * _moveDir;
                 var f = t - vel0;
                 var mult = (IsJumping && IsDashJump ? 2f : 1f) * (1f + 0.25f * v) * AirAccelMult;
+                if (_boost) {
+                    mult *= 0.25f;
+                }
                 state.ApplyForce(f * mult);
             }
         }
@@ -199,11 +267,12 @@ public partial class Player : RigidBody3D
     }
 
     // MOVEMENT
-    private void Jump()
+    private void Jump(float force = -1f)
     {
-        ApplyImpulse(Vector3.Up * JumpForce);
         IsJumping = true;
         IsDashJump = false;
+        // TODO(calco): Set other default state, isslidejump?
+        ApplyImpulse(Vector3.Up * (force == -1f ? JumpForce : force));
     }
 
     private void StartDash()
@@ -224,15 +293,51 @@ public partial class Player : RigidBody3D
 
     private void DashJump(bool halfJump)
     {
+        Jump(DashJumpHopForce);
         IsDashing = false;
         IsJumping = true;
         IsDashJump = true;
         _boost = true;
         
         _ifDashJump = true;
+        ApplyImpulse(_dashDir * DashJumpLeapForce * (halfJump ? 0.5f : 1f));
+    }
 
-        var vert = Vector3.Up * DashJumpHopForce;
-        var horiz = _dashDir * DashJumpLeapForce * (halfJump ? 0.5f : 1f);
-        ApplyImpulse(vert + horiz);
+    private void StartSlide()
+    {
+        IsSliding = true;
+        _slideDir = _moveDir.LengthSquared() > 0.01f ? _moveDir : _head.Forward();
+        _slideSpeed = Mathf.Max(LinearVelocity.Length(), SlideBaseSpeed);
+        _slideSpeed = Mathf.Max(_slideSpeed, _maxSlideSpeedBuffer);
+        _maxSlideSpeedBufferTimer = 0f;
+
+        // TODO(calco): Temporary, just showcasing slide
+        _head.Position += Vector3.Down;
+    }
+
+    private void EndSlide()
+    {
+        _maxSlideSpeedBufferTimer = 0f;
+
+        // TODO(calco): Temporary, just showcasing slide
+        _head.Position += Vector3.Up;
+        var d = CameraManager.Instance.RotationDegrees;
+        d.X = 0;
+        CameraManager.Instance.RotationDegrees = d;
+        IsSliding = false;
+    }
+
+    private void SlideJump()
+    {
+        EndSlide();
+        Jump(SlideHopForce);
+        _boost = true;
+        
+        GD.Print("V: ", LinearVelocity.Length());
+        if (LinearVelocity.Length() < 40f) {
+            var f = Mathf.Clamp(_slideSpeed * SlideLeapMultiplier, 0f, 40f);
+            GD.Print("F: ", f);
+            ApplyImpulse(_slideDir * f);
+        }
     }
 }
