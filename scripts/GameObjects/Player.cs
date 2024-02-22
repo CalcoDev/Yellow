@@ -173,6 +173,13 @@ public partial class Player : RigidBody3D
     private bool _prevDidMoveWallSlide = false;
     public override void _Process(double delta)
     {
+        // NOTE(drts): controller
+        float lookHoriz = Input.GetAxis("look_left", "look_right")/Sensitivity;
+        float lookVert = Input.GetAxis("look_up", "look_down")/Sensitivity;
+        _head.RotateY(-lookHoriz);
+        CameraManager.Instance.DoRotation(-lookHoriz, lookVert);
+
+
         _stamina = Mathf.Clamp(_stamina + Game.DeltaTime, 0f, MaxStamina);
 
         _didMoveWallSlide = _moveDir.Length() > 0.01f;
