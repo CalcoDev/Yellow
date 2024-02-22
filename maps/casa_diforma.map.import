@@ -1,0 +1,14 @@
+[remap]
+
+importer="qodot.map"
+type="Resource"
+uid="uid://jn5wfx3b17ob"
+path="res://.godot/imported/casa_diforma.map-b12ea9854bf90b2b8903a4c08ae9ea11.tres"
+
+[deps]
+
+source_file="res://maps/casa_diforma.map"
+dest_files=["res://.godot/imported/casa_diforma.map-b12ea9854bf90b2b8903a4c08ae9ea11.tres"]
+
+[params]
+
