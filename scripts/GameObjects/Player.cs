@@ -36,6 +36,14 @@ public partial class Player : RigidBody3D
     [Export] private float JumpForce;
     [Export] private float JumpReleaseMult;
 
+    [ExportSubgroup("Wall Jump")]
+    [Export] private float WallSlideMaxDot = -0.85f;
+    [Export] private float WallSlideGravityScale = 0.5f;
+    [Export] private float WallSlideMaxFallSpeed;
+    [Export] private float WallJumpHopForce;
+    [Export] private float WallJumpLeapForce;
+    [Export] private int WallJumpMaxCount = 3;
+
     [ExportSubgroup("Dash")]
     [Export] private float DashStaminaCost = 1f;
     [Export] private float DashDuration = 0.2f;
@@ -63,9 +71,10 @@ public partial class Player : RigidBody3D
 
     // States
     public bool CanSlideWall => _wallCheck.IsColliding && _wallCheck.IsOnSlope;
-    public bool IsWallSliding { get; private set; } = true;
+    public bool IsWallSliding { get; private set; } = false;
 
     private bool CanJump => _groundCheck.IsOnGround && !IsJumping;
+    private bool CanWallJump => !_groundCheck.IsOnGround && CanSlideWall && _wallJumpCount > 0;
     public bool IsJumping { get; private set; } = false;
     
     public bool IsDashJump { get; private set; } = false;
@@ -98,6 +107,9 @@ public partial class Player : RigidBody3D
     private float _thwompForce;
     private float _thwompJumpBufferTimer;
 
+    // Wall Jump
+    private int _wallJumpCount;
+
     private bool _boost = false;
     private bool _falling = false;
     private bool _heavyFall = false;
@@ -124,6 +136,7 @@ public partial class Player : RigidBody3D
             _boost = false;
             _falling = false;
             _heavyFall = false;
+            _wallJumpCount = WallJumpMaxCount;
         };
 
         // _groundCheck.OnIsGrounded += () => {
@@ -155,15 +168,27 @@ public partial class Player : RigidBody3D
             CameraManager.Instance.DoRotation(x, y);
         }
     }
+    
+    private bool _didMoveWallSlide = false;
+    private bool _prevDidMoveWallSlide = false;
     public override void _Process(double delta)
     {
         _stamina = Mathf.Clamp(_stamina + Game.DeltaTime, 0f, MaxStamina);
 
+        _didMoveWallSlide = _moveDir.Length() > 0.01f;
         if (CanSlideWall) {
-            if (_wallCheck.ClosestNormal.DotLess(_moveDir, -0.99f, false)) {
+            if (_wallCheck.ClosestNormal.DotLess(_moveDir, WallSlideMaxDot, false)) {
                 IsWallSliding = true;
+                if (_didMoveWallSlide && !_prevDidMoveWallSlide) {
+                    _ifWallSliding = false;
+                }
+            } else {
+                IsWallSliding = false;
             }
+        } else {
+            IsWallSliding = false;
         }
+        _prevDidMoveWallSlide = _didMoveWallSlide;
 
         // Dash
         if (IsDashing) {
@@ -194,18 +219,21 @@ public partial class Player : RigidBody3D
         if (CanJump && _input.Jump == KeyState.Pressed) {
             if (_thwompJumpBufferTimer > 0f) {
                 SuperJump();
-            }
-            else if (IsDashing) {
+            } else if (IsDashing) {
                 DashJump(_stamina < DashJumpStaminaCost);
                 // TODO(calco): Maybe move this to dashjump() ???
                 _stamina -= DashJumpStaminaCost;
-            }
-            else if (IsSliding) {
+            } else if (IsSliding) {
                 SlideJump();
             } else {
                 Jump();
             }
         }
+        
+        if (CanWallJump && _input.Jump == KeyState.Pressed) {
+            WallJump();
+        }
+
         // TODO(calco): Variable jump
 
         if (IsSliding) {
@@ -240,14 +268,16 @@ public partial class Player : RigidBody3D
     private bool _diff;
     private bool _ifDashing;
     private bool _ifDashJump;
+    private bool _ifWallSliding = false;
     public override void _IntegrateForces(PhysicsDirectBodyState3D state)
     {
         _moveDir2 = _moveDir * Game.FixedDeltaTime * RunSpeed;
 
         if (IsSliding) {
-            GravityScale = _groundCheck.IsOnGround ? 1f : 0f;
+            GravityScale = _groundCheck.IsOnGround ? 0f : 1f;
             var slideDir2 = (_slideDir + _moveDir * SlideDirChangeMult).Normalized();
-            state.LinearVelocity = slideDir2 * _slideSpeed;
+            var y = state.LinearVelocity.Y;
+            state.LinearVelocity = (slideDir2 * _slideSpeed).WithY(y);
             return;
         }
 
@@ -267,6 +297,17 @@ public partial class Player : RigidBody3D
             }
         }
 
+        var setThing = false;
+        if (IsWallSliding && !_ifWallSliding && state.LinearVelocity.Y < 0f) {
+            // !!! TODO(calco): FIX THIS LOL
+            var y = Mathf.Min(state.LinearVelocity.Y * 0.2f, 0.5f);
+            state.LinearVelocity = state.LinearVelocity.WithY(y);
+            setThing = true;
+        }
+        if (setThing) {
+            _ifWallSliding = IsWallSliding;
+        }
+
         if (_groundCheck.IsOnGround && !IsJumping) {
             GravityScale = _moveDir.LengthSquared() < 0.01f ? 0 : 1;
 
@@ -281,9 +322,15 @@ public partial class Player : RigidBody3D
         }
         else {
             GravityScale = _heavyFall ? 2f : 1f;
-
+            
             // Limit velocity
             var maxFall = MaxFallSpeed * GravityScale;
+
+            if (IsWallSliding && state.LinearVelocity.Y < 0f) {
+                GravityScale = WallSlideGravityScale;
+                maxFall = WallSlideMaxFallSpeed;
+            }
+
             if (state.LinearVelocity.Y < -maxFall) {
                 state.LinearVelocity = state.LinearVelocity.WithY(-maxFall);
             }
@@ -427,5 +474,14 @@ public partial class Player : RigidBody3D
     {
         Jump(JumpForce * 1.25f + _thwompForce * 4f);
         _thwompForce = 0f;
+    }
+
+    private void WallJump()
+    {
+        _wallJumpCount -= 1;
+        GravityScale = 1f;
+        LinearVelocity = LinearVelocity.WithX(0).WithY(0);
+        Jump(WallJumpHopForce);
+        ApplyImpulse(_wallCheck.ClosestNormal * WallJumpLeapForce);
     }
 }

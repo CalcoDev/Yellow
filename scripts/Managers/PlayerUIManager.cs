@@ -35,10 +35,10 @@ public partial class PlayerUIManager : Node
 
     public override void _Process(double delta)
     {
-        _w.Color = Input.IsActionPressed("mx_p") ? Colors.Red : Colors.White;
-        _a.Color = Input.IsActionPressed("mz_p") ? Colors.Red : Colors.White;
-        _s.Color = Input.IsActionPressed("mx_n") ? Colors.Red : Colors.White;
-        _d.Color = Input.IsActionPressed("mz_n") ? Colors.Red : Colors.White;
+        _w.Color = Input.IsActionPressed("mz_p") ? Colors.Red : Colors.White;
+        _a.Color = Input.IsActionPressed("mx_n") ? Colors.Red : Colors.White;
+        _s.Color = Input.IsActionPressed("mz_n") ? Colors.Red : Colors.White;
+        _d.Color = Input.IsActionPressed("mx_p") ? Colors.Red : Colors.White;
         _shift.Color = Input.IsActionPressed("dash") ? Colors.Red : Colors.White;
         _lctrl.Color = Input.IsActionPressed("slide") ? Colors.Red : Colors.White;
         _space.Color = Input.IsActionPressed("jump") ? Colors.Red : Colors.White;
