@@ -300,16 +300,16 @@ DashDuration = 0.175
 DashSpeed = 35.0
 DashEndSpeed = 10.0
 DashJumpStaminaCost = 1.0
-DashJumpHopForce = 16.0
+DashJumpHopForce = 13.0
 DashJumpLeapForce = 5.0
 SlideBaseSpeed = 13.5
 SlideDirChangeMult = 0.2
-SlideSpeedReduce = 0.75
-SlideLeapMultiplier = 0.75
-SlideHopForce = 17.0
-ThwompDownForce = 60.0
+SlideSpeedReduce = 1.0
+SlideLeapMultiplier = 0.65
+SlideHopForce = 16.0
+ThwompDownForce = 50.0
 ThwompJumpBuffer = 0.1
-ThwompForceTimeMult = 2.0
+ThwompForceTimeMult = 8.0
 
 [node name="Head" type="Node3D" parent="Player"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
@@ -328,6 +328,7 @@ transform = Transform3D(8.74228e-08, 0, -1, 0, 1, 0, 1, 0, 8.74228e-08, 0, 0, 0)
 script = ExtResource("6_1pmot")
 LayerMask = 33
 DefaultGroundProperties = ExtResource("9_ge3qk")
+DetectSlope = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Player/GroundCheck"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.199776, 0)
