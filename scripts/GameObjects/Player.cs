@@ -14,6 +14,7 @@ public partial class Player : RigidBody3D
     [ExportGroup("References")]
     [Export] private PlayerInput _input;
     [Export] private GroundCheckComponent _groundCheck;
+    [Export] private ShapeCastComponent _wallCheck;
 
     [ExportSubgroup("UI")]
     [Export] private PlayerUIManager _ui;
@@ -154,6 +155,11 @@ public partial class Player : RigidBody3D
     public override void _Process(double delta)
     {
         _stamina = Mathf.Clamp(_stamina + Game.DeltaTime, 0f, MaxStamina);
+
+        if (_wallCheck.IsColliding) {
+            GD.Print("NORMAL: ", _wallCheck.ClosestNormal);
+            GD.Print("SLOPE: ", _wallCheck.SlopeAngle);
+        }
 
         // Dash
         if (IsDashing) {
@@ -415,8 +421,7 @@ public partial class Player : RigidBody3D
 
     private void SuperJump()
     {
-        GD.Print("SUPER JUMP: ", _thwompForce);
-        Jump(JumpForce * 1.1f + _thwompForce * 4f);
+        Jump(JumpForce * 1.25f + _thwompForce * 4f);
         _thwompForce = 0f;
     }
 }

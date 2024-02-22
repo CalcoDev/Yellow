@@ -11,16 +11,12 @@ namespace Yellow.Components;
 public partial class GroundCheckComponent : Area3D
 {
     [ExportGroup("Settings")]
-    [Export(PropertyHint.Layers3DPhysics)] public int LayerMask;
+    [Export(PropertyHint.Layers3DPhysics)] public uint LayerMask;
     [Export] public GroundProperties DefaultGroundProperties;
-    [Export] public bool DetectSlope;
 
     // Sth
     public bool IsOnGround { get; private set; }
-    public bool OnSlope { get; private set; }
-    public float SlopeAngle { get; private set; }
     public GroundProperties GroundProperties { get; private set; }
-    public Vector3 ClosestPoint { get; private set; }
 
     [Signal]
     public delegate void OnEnterGroundEventHandler(PhysicsBody3D ground);
@@ -34,44 +30,13 @@ public partial class GroundCheckComponent : Area3D
     [Signal]
     public delegate void OnIsNotGroundedEventHandler();
 
-    private bool _touchingGround = false;
-
     private readonly List<PhysicsBody3D> _colls = new();
-    
-    // NOTE(calco): Class for reference passing
-    private class ShapeInfo : IEquatable<ShapeInfo>
-    {
-        public CollisionShape3D Owner;
-        public Shape3D Shape;
-
-        public ShapeInfo(CollisionShape3D owner, Shape3D shape)
-        {
-            Owner = owner;
-            Shape = shape;
-        }
-
-        public override bool Equals(object obj)
-        {
-            return base.Equals((ShapeInfo)obj);
-        }
-
-        public bool Equals(ShapeInfo other)
-        {
-            return other.Owner == Owner && other.Shape == Shape;
-        }
-
-        public Transform3D GetOwnerTransform()
-        {
-            return Owner.GlobalTransform;
-        }
-    }
-    private readonly List<ShapeInfo> _shapes = new();
-    private ShapeInfo _selfShapeInfo;
+    private bool _touchingGround = false;
 
     public override void _Ready()
     {
-        BodyShapeEntered += OnShapeEntered;
-        BodyShapeExited += OnShapeExited;
+        BodyEntered += OnBodyEntered;
+        BodyExited += OnBodyExited;
 
         ProcessPriority = (int)NodeProcessOrder.GroundChecks;
 
@@ -84,10 +49,6 @@ public partial class GroundCheckComponent : Area3D
         if (IsOnGround != _touchingGround) {
             IsOnGround = _touchingGround;
             EmitSignal(IsOnGround ? SignalName.OnIsGrounded : SignalName.OnIsNotGrounded);
-        }
-
-        if (DetectSlope) {
-            HandleSlope();
         }
 
         // TODO(calco): Maybe add some logic to remove unusable bodies.
@@ -104,29 +65,11 @@ public partial class GroundCheckComponent : Area3D
         return body.IsActive();
     }
 
-    private static ShapeInfo GetShapeInfo(CollisionObject3D obj, int shapeIdx)
+    private void OnBodyEntered(Node3D body)
     {
-        var shapeOwnerId = obj.ShapeFindOwner(shapeIdx);
-        var shapeOwner = obj.ShapeOwnerGetOwner(shapeOwnerId);
-        return new ShapeInfo((CollisionShape3D)shapeOwner, obj.ShapeOwnerGetShape(shapeOwnerId, 0));
-    }
-    
-    private void OnShapeEntered(Rid bodyRid, Node3D body, long bodyShapeIndex, long localShapeIndex)
-    {
-        if (body is not PhysicsBody3D pBody || !IsCheckable(pBody) || pBody.IsInGroup("player") || _colls.Contains(pBody)) {
+        if (body is not PhysicsBody3D pBody || !IsCheckable(pBody) || pBody.IsInGroup("player")) {
             return;
         }
-
-        var bodyShapeInfo = GetShapeInfo((CollisionObject3D)body, (int)bodyShapeIndex);
-        var areaShapeInfo = GetShapeInfo(this, (int)localShapeIndex);
-        if (_selfShapeInfo == null) {
-            _selfShapeInfo = areaShapeInfo;
-        } else if (areaShapeInfo != null && !_selfShapeInfo.Equals(areaShapeInfo)) {
-            GD.PushError("ERROR: GroundChecker ENTER different self shape ayo?");
-            _selfShapeInfo = areaShapeInfo;
-        }
-        _shapes.Add(bodyShapeInfo);
-        
         _colls.Add(pBody);
         _touchingGround = true;
 
@@ -140,30 +83,13 @@ public partial class GroundCheckComponent : Area3D
         // TODO(calco): Figure out if slope and the slope angle.
         // TODO(calco): Handle moving platforms
     }
-   
-    private void OnShapeExited(Rid bodyRid, Node3D body, long bodyShapeIndex, long localShapeIndex)
+
+    private void OnBodyExited(Node3D body)
     {
-        if (body is not PhysicsBody3D pBody || !IsCheckable(pBody) || pBody.IsInGroup("player") || !_colls.Contains(pBody)) {
+        if (body is not PhysicsBody3D pBody || !IsCheckable(pBody) || pBody.IsInGroup("player")) {
             return;
         }
-
-        var bodyShapeInfo = GetShapeInfo((CollisionObject3D)body, (int)bodyShapeIndex);
-        var areaShapeInfo = GetShapeInfo(this, (int)localShapeIndex);
-        if (_selfShapeInfo == null) {
-            _selfShapeInfo = areaShapeInfo;
-        } else if (areaShapeInfo != null && !_selfShapeInfo.Equals(areaShapeInfo)) {
-            GD.PushError("ERROR: GroundChecker EXIT different self shape ayo?");
-            _selfShapeInfo = areaShapeInfo;
-        }
-        _shapes.Remove(bodyShapeInfo);
         _colls.Remove(pBody);
-
-        // TODO(calco): Useless, as we check shape exit.
-        // for (int i = _shapes.Count - 1; i >= 0; --i) {
-        //     if (_shapes[i].Owner == pBody) {
-        //         _shapes.RemoveAt(i);
-        //     }
-        // }
 
         for (int i = _colls.Count - 1; i >= 0; --i) {
             if (IsStillUsable(_colls[i])) {
@@ -183,20 +109,5 @@ public partial class GroundCheckComponent : Area3D
         }
 
         // TODO(calco): Handle moving platforms
-    }
-
-    private void HandleSlope()
-    {
-        if (_selfShapeInfo == null) {
-            return;
-        }
-
-        foreach (var shape in _shapes) {
-            // _selfShapeInfo.Shape.
-        }
-        // GD.Print(string.Join(", ", _shapes));
-
-        // Figure out: closest point
-        // then raycast from body to closest point, colliding with body and get slope to that???
     }
 }
