@@ -62,6 +62,9 @@ public partial class Player : RigidBody3D
     // [Export] private float ThwompForce
 
     // States
+    public bool CanSlideWall => _wallCheck.IsColliding && _wallCheck.IsOnSlope;
+    public bool IsWallSliding { get; private set; } = true;
+
     private bool CanJump => _groundCheck.IsOnGround && !IsJumping;
     public bool IsJumping { get; private set; } = false;
     
@@ -156,9 +159,10 @@ public partial class Player : RigidBody3D
     {
         _stamina = Mathf.Clamp(_stamina + Game.DeltaTime, 0f, MaxStamina);
 
-        if (_wallCheck.IsColliding) {
-            GD.Print("NORMAL: ", _wallCheck.ClosestNormal);
-            GD.Print("SLOPE: ", _wallCheck.SlopeAngle);
+        if (CanSlideWall) {
+            if (_wallCheck.ClosestNormal.DotLess(_moveDir, -0.99f, false)) {
+                IsWallSliding = true;
+            }
         }
 
         // Dash
