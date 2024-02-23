@@ -33,7 +33,7 @@ extends Resource
 
 ## Array of FGD resources to include with this game.
 @export var fgd_files : Array[Resource] = [
-	preload("res://addons/qodot/game_definitions/fgd/qodot_fgd.tres")
+	preload("res://definitions/qodot_fgd.tres")
 ]
 
 ## Scale expression that modifies the default display scale of entities in Trenchbroom. See the [**Trenchbroom Documentation**](https://trenchbroom.github.io/manual/latest/#game_configuration_files_entities) for more information.
