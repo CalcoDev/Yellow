@@ -16,6 +16,24 @@ public partial class QodotCustomTrigger : Area3D
 	[Signal]
 	public delegate void OnTriggerExitEventHandler(PhysicsBody3D body);
 
+
+
+
+
+
+
+	// TORFO(calco): WHAT THE FRICK IS THIS
+	[Signal]
+	public delegate void OnTriggerEnterParamlessEventHandler();
+
+	[Signal]
+	public delegate void OnTriggerExitParamlessEventHandler();
+
+
+
+
+
+
 	private uint _layerMask;
 
 
@@ -32,6 +50,7 @@ public partial class QodotCustomTrigger : Area3D
 			return;
 		}
 		EmitSignal(SignalName.OnTriggerEnter, pBody);
+		EmitSignal(SignalName.OnTriggerEnterParamless);
     }
 
     private void OnBodyExited(Node3D body)
@@ -40,6 +59,7 @@ public partial class QodotCustomTrigger : Area3D
 			return;
 		}
 		EmitSignal(SignalName.OnTriggerExit, pBody);
+		EmitSignal(SignalName.OnTriggerExitParamless);
     }
 
 	private static readonly System.Collections.Generic.Dictionary<string, int> LayerDict = new();

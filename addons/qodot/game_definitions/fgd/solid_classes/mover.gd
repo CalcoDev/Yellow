@@ -1,3 +1,5 @@
+class_name Mover
+
 extends CharacterBody3D
 
 @export var properties: Dictionary :
@@ -37,6 +39,7 @@ func _ready() -> void:
 	target_transform = base_transform
 
 func use() -> void:
+	print("MOOOOOOOOOOVEEEEEEEEEEEEEEEEEEEEEER PLEEEEEAAAAAAAAAASE")
 	play_motion()
 
 func play_motion() -> void:

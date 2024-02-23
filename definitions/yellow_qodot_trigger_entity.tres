@@ -22,10 +22,12 @@ description = "A custom 3d value OBB."
 qodot_internal = false
 base_classes = Array[Resource]([])
 class_properties = {
-"layer_mask": "player"
+"layer_mask": "player",
+"target": ""
 }
 class_property_descriptions = {
-"layer_mask": "The layers to collide with."
+"layer_mask": "The layers to collide with.",
+"target": "The target to affect"
 }
 meta_properties = {}
 node_class = "Area3D"

@@ -1244,6 +1244,7 @@ func connect_signals() -> void:
 		
 		var target_nodes := get_nodes_by_targetname(entity_properties['target'])
 		for target_node in target_nodes:
+			# print("AAAAAAAAAA", target_node)
 			connect_signal(entity_node, target_node)
 
 ## Connect a signal on [code]entity_node[/code] to [code]target_node[/code], possibly mediated by the contents of a [code]signal[/code] or [code]receiver[/code] entity
@@ -1264,8 +1265,19 @@ func connect_signal(entity_node: Node, target_node: Node) -> void:
 	else:
 		var signal_list = entity_node.get_signal_list()
 		for signal_dict in signal_list:
-			if signal_dict['name'] == 'trigger':
-				entity_node.connect("trigger",Callable(target_node,"use"),CONNECT_PERSIST)
+			# NOTE(calco): WAS HARCPDED TO TRIGGER
+			# print("Trying to connect ", target_node, " to ", entity_node, " with signal ", signal_dict['name']);
+			if signal_dict['name'] == 'OnTriggerEnter':
+				entity_node.connect("OnTriggerEnter",Callable(target_node,"UseEnter"),CONNECT_PERSIST)
+				entity_node.connect("OnTriggerExit",Callable(target_node,"UseExit"),CONNECT_PERSIST)
+				
+				# NOTE(calco): TO KEEP INTEROP EASY
+				if target_node.properties['on_enter'] == 'true':
+					print("CONNECTED A ", target_node, " AND ", entity_node)
+					entity_node.connect("OnTriggerEnterParamless",Callable(target_node,"use"),CONNECT_PERSIST)
+				if target_node.properties['on_exit'] == 'true':
+					print("CONNECTED B ", target_node, " AND ", entity_node)
+					entity_node.connect("OnTriggerExitParamless",Callable(target_node,"use"),CONNECT_PERSIST)
 				break
 
 ## Remove nodes marked transient. See [member QodotFGDClass.transient_node]
