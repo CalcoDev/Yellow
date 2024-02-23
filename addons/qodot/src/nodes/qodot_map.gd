@@ -36,7 +36,13 @@ signal unwrap_uv2_complete()
 @export_category("Entities")
 ## [QodotFGDFile] for the map.
 ## This resource will translate between Trenchbroom classnames and Godot scripts/scenes. See [url=https://qodotplugin.github.io/docs/entities/]Entities[/url] in the Qodot manual.
-@export var entity_fgd: QodotFGDFile = load("res://addons/qodot/game_definitions/fgd/qodot_fgd.tres")
+
+
+# NOTE(calco): I CHANGED THIS
+@export var entity_fgd: QodotFGDFile = load("res://definitions/qodot_fgd.tres")
+
+
+
 @export_category("Textures")
 ## Base directory for textures. When building materials, Qodot will search this directory for texture files matching the textures assigned to Trenchbroom faces.
 @export_dir var base_texture_dir := "res://textures"

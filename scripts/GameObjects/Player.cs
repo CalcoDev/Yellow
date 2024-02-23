@@ -9,6 +9,7 @@ namespace Yellow.GameObjects;
 
 using static Yellow.Resources.PlayerInput;
 
+[GlobalClass]
 public partial class Player : RigidBody3D
 {
 	[ExportGroup("References")]

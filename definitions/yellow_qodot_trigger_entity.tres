@@ -1,6 +1,5 @@
-[gd_resource type="Resource" script_class="QodotFGDSolidClass" load_steps=4 format=3 uid="uid://c14fmrs6p1nmd"]
+[gd_resource type="Resource" script_class="QodotFGDSolidClass" load_steps=3 format=3 uid="uid://c14fmrs6p1nmd"]
 
-[ext_resource type="Resource" uid="uid://dvpn76cudcfbw" path="res://definitions/yellow_qodot_trigger_base.tres" id="1_dv66w"]
 [ext_resource type="Script" path="res://addons/qodot/src/resources/game-definitions/fgd/qodot_fgd_solid_class.gd" id="1_viwb4"]
 [ext_resource type="Script" path="res://scripts/Qodot/QodotCustomTrigger.cs" id="2_6a3bv"]
 
@@ -21,7 +20,7 @@ script_class = ExtResource("2_6a3bv")
 classname = "custom_trigger"
 description = "A custom 3d value OBB."
 qodot_internal = false
-base_classes = Array[Resource]([ExtResource("1_dv66w")])
+base_classes = Array[Resource]([])
 class_properties = {
 "layer_mask": "player"
 }
