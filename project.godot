@@ -118,6 +118,7 @@ look_down={
 3d_physics/layer_1="LevelGeometry"
 3d_physics/layer_6="Entities"
 3d_physics/layer_11="Player"
+3d_physics/layer_15="Triggers"
 
 [physics]
 

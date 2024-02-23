@@ -1,7 +1,7 @@
 [gd_scene load_steps=60 format=3 uid="uid://dmcwmj8dpeee4"]
 
 [ext_resource type="Script" path="res://addons/qodot/src/nodes/qodot_map.gd" id="1"]
-[ext_resource type="Resource" uid="uid://c36hv0o6g0udo" path="res://addons/qodot/game_definitions/fgd/qodot_fgd.tres" id="2"]
+[ext_resource type="Resource" uid="uid://c36hv0o6g0udo" path="res://definitions/qodot_fgd.tres" id="2"]
 [ext_resource type="Material" path="res://addons/qodot/textures/materials/checkerboard_material.tres" id="3"]
 [ext_resource type="Material" path="res://addons/qodot/textures/materials/grid_material.tres" id="4"]
 [ext_resource type="Material" path="res://addons/qodot/textures/materials/uv_test_material.tres" id="5"]

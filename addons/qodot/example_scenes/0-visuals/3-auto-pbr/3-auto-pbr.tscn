@@ -1,7 +1,7 @@
 [gd_scene load_steps=15 format=3 uid="uid://b370vrg0nak8d"]
 
 [ext_resource type="Script" path="res://addons/qodot/src/nodes/qodot_map.gd" id="1"]
-[ext_resource type="Resource" uid="uid://c36hv0o6g0udo" path="res://addons/qodot/game_definitions/fgd/qodot_fgd.tres" id="2"]
+[ext_resource type="Resource" uid="uid://c36hv0o6g0udo" path="res://definitions/qodot_fgd.tres" id="2"]
 [ext_resource type="Texture2D" uid="uid://df7s57f6m26uf" path="res://addons/qodot/textures/pbr/military-panel/military-panel_metallic.png" id="4"]
 [ext_resource type="Texture2D" uid="uid://b3g5hqkvp4mqv" path="res://addons/qodot/textures/pbr/military-panel/military-panel_normal.png" id="5"]
 [ext_resource type="Texture2D" uid="uid://cpxl04ai0om41" path="res://addons/qodot/textures/pbr/military-panel/military-panel_roughness.png" id="6"]

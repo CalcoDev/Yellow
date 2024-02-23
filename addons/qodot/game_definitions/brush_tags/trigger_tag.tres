@@ -4,8 +4,8 @@
 
 [resource]
 script = ExtResource("1")
-tag_name = "Trigger"
+tag_name = "T"
 tag_attributes = Array[String](["transparent"])
-tag_match_type = 4
-tag_pattern = "trigger*"
-texture_name = "trigger"
+tag_match_type = 0
+tag_pattern = "a_trigger*as"
+texture_name = "triggerasdadasd"
