@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="PlayerMovementSO" load_steps=2 format=3 uid="uid://uccyjnd3efm"]
+
+[ext_resource type="Script" path="res://scripts/Resources/PlayerMovementSO.cs" id="1_uis1a"]
+
+[resource]
+script = ExtResource("1_uis1a")
+MaxStamina = 3.0
+RunSpeed = 600.0
+AirAccelMult = 1.5
+MaxFallSpeed = 40.0
+JumpForce = 17.75
+WallSlideMaxDot = -0.85
+WallSlideGravityScale = 0.2
+WallSlideMaxFallSpeed = 20.0
+WallJumpHopForce = 16.0
+WallJumpLeapForce = 17.0
+WallJumpMaxCount = 3
+DashStaminaCost = 1.0
+DashDuration = 0.175
+DashSpeed = 35.0
+DashEndSpeed = 10.0
+DashJumpStaminaCost = 1.0
+DashJumpHopForce = 13.0
+DashJumpLeapForce = 5.0
+SlideBaseSpeed = 13.5
+SlideDirChangeMult = 0.2
+SlideSpeedReduce = 1.0
+SlideLeapMultiplier = 0.55
+SlideHopForce = 16.0
+SlideMaxSpeedBuffer = 0.1
+ThwompDownForce = 50.0
+ThwompJumpBuffer = 0.1
+ThwompForceTimeMult = 8.0

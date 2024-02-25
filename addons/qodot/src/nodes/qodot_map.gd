@@ -1279,6 +1279,10 @@ func connect_signal(entity_node: Node, target_node: Node) -> void:
 					print("CONNECTED B ", target_node, " AND ", entity_node)
 					entity_node.connect("OnTriggerExitParamless",Callable(target_node,"use"),CONNECT_PERSIST)
 				break
+			if signal_dict['name'] == 'trigger':
+				entity_node.connect("trigger",Callable(target_node,"use"),CONNECT_PERSIST)
+				break
+			
 
 ## Remove nodes marked transient. See [member QodotFGDClass.transient_node]
 func remove_transient_nodes() -> void:
