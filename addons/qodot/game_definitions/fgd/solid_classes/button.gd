@@ -32,6 +32,9 @@ var trigger_signal_delay :=  0.0
 var press_signal_delay :=  0.0
 var release_signal_delay :=  0.0
 
+var OneShot := false
+var OneShotOver := false
+
 var _layer_mask: int = 0
 
 var overlaps := 0
@@ -63,6 +66,10 @@ func update_properties() -> void:
 	else:
 		_layer_mask = 0
 	collision_mask = _layer_mask
+
+	if 'one_shot' in properties:
+		OneShot = properties['one_shot'] == 'true'
+	OneShotOver = false
 
 func _compute_layer_mask() -> int:
 	if 'layer_mask' in properties:
@@ -97,7 +104,7 @@ func _process(delta: float) -> void:
 	position = position.lerp(target_position, speed * delta)
 
 func body_shape_entered(body_id, body: Node, body_shape_idx: int, self_shape_idx: int) -> void:
-	if body is StaticBody3D:
+	if body is StaticBody3D or (OneShot && OneShotOver):
 		return
 
 	OnTriggerEnterParamless.emit()
@@ -108,7 +115,7 @@ func body_shape_entered(body_id, body: Node, body_shape_idx: int, self_shape_idx
 	overlaps += 1
 
 func body_shape_exited(body_id, body: Node, body_shape_idx: int, self_shape_idx: int) -> void:
-	if body is StaticBody3D:
+	if body is StaticBody3D or (OneShot && OneShotOver):
 		return
 
 	overlaps -= 1
@@ -126,6 +133,7 @@ func press(body) -> void:
 		return
 
 	is_pressed = true
+	OneShotOver = true
 
 	emit_trigger(body)
 	emit_pressed(body)

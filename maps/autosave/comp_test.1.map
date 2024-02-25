@@ -32,7 +32,6 @@
 "on_enter" "true"
 "on_exit" "false"
 "layer_mask" "player"
-"one_shot" "true"
 // brush 0
 {
 ( 160 -64 144 ) ( 160 64 16 ) ( 160 64 144 ) grid/orange/texture_08 [ 0 -1 0 0 ] [ 0 0 -1 0 ] 0 1 1
@@ -77,10 +76,9 @@
 {
 "classname" "button"
 "target" "cbtn_door"
-"on_pressed" "true"
+"on_pressed" "false"
 "layer_mask" "player"
-"on_released" "false"
-"one_shot" "true"
+"on_released" "THI"
 // brush 0
 {
 ( -64 -336 32 ) ( -64 -240 16 ) ( -64 -240 32 ) grid/orange/texture_08 [ 0 -1 0 0 ] [ 0 0 -1 0 ] 0 1 1

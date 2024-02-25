@@ -25,12 +25,14 @@ class_properties = {
 "layer_mask": "player",
 "on_enter": "true",
 "on_exit": "false",
+"one_shot": "false",
 "target": ""
 }
 class_property_descriptions = {
 "layer_mask": "The layers to collide with.",
 "on_enter": "READ THE DOCS",
 "on_exit": "READ. THE. DOCUMENTAITON.",
+"one_shot": "Can trigger ONE event then dies forever.",
 "target": "The target to affect"
 }
 meta_properties = {}

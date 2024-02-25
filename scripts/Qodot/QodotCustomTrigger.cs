@@ -9,6 +9,8 @@ public partial class QodotCustomTrigger : Area3D
 {
 	[ExportGroup("QODOT!!! DO NOT TOUCH")]
 	[Export] public Dictionary properties;
+	public bool OneShot { get; private set; } = false;
+	public bool OneShotOver { get; private set; } = false;
 
 	[Signal]
 	public delegate void OnTriggerEnterEventHandler(PhysicsBody3D body);
@@ -42,22 +44,30 @@ public partial class QodotCustomTrigger : Area3D
 		ParseLayers();
 		BodyEntered += OnBodyEntered;
 		BodyExited += OnBodyExited;
+		
+		if (properties.TryGetValue("one_shot", out var oneshot)) {
+			OneShot = oneshot.As<string>() == "true";
+		}
 	}
 
     private void OnBodyEntered(Node3D body)
     {
-		if (body is not PhysicsBody3D pBody) {
+		if (body is not PhysicsBody3D pBody || (OneShot && OneShotOver)) {
 			return;
 		}
+		
+		OneShotOver = true;
 		EmitSignal(SignalName.OnTriggerEnter, pBody);
 		EmitSignal(SignalName.OnTriggerEnterParamless);
     }
 
     private void OnBodyExited(Node3D body)
     {
-		if (body is not PhysicsBody3D pBody) {
+		if (body is not PhysicsBody3D pBody || (OneShot && OneShotOver)) {
 			return;
 		}
+
+		OneShotOver = true;
 		EmitSignal(SignalName.OnTriggerExit, pBody);
 		EmitSignal(SignalName.OnTriggerExitParamless);
     }
