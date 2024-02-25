@@ -1,8 +1,18 @@
+class_name QodotButton
 extends Area3D
 
 signal trigger()
 signal pressed()
 signal released()
+
+signal OnTriggerEnter(body)
+signal OnTriggerExit(body)
+
+signal OnTriggerEnterParamless()
+signal OnTriggerExitParamless()
+
+signal OnPressed(body)
+signal OnReleased(body)
 
 @export var properties: Dictionary :
 	get:
@@ -21,6 +31,8 @@ var release_delay := 0.0
 var trigger_signal_delay :=  0.0
 var press_signal_delay :=  0.0
 var release_signal_delay :=  0.0
+
+var _layer_mask: int = 0
 
 var overlaps := 0
 
@@ -45,6 +57,33 @@ func update_properties() -> void:
 
 	if 'release_signal_delay' in properties:
 		release_signal_delay = properties.release_signal_delay
+	
+	if 'layer_mask' in properties:
+		_layer_mask = _compute_layer_mask()
+	else:
+		_layer_mask = 0
+	collision_mask = _layer_mask
+
+func _compute_layer_mask() -> int:
+	if 'layer_mask' in properties:
+		var layers = _parse_layers()
+		var lmask: int = 0
+		for layer in properties['layer_mask'].split(","):
+			var trimmed: String = layer.trim_prefix(" ").trim_suffix(" ").to_lower()
+			if trimmed in layers:
+				lmask += 1 << layers[trimmed]
+		return lmask
+	else:
+		return 0
+
+# TODO(calco): This should just be static but gdscript no do that :skull:
+func _parse_layers() -> Dictionary:
+	var dict: Dictionary
+	for i in 33:
+		var name: String = ProjectSettings.get_setting("layer_names/3d_physics/layer_%d" % i, "NO_NAME")
+		dict[name.to_lower()] = i - 1;
+	return dict;
+
 
 func _init() -> void:
 	connect("body_shape_entered", body_shape_entered)
@@ -61,8 +100,10 @@ func body_shape_entered(body_id, body: Node, body_shape_idx: int, self_shape_idx
 	if body is StaticBody3D:
 		return
 
+	OnTriggerEnterParamless.emit()
+	OnTriggerEnter.emit(body)
 	if overlaps == 0:
-		press()
+		press(body)
 
 	overlaps += 1
 
@@ -71,31 +112,34 @@ func body_shape_exited(body_id, body: Node, body_shape_idx: int, self_shape_idx:
 		return
 
 	overlaps -= 1
+	OnTriggerExit.emit(body)
+	OnTriggerEnterParamless.emit()
 	if overlaps == 0:
 		if release_delay == 0:
-			release()
+			release(body)
 		elif release_delay > 0:
 			await get_tree().create_timer(release_delay).timeout
-			release()
+			release(body)
 
-func press() -> void:
+func press(body) -> void:
 	if is_pressed:
 		return
 
 	is_pressed = true
 
-	emit_trigger()
-	emit_pressed()
+	emit_trigger(body)
+	emit_pressed(body)
 
-func emit_trigger() -> void:
+func emit_trigger(body) -> void:
 	await get_tree().create_timer(trigger_signal_delay).timeout
 	trigger.emit()
 
-func emit_pressed() -> void:
+func emit_pressed(body) -> void:
 	await get_tree().create_timer(press_signal_delay).timeout
 	pressed.emit()
+	OnPressed.emit(body)
 
-func release() -> void:
+func release(body) -> void:
 	if not is_pressed:
 		return
 
@@ -103,3 +147,4 @@ func release() -> void:
 
 	await get_tree().create_timer(release_delay).timeout
 	released.emit()
+	OnReleased.emit(body)

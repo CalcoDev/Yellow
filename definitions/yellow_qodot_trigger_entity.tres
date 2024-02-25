@@ -23,10 +23,14 @@ qodot_internal = false
 base_classes = Array[Resource]([])
 class_properties = {
 "layer_mask": "player",
+"on_enter": "true",
+"on_exit": "false",
 "target": ""
 }
 class_property_descriptions = {
 "layer_mask": "The layers to collide with.",
+"on_enter": "READ THE DOCS",
+"on_exit": "READ. THE. DOCUMENTAITON.",
 "target": "The target to affect"
 }
 meta_properties = {}

@@ -24,6 +24,9 @@ base_classes = Array[Resource]([])
 class_properties = {
 "axis": Vector3(0, -1, 0),
 "depth": 0.8,
+"layer_mask": "player",
+"on_pressed": "true",
+"on_released": "false",
 "press_signal_delay": 0.0,
 "release_delay": 0.0,
 "release_signal_delay": 0.0,
@@ -34,6 +37,9 @@ class_properties = {
 class_property_descriptions = {
 "axis": "Direction of movement when pressed.",
 "depth": "How far to move along the axis when pressed.",
+"layer_mask": "The layers this button collides with.",
+"on_pressed": "READ THE DOCS YOU FOOL",
+"on_released": "READ THE DOCS YOU FOOL",
 "press_signal_delay": "Seconds after press() is called, before emitting is own pressed signal.",
 "release_delay": "Seconds after a physics body exits, before calling release()",
 "release_signal_delay": "Seconds after release() is called, before emitting is own released signal.",

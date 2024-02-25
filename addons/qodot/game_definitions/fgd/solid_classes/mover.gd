@@ -39,7 +39,6 @@ func _ready() -> void:
 	target_transform = base_transform
 
 func use() -> void:
-	print("MOOOOOOOOOOVEEEEEEEEEEEEEEEEEEEEEER PLEEEEEAAAAAAAAAASE")
 	play_motion()
 
 func play_motion() -> void:

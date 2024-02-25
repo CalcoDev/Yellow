@@ -22,8 +22,6 @@ description = "Moving brush."
 qodot_internal = false
 base_classes = Array[Resource]([])
 class_properties = {
-"on_enter": "true",
-"on_exit": "false",
 "rotation": Vector3(0, 0, 0),
 "scale": Vector3(1, 1, 1),
 "speed": 1.0,
