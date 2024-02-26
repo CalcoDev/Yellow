@@ -12,7 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://bofrt6byqqgvp" path="res://textures/grid/orange/texture_08.png" id="9_wikmr"]
 [ext_resource type="Script" path="res://addons/qodot/game_definitions/fgd/solid_classes/button.gd" id="10_cxfya"]
 [ext_resource type="Script" path="res://scripts/Managers/CameraManager.cs" id="11_jnrui"]
-[ext_resource type="PackedScene" uid="uid://bsgwkv72xs4ab" path="res://scenes/entities/player.tscn" id="11_rrs4j"]
+[ext_resource type="PackedScene" uid="uid://bsgwkv72xs4ab" path="res://scenes/game_objects/entities/player.tscn" id="11_rrs4j"]
 [ext_resource type="Script" path="res://scripts/Managers/PlayerUIManager.cs" id="13_0m6b1"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_xms1l"]

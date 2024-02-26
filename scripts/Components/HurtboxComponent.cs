@@ -26,7 +26,7 @@ public partial class HurtboxComponent : Area3D
     }
     [Export] public float InvincibilityTime { get; set; } = 0f;
 
-    [Export] private float _invincibilityTimer;
+    private float _invincibilityTimer;
 
     [Signal]
     public delegate void OnHitEventHandler(HitboxComponent other);

@@ -12,6 +12,8 @@ using static Yellow.Resources.PlayerInput;
 [GlobalClass]
 public partial class Player : RigidBody3D
 {
+	public static Player Instance { get; private set; }
+
 	[ExportGroup("References")]
 	[Export] private PlayerInput _input;
 	[Export] private GroundCheckComponent _groundCheck;
@@ -79,7 +81,22 @@ public partial class Player : RigidBody3D
 		}
 	}
 
-	public override void _Ready()
+    public override void _EnterTree()
+    {
+        if (Instance != null) {
+			GD.PushWarning("WARN: Player instance already exists!");
+			QueueFree();
+			return;
+		}
+		Instance = this;
+    }
+
+    public override void _ExitTree()
+    {
+        Instance = null;
+    }
+
+    public override void _Ready()
 	{
 		ProcessPriority = (int)NodeProcessOrder.Player;
 		AddToGroup("player");

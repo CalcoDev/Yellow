@@ -1,14 +1,12 @@
 [gd_scene load_steps=15 format=3 uid="uid://bsgwkv72xs4ab"]
 
 [ext_resource type="Script" path="res://scripts/GameObjects/Player.cs" id="1_8gga7"]
+[ext_resource type="PhysicsMaterial" uid="uid://cknorhfrivu38" path="res://resources/physics_mat/no_friction_mat.tres" id="1_l3ghh"]
 [ext_resource type="Resource" uid="uid://yf2osyn4pvt3" path="res://resources/player_input.tres" id="2_ihh5m"]
 [ext_resource type="Resource" uid="uid://uccyjnd3efm" path="res://resources/player_movement/player_movement_default.tres" id="3_x1l4f"]
 [ext_resource type="Script" path="res://scripts/Components/ShapeCastComponent.cs" id="4_16gja"]
 [ext_resource type="Script" path="res://scripts/Components/GroundCheckComponent.cs" id="5_e2m20"]
 [ext_resource type="Resource" uid="uid://okxparq80j4b" path="res://resources/ground_properties/default_ground_props.tres" id="6_5d0dr"]
-
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_igkij"]
-friction = 0.0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1ogde"]
 size = Vector3(0.2, 1.8, 0.8)
@@ -32,7 +30,7 @@ size = Vector3(0.619141, 0.4, 0.452148)
 [node name="Player" type="RigidBody3D" node_paths=PackedStringArray("_groundCheck", "_wallCheck") groups=["player"]]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 1.42522, 1.60731, 1.67124)
 collision_layer = 1056
-physics_material_override = SubResource("PhysicsMaterial_igkij")
+physics_material_override = ExtResource("1_l3ghh")
 can_sleep = false
 lock_rotation = true
 continuous_cd = true
