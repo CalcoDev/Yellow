@@ -1,0 +1,91 @@
+[gd_scene load_steps=15 format=3 uid="uid://bsgwkv72xs4ab"]
+
+[ext_resource type="Script" path="res://scripts/GameObjects/Player.cs" id="1_8gga7"]
+[ext_resource type="Resource" uid="uid://yf2osyn4pvt3" path="res://resources/player_input.tres" id="2_ihh5m"]
+[ext_resource type="Resource" uid="uid://uccyjnd3efm" path="res://resources/player_movement/player_movement_default.tres" id="3_x1l4f"]
+[ext_resource type="Script" path="res://scripts/Components/ShapeCastComponent.cs" id="4_16gja"]
+[ext_resource type="Script" path="res://scripts/Components/GroundCheckComponent.cs" id="5_e2m20"]
+[ext_resource type="Resource" uid="uid://okxparq80j4b" path="res://resources/ground_properties/default_ground_props.tres" id="6_5d0dr"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_igkij"]
+friction = 0.0
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1ogde"]
+size = Vector3(0.2, 1.8, 0.8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1ojxg"]
+size = Vector3(0.2, 1.8, 0.8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_r6oh0"]
+size = Vector3(0.8, 1.8, 0.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_km8yv"]
+size = Vector3(0.8, 1.8, 0.2)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_0m1ta"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bh7jh"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_iiuxv"]
+size = Vector3(0.619141, 0.4, 0.452148)
+
+[node name="Player" type="RigidBody3D" node_paths=PackedStringArray("_groundCheck", "_wallCheck") groups=["player"]]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 1.42522, 1.60731, 1.67124)
+collision_layer = 1056
+physics_material_override = SubResource("PhysicsMaterial_igkij")
+can_sleep = false
+lock_rotation = true
+continuous_cd = true
+script = ExtResource("1_8gga7")
+_input = ExtResource("2_ihh5m")
+_groundCheck = NodePath("GroundCheck")
+_wallCheck = NodePath("Head/ShapeCastComponent")
+Sensitivity = 44.0
+_p = ExtResource("3_x1l4f")
+
+[node name="Head" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+
+[node name="ShapeCastComponent" type="Node3D" parent="Head"]
+transform = Transform3D(8.74228e-08, 0, -1, 0, 1, 0, 1, 0, 8.74228e-08, 0, -1, 0)
+script = ExtResource("4_16gja")
+LayerMask = 1
+
+[node name="Front" type="ShapeCast3D" parent="Head/ShapeCastComponent"]
+shape = SubResource("BoxShape3D_1ogde")
+target_position = Vector3(0.6, 0, 0)
+debug_shape_custom_color = Color(1, 0, 0, 1)
+
+[node name="Back" type="ShapeCast3D" parent="Head/ShapeCastComponent"]
+shape = SubResource("BoxShape3D_1ojxg")
+target_position = Vector3(-0.6, 0, 0)
+debug_shape_custom_color = Color(1, 0, 0, 1)
+
+[node name="Right" type="ShapeCast3D" parent="Head/ShapeCastComponent"]
+shape = SubResource("BoxShape3D_r6oh0")
+target_position = Vector3(0, 0, 0.6)
+debug_shape_custom_color = Color(1, 0, 0, 1)
+
+[node name="Right2" type="ShapeCast3D" parent="Head/ShapeCastComponent"]
+shape = SubResource("BoxShape3D_km8yv")
+target_position = Vector3(0, 0, -0.6)
+debug_shape_custom_color = Color(1, 0, 0, 1)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+layers = 524288
+mesh = SubResource("CapsuleMesh_0m1ta")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_bh7jh")
+
+[node name="GroundCheck" type="Area3D" parent="."]
+transform = Transform3D(8.74228e-08, 0, -1, 0, 1, 0, 1, 0, 8.74228e-08, 0, -5.96046e-08, 0)
+script = ExtResource("5_e2m20")
+LayerMask = 33
+DefaultGroundProperties = ExtResource("6_5d0dr")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GroundCheck"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.199776, 0)
+shape = SubResource("BoxShape3D_iiuxv")
