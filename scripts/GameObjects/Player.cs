@@ -69,6 +69,9 @@ public partial class Player : RigidBody3D
 	[Export] private float ThwompForceTimeMult;
 	// [Export] private float ThwompForce
 
+	[ExportGroup("Hand")]
+	[Export] private HandSlot PlayerHand;
+	
 	// States
 	public bool CanSlideWall => _wallCheck.IsColliding && _wallCheck.IsOnSlope;
 	public bool IsWallSliding { get; private set; } = false;
@@ -269,6 +272,18 @@ public partial class Player : RigidBody3D
 		_moveDir = (forward + right).Normalized();
 
 		_ui.DisplayStamina(_stamina);
+
+		if (Input.IsActionJustPressed("use_primary"))
+		{
+			GD.Print("Using primary.");
+			PlayerHand.UsePrimary(_head.Forward());
+		}
+
+		if (Input.IsActionJustPressed("use_secondary"))
+		{
+			GD.Print("Using secondary.");
+			PlayerHand.UseSecondary();
+		}
 	}
 
 	private Vector3 _diffDir;

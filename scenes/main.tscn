@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=3 uid="uid://7vap7yixm4ha"]
+[gd_scene load_steps=52 format=3 uid="uid://7vap7yixm4ha"]
 
 [ext_resource type="Script" path="res://addons/qodot/src/nodes/qodot_map.gd" id="1_4c04o"]
 [ext_resource type="Script" path="res://scripts/Managers/Game.cs" id="1_xylgx"]
@@ -17,6 +17,9 @@
 [ext_resource type="Texture2D" uid="uid://dcwisald8g5hd" path="res://textures/128x128/Stone/Stone_14-128x128.png" id="10_nsosw"]
 [ext_resource type="Script" path="res://scripts/Managers/CameraManager.cs" id="11_jnrui"]
 [ext_resource type="Script" path="res://scripts/Managers/PlayerUIManager.cs" id="13_0m6b1"]
+[ext_resource type="Script" path="res://scripts/GameObjects/HandSlot.cs" id="15_0r88o"]
+[ext_resource type="Script" path="res://scripts/GameObjects/Gun.cs" id="19_rrmda"]
+[ext_resource type="Script" path="res://scripts/Resources/Items/GunResource.cs" id="20_qpuv4"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_xms1l"]
 
@@ -168,6 +171,23 @@ size = Vector3(0.8, 1.8, 0.2)
 [sub_resource type="BoxShape3D" id="BoxShape3D_iiuxv"]
 size = Vector3(0.619141, 0.4, 0.452148)
 
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_0akjw"]
+
+[sub_resource type="Resource" id="Resource_vwgfl"]
+script = ExtResource("20_qpuv4")
+Damage = 1.0
+MagazineCapacity = 10
+BulletCount = 10
+BulletsPerShot = 1
+MaxSpreadAngle = 10.0
+Hitscan = true
+BulletSpeed = 200.0
+ShootCooldown = 1.0
+ReloadCooldown = 2.5
+CooldownTimer = 1.0
+DisplayName = "Default"
+Cooldown = 1.0
+
 [node name="Main" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0993204, 0.0205519, 0.0939817)
 
@@ -229,7 +249,7 @@ shape = SubResource("ConvexPolygonShape3D_hwjhv")
 [node name="entity_0_brush_8_collision_shape" type="CollisionShape3D" parent="QodotMap/entity_0_worldspawn"]
 shape = SubResource("ConvexPolygonShape3D_h8goh")
 
-[node name="Player" type="RigidBody3D" parent="." node_paths=PackedStringArray("_groundCheck", "_wallCheck", "_ui") groups=["player"]]
+[node name="Player" type="RigidBody3D" parent="." node_paths=PackedStringArray("_groundCheck", "_wallCheck", "_ui", "PlayerHand") groups=["player"]]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 26.9765, 0.849706, 3.95836)
 collision_layer = 1056
 physics_material_override = SubResource("PhysicsMaterial_igkij")
@@ -265,6 +285,7 @@ SlideHopForce = 16.0
 ThwompDownForce = 50.0
 ThwompJumpBuffer = 0.1
 ThwompForceTimeMult = 8.0
+PlayerHand = NodePath("HandSlot")
 
 [node name="Head" type="Node3D" parent="Player"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
@@ -294,6 +315,10 @@ shape = SubResource("BoxShape3D_km8yv")
 target_position = Vector3(0, 0, -0.6)
 debug_shape_custom_color = Color(1, 0, 0, 1)
 
+[node name="RayCast3D" type="RayCast3D" parent="Player/Head"]
+hit_from_inside = true
+collide_with_areas = true
+
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Player"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 layers = 524288
@@ -313,8 +338,12 @@ DefaultGroundProperties = ExtResource("9_ge3qk")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.199776, 0)
 shape = SubResource("BoxShape3D_iiuxv")
 
+[node name="HandSlot" type="Node3D" parent="Player" node_paths=PackedStringArray("HeldWeapon")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.434004, 1, 0)
+script = ExtResource("15_0r88o")
+HeldWeapon = NodePath("../../BasicGun")
+
 [node name="Camera" type="Node3D" parent="." node_paths=PackedStringArray("Follow")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.308, 2.57853, 5.89811)
 script = ExtResource("11_jnrui")
 Follow = NodePath("../Player/Head")
 FollowSpeed = 100.0
@@ -337,6 +366,12 @@ offset_bottom = 12.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("9_rg4o0")
+
+[node name="CamHand" type="Node3D" parent="Camera"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Camera/CamHand"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 1.185, -1.04, -0.99)
+mesh = SubResource("CapsuleMesh_0akjw")
 
 [node name="PlayerUI" type="CanvasLayer" parent="." node_paths=PackedStringArray("_staminaBars", "_w", "_a", "_s", "_d", "_shift", "_lctrl", "_space")]
 script = ExtResource("13_0m6b1")
@@ -527,3 +562,8 @@ layout_mode = 2
 size_flags_horizontal = 7
 size_flags_vertical = 3
 max_value = 1.0
+
+[node name="BasicGun" type="Node3D" parent="." node_paths=PackedStringArray("EntityLookingAt")]
+script = ExtResource("19_rrmda")
+Data = SubResource("Resource_vwgfl")
+EntityLookingAt = NodePath("../Player/Head/RayCast3D")

@@ -1,0 +1,111 @@
+[gd_scene load_steps=14 format=3 uid="uid://cfd7v7xq1bpfl"]
+
+[ext_resource type="Script" path="res://scripts/GameObjects/Player.cs" id="1_s6krj"]
+[ext_resource type="Resource" uid="uid://yf2osyn4pvt3" path="res://resources/player_input.tres" id="2_hh3mj"]
+[ext_resource type="Script" path="res://scripts/Components/ShapeCastComponent.cs" id="3_jt8sb"]
+[ext_resource type="Script" path="res://scripts/Components/GroundCheckComponent.cs" id="4_5vvu7"]
+[ext_resource type="Resource" uid="uid://okxparq80j4b" path="res://resources/ground_properties/default_ground_props.tres" id="5_mxbyr"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_igkij"]
+friction = 0.0
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_0m1ta"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bh7jh"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_iiuxv"]
+size = Vector3(0.619141, 0.4, 0.452148)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1ogde"]
+size = Vector3(0.2, 1.8, 0.8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1ojxg"]
+size = Vector3(0.2, 1.8, 0.8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_r6oh0"]
+size = Vector3(0.8, 1.8, 0.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_km8yv"]
+size = Vector3(0.8, 1.8, 0.2)
+
+[node name="Player" type="RigidBody3D" node_paths=PackedStringArray("_groundCheck", "_wallCheck", "Inventory") groups=["player"]]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+collision_layer = 1056
+physics_material_override = SubResource("PhysicsMaterial_igkij")
+can_sleep = false
+lock_rotation = true
+continuous_cd = true
+script = ExtResource("1_s6krj")
+_input = ExtResource("2_hh3mj")
+_groundCheck = NodePath("GroundCheck")
+_wallCheck = NodePath("Head/ShapeCastComponent")
+Sensitivity = 44.0
+RunSpeed = 600.0
+AirAccelMult = 1.5
+MaxFallSpeed = 40.0
+JumpForce = 17.75
+WallSlideGravityScale = 0.2
+WallSlideMaxFallSpeed = 20.0
+WallJumpHopForce = 16.0
+WallJumpLeapForce = 17.0
+WallJumpMaxCount = 10000
+DashDuration = 0.175
+DashSpeed = 35.0
+DashEndSpeed = 10.0
+DashJumpStaminaCost = 1.0
+DashJumpHopForce = 13.0
+DashJumpLeapForce = 5.0
+SlideBaseSpeed = 13.5
+SlideDirChangeMult = 0.2
+SlideSpeedReduce = 1.0
+SlideLeapMultiplier = 0.55
+SlideHopForce = 16.0
+ThwompDownForce = 50.0
+ThwompJumpBuffer = 0.1
+ThwompForceTimeMult = 8.0
+Inventory = []
+CurrentSlot = -1
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+layers = 524288
+mesh = SubResource("CapsuleMesh_0m1ta")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_bh7jh")
+
+[node name="GroundCheck" type="Area3D" parent="."]
+transform = Transform3D(8.74228e-08, 0, -1, 0, 1, 0, 1, 0, 8.74228e-08, 0, -0.891385, 0)
+script = ExtResource("4_5vvu7")
+LayerMask = 33
+DefaultGroundProperties = ExtResource("5_mxbyr")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GroundCheck"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.199776, 0)
+shape = SubResource("BoxShape3D_iiuxv")
+
+[node name="Head" type="Node3D" parent="."]
+
+[node name="ShapeCastComponent" type="Node3D" parent="Head"]
+transform = Transform3D(8.74228e-08, 0, -1, 0, 1, 0, 1, 0, 8.74228e-08, 0, 0, 0)
+script = ExtResource("3_jt8sb")
+LayerMask = 1
+
+[node name="Front" type="ShapeCast3D" parent="Head/ShapeCastComponent"]
+shape = SubResource("BoxShape3D_1ogde")
+target_position = Vector3(0.6, 0, 0)
+debug_shape_custom_color = Color(1, 0, 0, 1)
+
+[node name="Back" type="ShapeCast3D" parent="Head/ShapeCastComponent"]
+shape = SubResource("BoxShape3D_1ojxg")
+target_position = Vector3(-0.6, 0, 0)
+debug_shape_custom_color = Color(1, 0, 0, 1)
+
+[node name="Right" type="ShapeCast3D" parent="Head/ShapeCastComponent"]
+shape = SubResource("BoxShape3D_r6oh0")
+target_position = Vector3(0, 0, 0.6)
+debug_shape_custom_color = Color(1, 0, 0, 1)
+
+[node name="Right2" type="ShapeCast3D" parent="Head/ShapeCastComponent"]
+shape = SubResource("BoxShape3D_km8yv")
+target_position = Vector3(0, 0, -0.6)
+debug_shape_custom_color = Color(1, 0, 0, 1)
