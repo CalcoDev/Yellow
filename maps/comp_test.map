@@ -32,15 +32,15 @@
 "on_enter" "true"
 "on_exit" "false"
 "layer_mask" "player"
-"one_shot" "true"
+"one_shot" "false"
 // brush 0
 {
-( 160 -64 144 ) ( 160 64 16 ) ( 160 64 144 ) grid/orange/texture_08 [ 0 -1 0 0 ] [ 0 0 -1 0 ] 0 1 1
-( 320 -64 144 ) ( 160 -64 16 ) ( 160 -64 144 ) grid/orange/texture_08 [ 1 0 0 -16 ] [ 0 0 -1 0 ] 0 1 1
-( 320 64 16 ) ( 160 -64 16 ) ( 320 -64 16 ) grid/orange/texture_08 [ -1 0 0 16 ] [ 0 -1 0 0 ] 0 1 1
-( 320 64 144 ) ( 160 -64 144 ) ( 160 64 144 ) grid/orange/texture_08 [ 1 0 0 -16 ] [ 0 -1 0 0 ] 0 1 1
-( 320 64 144 ) ( 160 64 16 ) ( 320 64 16 ) grid/orange/texture_08 [ -1 0 0 16 ] [ 0 0 -1 0 ] 0 1 1
-( 320 64 144 ) ( 320 -64 16 ) ( 320 -64 144 ) grid/orange/texture_08 [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 224 -64 144 ) ( 224 64 16 ) ( 224 64 144 ) grid/orange/texture_08 [ 0 -1 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 384 -64 144 ) ( 224 -64 16 ) ( 224 -64 144 ) grid/orange/texture_08 [ 1 0 0 -80 ] [ 0 0 -1 0 ] 0 1 1
+( 384 64 16 ) ( 224 -64 16 ) ( 384 -64 16 ) grid/orange/texture_08 [ -1 0 0 80 ] [ 0 -1 0 0 ] 0 1 1
+( 384 64 144 ) ( 224 -64 144 ) ( 224 64 144 ) grid/orange/texture_08 [ 1 0 0 -80 ] [ 0 -1 0 0 ] 0 1 1
+( 384 64 144 ) ( 224 64 16 ) ( 384 64 16 ) grid/orange/texture_08 [ -1 0 0 80 ] [ 0 0 -1 0 ] 0 1 1
+( 384 64 144 ) ( 384 -64 16 ) ( 384 -64 144 ) grid/orange/texture_08 [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
 }
 }
 // entity 2
@@ -48,6 +48,7 @@
 "classname" "mover"
 "targetname" "ctrig_door"
 "translation" "0 20 0"
+"togglable" "true"
 // brush 0
 {
 ( 416 -64 128 ) ( 416 64 16 ) ( 416 64 128 ) grid/orange/texture_08 [ 0 -1 0 0 ] [ 0 0 -1 0 ] 0 1 1
@@ -63,6 +64,8 @@
 "classname" "mover"
 "targetname" "cbtn_door"
 "translation" "0 20 0"
+"close_delay" ".2"
+"togglable" "true"
 // brush 0
 {
 ( -64 -496 128 ) ( -64 -464 16 ) ( -64 -464 128 ) grid/orange/texture_08 [ -1.8369701987210297e-16 -1 0 -48 ] [ 0 0 -1 0 ] 0 1 1
@@ -80,7 +83,7 @@
 "on_pressed" "true"
 "layer_mask" "player"
 "on_released" "false"
-"one_shot" "true"
+"one_shot" "false"
 // brush 0
 {
 ( -64 -336 32 ) ( -64 -240 16 ) ( -64 -240 32 ) grid/orange/texture_08 [ 0 -1 0 0 ] [ 0 0 -1 0 ] 0 1 1

@@ -22,13 +22,18 @@ description = "Moving brush."
 qodot_internal = false
 base_classes = Array[Resource]([])
 class_properties = {
+"close_delay": -1.0,
 "rotation": Vector3(0, 0, 0),
 "scale": Vector3(1, 1, 1),
 "speed": 1.0,
 "targetname": "",
+"togglable": "false",
 "translation": Vector3(0, 0, 0)
 }
-class_property_descriptions = {}
+class_property_descriptions = {
+"close_delay": "Auto closes after TIME. NEGATIVE => NEVER",
+"togglable": "DOCS YES HM."
+}
 meta_properties = {}
 node_class = "CharacterBody3D"
 transient_node = false
