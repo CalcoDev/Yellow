@@ -13,6 +13,21 @@ public partial class Game : Node
 	public static float Time { get; private set; }
 	public static float FixedTime { get; private set; }
 
+	// FULLSCREEN
+	public static bool Fullscreen {
+		get => _fullscreen;
+		set {
+			_fullscreen = value;
+			var val = _fullscreen ? DisplayServer.WindowMode.Fullscreen : _prevWinMode;
+			if (_fullscreen) {
+				_prevWinMode = DisplayServer.WindowGetMode();
+			}
+			DisplayServer.WindowSetMode(val);
+		}
+	}
+	private static bool _fullscreen;
+	private static DisplayServer.WindowMode _prevWinMode;
+
 	// MOUSE
 	public static bool MouseLocked
 	{
@@ -52,6 +67,10 @@ public partial class Game : Node
 
 		if (Input.IsActionJustPressed("quit")) {
 			GetTree().Quit();
+		}
+
+		if (Input.IsActionJustPressed("fullscreen")) {
+			Fullscreen = !Fullscreen;
 		}
 
 		if (Input.IsActionJustPressed("unfocus")) {
