@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://bd6bt8t0u5aqj"]
+
+[ext_resource type="PackedScene" uid="uid://dpjvi22inhjl" path="res://assets/low-poly_g17.glb" id="1_euh4k"]
+
+[node name="G17Pistol" type="Node3D"]
+
+[node name="G17Model" parent="." instance=ExtResource("1_euh4k")]
+transform = Transform3D(-1.31134e-08, 0, 0.3, 0, 0.3, 0, -0.3, 0, -1.31134e-08, 0, 0, -0.196)

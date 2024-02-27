@@ -1,19 +1,20 @@
-[gd_scene load_steps=33 format=3 uid="uid://7vap7yixm4ha"]
+[gd_scene load_steps=34 format=3 uid="uid://bnfm3fc5l51mb"]
 
-[ext_resource type="Script" path="res://addons/qodot/src/nodes/qodot_map.gd" id="1_4c04o"]
-[ext_resource type="Script" path="res://scripts/Managers/Game.cs" id="1_xylgx"]
-[ext_resource type="Script" path="res://scripts/Managers/InputManager.cs" id="2_b1kx5"]
-[ext_resource type="Resource" uid="uid://c36hv0o6g0udo" path="res://definitions/qodot_fgd.tres" id="2_el4fi"]
-[ext_resource type="Resource" uid="uid://yf2osyn4pvt3" path="res://resources/player_input.tres" id="3_10npm"]
-[ext_resource type="Texture2D" uid="uid://cxoqhsrxebcve" path="res://textures/grid/dark/texture_08.png" id="6_lfin4"]
-[ext_resource type="Script" path="res://scripts/Qodot/QodotCustomTrigger.cs" id="7_35ema"]
-[ext_resource type="Script" path="res://addons/qodot/game_definitions/fgd/solid_classes/mover.gd" id="8_ts2hw"]
-[ext_resource type="Texture2D" uid="uid://dt1sbjvvc1356" path="res://assets/crosshair.png" id="9_rg4o0"]
-[ext_resource type="Texture2D" uid="uid://bofrt6byqqgvp" path="res://textures/grid/orange/texture_08.png" id="9_wikmr"]
-[ext_resource type="Script" path="res://addons/qodot/game_definitions/fgd/solid_classes/button.gd" id="10_cxfya"]
-[ext_resource type="Script" path="res://scripts/Managers/CameraManager.cs" id="11_jnrui"]
-[ext_resource type="PackedScene" uid="uid://bsgwkv72xs4ab" path="res://scenes/game_objects/entities/player.tscn" id="11_rrs4j"]
-[ext_resource type="Script" path="res://scripts/Managers/PlayerUIManager.cs" id="13_0m6b1"]
+[ext_resource type="Script" path="res://scripts/Managers/Game.cs" id="1_me4x0"]
+[ext_resource type="Script" path="res://scripts/Managers/InputManager.cs" id="2_itqj0"]
+[ext_resource type="Resource" uid="uid://yf2osyn4pvt3" path="res://resources/player_input.tres" id="3_dr8yf"]
+[ext_resource type="Script" path="res://addons/qodot/src/nodes/qodot_map.gd" id="4_vh5n1"]
+[ext_resource type="Resource" uid="uid://c36hv0o6g0udo" path="res://definitions/qodot_fgd.tres" id="5_7ibwn"]
+[ext_resource type="Texture2D" uid="uid://cxoqhsrxebcve" path="res://textures/grid/dark/texture_08.png" id="6_2c8rw"]
+[ext_resource type="Script" path="res://scripts/Qodot/QodotCustomTrigger.cs" id="7_6xknv"]
+[ext_resource type="Script" path="res://addons/qodot/game_definitions/fgd/solid_classes/mover.gd" id="8_jnhaj"]
+[ext_resource type="Texture2D" uid="uid://bofrt6byqqgvp" path="res://textures/grid/orange/texture_08.png" id="9_2imve"]
+[ext_resource type="Script" path="res://addons/qodot/game_definitions/fgd/solid_classes/button.gd" id="10_r2kui"]
+[ext_resource type="PackedScene" uid="uid://bsgwkv72xs4ab" path="res://scenes/game_objects/entities/player.tscn" id="11_al5ng"]
+[ext_resource type="Script" path="res://scripts/Managers/CameraManager.cs" id="12_nwfpr"]
+[ext_resource type="PackedScene" uid="uid://bd6bt8t0u5aqj" path="res://scenes/game_objects/weapons/g_17_pistol.tscn" id="13_dyvuu"]
+[ext_resource type="Texture2D" uid="uid://dt1sbjvvc1356" path="res://assets/crosshair.png" id="13_kivkm"]
+[ext_resource type="Script" path="res://scripts/Managers/PlayerUIManager.cs" id="14_wpsvg"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_xms1l"]
 
@@ -35,7 +36,7 @@ dof_blur_far_distance = 100.0
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q8w2k"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hxpue"]
-albedo_texture = ExtResource("6_lfin4")
+albedo_texture = ExtResource("6_2c8rw")
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_ecnwl"]
 _surfaces = [{
@@ -66,7 +67,7 @@ points = PackedVector3Array(-37, 1, -4, -37, -1, -4, -4, -1, -4, -4, 1, -4, -37,
 points = PackedVector3Array(-4, 4, -5, -4, -4, -5, 4, -4, -5, 4, 4, -5, -4, 4, 5, -4, -4, 5, 4, -4, 5, 4, 4, 5)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l5m5k"]
-albedo_texture = ExtResource("9_wikmr")
+albedo_texture = ExtResource("9_2imve")
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_cj5bg"]
 _surfaces = [{
@@ -126,11 +127,11 @@ points = PackedVector3Array(-3, 0.5, -4, -3, -0.5, -4, 3, -0.5, -4, 3, 0.5, -4, 
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0993204, 0.0205519, 0.0939817)
 
 [node name="Game" type="Node" parent="."]
-script = ExtResource("1_xylgx")
+script = ExtResource("1_me4x0")
 
 [node name="InputManager" type="Node" parent="."]
-script = ExtResource("2_b1kx5")
-_input = ExtResource("3_10npm")
+script = ExtResource("2_itqj0")
+_input = ExtResource("3_dr8yf")
 _update = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -141,9 +142,9 @@ camera_attributes = SubResource("CameraAttributesPractical_1keek")
 transform = Transform3D(0.895841, -0.132147, -0.424271, 0.284018, -0.564027, 0.775376, -0.341764, -0.815114, -0.467746, 0, 22.7694, 0)
 
 [node name="QodotMap" type="Node3D" parent="."]
-script = ExtResource("1_4c04o")
+script = ExtResource("4_vh5n1")
 map_file = "C:/Users/calco/Documents/Calcopod/Development/GameDev/Godot/bitdefender_shithead/Yellow/maps/comp_test.map"
-entity_fgd = ExtResource("2_el4fi")
+entity_fgd = ExtResource("5_7ibwn")
 texture_file_extensions = PackedStringArray("png", "jpg", "jpeg", "bmp")
 default_material = SubResource("StandardMaterial3D_q8w2k")
 
@@ -165,7 +166,7 @@ shape = SubResource("ConvexPolygonShape3D_1x3ce")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 19)
 collision_layer = 16384
 collision_mask = 1056
-script = ExtResource("7_35ema")
+script = ExtResource("7_6xknv")
 properties = {
 "classname": "custom_trigger",
 "layer_mask": "player",
@@ -180,7 +181,7 @@ shape = SubResource("ConvexPolygonShape3D_t2sgp")
 
 [node name="entity_2_mover" type="CharacterBody3D" parent="QodotMap"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.5, 27)
-script = ExtResource("8_ts2hw")
+script = ExtResource("8_jnhaj")
 properties = {
 "classname": "mover",
 "close_delay": -1.0,
@@ -200,7 +201,7 @@ shape = SubResource("ConvexPolygonShape3D_jjqqj")
 
 [node name="entity_3_mover" type="CharacterBody3D" parent="QodotMap"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 4.5, 0)
-script = ExtResource("8_ts2hw")
+script = ExtResource("8_jnhaj")
 properties = {
 "classname": "mover",
 "close_delay": 0.2,
@@ -220,7 +221,7 @@ shape = SubResource("ConvexPolygonShape3D_klk7m")
 
 [node name="entity_4_button" type="Area3D" parent="QodotMap"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 1.5, 0)
-script = ExtResource("10_cxfya")
+script = ExtResource("10_r2kui")
 properties = {
 "axis": Vector3(0, -1, 0),
 "classname": "button",
@@ -243,12 +244,12 @@ mesh = SubResource("ArrayMesh_ddag8")
 [node name="entity_4_brush_0_collision_shape" type="CollisionShape3D" parent="QodotMap/entity_4_button"]
 shape = SubResource("ConvexPolygonShape3D_f6gmq")
 
-[node name="Player" parent="." instance=ExtResource("11_rrs4j")]
+[node name="Player" parent="." instance=ExtResource("11_al5ng")]
 _p = null
 
 [node name="Camera" type="Node3D" parent="." node_paths=PackedStringArray("Follow")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.308, 2.57853, 5.89811)
-script = ExtResource("11_jnrui")
+script = ExtResource("12_nwfpr")
 Follow = NodePath("../Player/Head")
 FollowSpeed = 100.0
 
@@ -256,6 +257,9 @@ FollowSpeed = 100.0
 cull_mask = 524287
 current = true
 fov = 105.0
+
+[node name="G17Pistol" parent="Camera/Camera" instance=ExtResource("13_dyvuu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.835, -1.15, -1.605)
 
 [node name="Crosshair" type="TextureRect" parent="Camera/Camera"]
 anchors_preset = 8
@@ -269,10 +273,10 @@ offset_right = 12.0
 offset_bottom = 12.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("9_rg4o0")
+texture = ExtResource("13_kivkm")
 
 [node name="PlayerUI" type="CanvasLayer" parent="." node_paths=PackedStringArray("_staminaBars", "_w", "_a", "_s", "_d", "_shift", "_lctrl", "_space")]
-script = ExtResource("13_0m6b1")
+script = ExtResource("14_wpsvg")
 _staminaBars = [NodePath("Grid/GridContainer/ProgressBar"), NodePath("Grid/GridContainer/ProgressBar2"), NodePath("Grid/GridContainer/ProgressBar3")]
 _w = NodePath("Keystrokes/W")
 _a = NodePath("Keystrokes/A")
