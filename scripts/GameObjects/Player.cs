@@ -69,8 +69,7 @@ public partial class Player : RigidBody3D
 	[Export] private float ThwompForceTimeMult;
 	// [Export] private float ThwompForce
 
-	[ExportGroup("Hand")]
-	[Export] private HandSlot PlayerHand;
+	private RayCast3D _aimCast;
 	
 	// States
 	public bool CanSlideWall => _wallCheck.IsColliding && _wallCheck.IsOnSlope;
@@ -154,6 +153,8 @@ public partial class Player : RigidBody3D
 				// twen.Finished += () => twen.Free();
 			// }
 		// };
+
+		_aimCast = GetTree().Root.GetNode("Main").GetNode("Camera/Camera/AimCast") as RayCast3D;
 	}
 
 	public override void _Input(InputEvent e)
@@ -275,14 +276,21 @@ public partial class Player : RigidBody3D
 
 		if (Input.IsActionJustPressed("use_primary"))
 		{
-			GD.Print("Using primary.");
-			PlayerHand.UsePrimary(_head.Forward());
+			GD.Print("[Action] Using primary...");
+
+			_aimCast.ForceRaycastUpdate();
+			if (!_aimCast.IsColliding())
+			{
+				GD.Print("[Gun] Missed shot.");
+				return;
+			}
+			
+			GD.Print("[Gun] Hit something! (" + _aimCast.GetCollider() + ")");
 		}
 
 		if (Input.IsActionJustPressed("use_secondary"))
 		{
-			GD.Print("Using secondary.");
-			PlayerHand.UseSecondary();
+			GD.Print("[Action] Using secondary...");
 		}
 	}
 
