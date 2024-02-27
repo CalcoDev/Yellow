@@ -275,6 +275,9 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("13_kivkm")
 
+[node name="HitscanRay" type="RayCast3D" parent="Camera/Camera"]
+target_position = Vector3(0, -1, 1000)
+
 [node name="PlayerUI" type="CanvasLayer" parent="." node_paths=PackedStringArray("_staminaBars", "_w", "_a", "_s", "_d", "_shift", "_lctrl", "_space")]
 script = ExtResource("14_wpsvg")
 _staminaBars = [NodePath("Grid/GridContainer/ProgressBar"), NodePath("Grid/GridContainer/ProgressBar2"), NodePath("Grid/GridContainer/ProgressBar3")]
