@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://bsgwkv72xs4ab"]
+[gd_scene load_steps=31 format=3 uid="uid://bsgwkv72xs4ab"]
 
 [ext_resource type="Script" path="res://scripts/GameObjects/Player.cs" id="1_8gga7"]
 [ext_resource type="PhysicsMaterial" uid="uid://cknorhfrivu38" path="res://resources/physics_mat/no_friction_mat.tres" id="1_l3ghh"]
@@ -9,8 +9,11 @@
 [ext_resource type="Resource" uid="uid://okxparq80j4b" path="res://resources/ground_properties/default_ground_props.tres" id="6_5d0dr"]
 [ext_resource type="Script" path="res://scripts/Managers/CameraManager.cs" id="8_ckwyo"]
 [ext_resource type="Texture2D" uid="uid://dt1sbjvvc1356" path="res://assets/crosshair.png" id="8_ixsmc"]
-[ext_resource type="PackedScene" uid="uid://bd6bt8t0u5aqj" path="res://scenes/game_objects/weapons/g_17_pistol.tscn" id="9_5l5pq"]
+[ext_resource type="Script" path="res://scripts/Managers/WeaponManager.cs" id="10_b0cpw"]
+[ext_resource type="Resource" uid="uid://2hq4dsenjqd" path="res://resources/weapon/AK47.tres" id="11_7x5ua"]
 [ext_resource type="PackedScene" uid="uid://bl8sb7msaewkq" path="res://assets/low_poly_ak-47.glb" id="11_vnlja"]
+[ext_resource type="PackedScene" uid="uid://dpjvi22inhjl" path="res://assets/low-poly_g17.glb" id="12_t6jfe"]
+[ext_resource type="Resource" uid="uid://dq7dms1su1ujl" path="res://resources/weapon/G17.tres" id="12_u6xim"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1ogde"]
 size = Vector3(0.2, 1.8, 0.8)
@@ -132,12 +135,117 @@ tracks/0/keys = {
 "values": [Vector3(0.5, 1, -2), Vector3(0.5, 1, -1.8), Vector3(0.5, 1, -2.2), Vector3(0.5, 1, -1.5), Vector3(0.5, 1, -1.8), Vector3(0.5, 1, -2.2), Vector3(0.5, 1, -2)]
 }
 
+[sub_resource type="Animation" id="Animation_dfqg8"]
+resource_name = "G17 Activate"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("G17:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(1.5, 1, -2)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("G17:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 3.14159, 0), Vector3(0, 1.5708, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_jhxll"]
+resource_name = "G17 Deactivate"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("G17:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(1.5, 1, -2), Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("G17:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 1.5708, 0), Vector3(0, 3.14159, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_flma1"]
+resource_name = "G17 Shoot"
+length = 0.2
+step = 0.02
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("G17:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.04, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(1.5, 1, -2), Vector3(1.5, 1, -1.5), Vector3(1.5, 1, -2)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("G17:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.04, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 1.5708, 0), Vector3(0, 1.5708, 0.174533), Vector3(0, 1.5708, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_ukrgp"]
+resource_name = "G17 OOA"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("G17:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(1.5, 1, -2), Vector3(1.5, 1, -1.8), Vector3(1.5, 1, -2.2), Vector3(1.5, 1, -2), Vector3(1.5, 1, -1.8), Vector3(1.5, 1, -2.2), Vector3(1.5, 1, -2)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_hbjbu"]
 _data = {
 "AK47 Activate": SubResource("Animation_sb6hm"),
 "AK47 Deactivate": SubResource("Animation_ffqf4"),
 "AK47 OOA": SubResource("Animation_otfbl"),
-"AK47 Shoot": SubResource("Animation_0pc3k")
+"AK47 Shoot": SubResource("Animation_0pc3k"),
+"G17 Activate": SubResource("Animation_dfqg8"),
+"G17 Deactivate": SubResource("Animation_jhxll"),
+"G17 OOA": SubResource("Animation_ukrgp"),
+"G17 Shoot": SubResource("Animation_flma1")
 }
 
 [node name="Player" type="RigidBody3D" node_paths=PackedStringArray("_groundCheck", "_wallCheck") groups=["player"]]
@@ -228,15 +336,18 @@ texture = ExtResource("8_ixsmc")
 target_position = Vector3(0, -1, -1000)
 
 [node name="WeaponManager" type="Node3D" parent="ViewportManager/FirstPersonCamera"]
+script = ExtResource("10_b0cpw")
+WeaponResources = Array[Object]([ExtResource("11_7x5ua"), ExtResource("12_u6xim")])
+StartWeapons = PackedStringArray("AK47", "G17")
 
 [node name="Models" type="Node3D" parent="ViewportManager/FirstPersonCamera/WeaponManager"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
 
-[node name="G17" parent="ViewportManager/FirstPersonCamera/WeaponManager/Models" instance=ExtResource("9_5l5pq")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+[node name="G17" parent="ViewportManager/FirstPersonCamera/WeaponManager/Models" instance=ExtResource("12_t6jfe")]
+transform = Transform3D(-8.74228e-09, 0, 0.2, 0, 0.2, 0, -0.2, 0, -8.74228e-09, 1.5, 1, -2)
 
 [node name="AK47" parent="ViewportManager/FirstPersonCamera/WeaponManager/Models" instance=ExtResource("11_vnlja")]
-transform = Transform3D(-2.18557e-08, 0, 0.5, 0, 0.5, 0, -0.5, 0, -2.18557e-08, 0.5, 1, -2)
+transform = Transform3D(-0.5, 0, -4.37114e-08, 0, 0.5, 0, 4.37114e-08, 0, -0.5, 0, 0, 0)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="ViewportManager/FirstPersonCamera/WeaponManager/Models"]
 libraries = {

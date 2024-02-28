@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="WeaponResource" load_steps=2 format=3 uid="uid://dq7dms1su1ujl"]
+
+[ext_resource type="Script" path="res://scripts/Resources/WeaponResource.cs" id="1_rouor"]
+
+[resource]
+script = ExtResource("1_rouor")
+WeaponName = "G17"
+ActivateAnim = "G17 Activate"
+DeactivateAnim = "G17 Deactivate"
+ShootAnim = "G17 Shoot"
+OutOfAmmoAnim = "G17 OOA"
+CurrentAmmo = 10
+ReserveAmmo = 20
+Magazine = 10
+MaxAmmo = 30
+Hitscan = true
+Automatic = false
