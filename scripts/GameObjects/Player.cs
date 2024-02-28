@@ -27,7 +27,6 @@ public partial class Player : RigidBody3D
 	[Export] private PlayerUIManager _ui;
 
 	[Node("Head")] private Node3D _head;
-
 	
 	// States
 	public bool CanSlideWall => _wallCheck.IsColliding && _wallCheck.IsOnSlope;
@@ -46,8 +45,8 @@ public partial class Player : RigidBody3D
 	public bool IsThwomping { get; private set; } = false;
 
 	// Input
-	private Vector3 _moveDir;
-	private Vector3 _moveDir2;
+	private Vector3 _moveDir = Vector3.Zero;
+	private Vector3 _moveDir2 = Vector3.Zero;
 
 	// Stamina
 	private float _stamina;
@@ -75,6 +74,7 @@ public partial class Player : RigidBody3D
 	private bool _heavyFall = false;
 	
 	// Ray
+	[Node("ViewportManager/FirstPersonCamera/HitscanRay")]
 	private RayCast3D _hitscanRay;
 
 	public override void _Notification(int what)
@@ -129,8 +129,6 @@ public partial class Player : RigidBody3D
 				// twen.Finished += () => twen.Free();
 			// }
 		// };
-
-		_hitscanRay = GetTree().Root.GetNode("Main").GetNode<RayCast3D>("Camera/Camera/HitscanRay");
 	}
 
 	public override void _Input(InputEvent e)
@@ -362,6 +360,7 @@ public partial class Player : RigidBody3D
 
 	public override void _PhysicsProcess(double delta)
 	{
+		
 	}
 
 	// MOVEMENT

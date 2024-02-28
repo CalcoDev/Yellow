@@ -12,7 +12,7 @@ public partial class CameraManager : Node3D
 	[Export] public Node3D Follow;
 	[Export] public float FollowSpeed;
 
-	[Node("Camera")] private Camera3D _cam;
+	[Node("FirstPersonCamera")] private Camera3D _cam;
 
 	public override void _Notification(int what)
 	{

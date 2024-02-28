@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://bnfm3fc5l51mb"]
+[gd_scene load_steps=31 format=3 uid="uid://bnfm3fc5l51mb"]
 
 [ext_resource type="Script" path="res://scripts/Managers/Game.cs" id="1_me4x0"]
 [ext_resource type="Script" path="res://scripts/Managers/InputManager.cs" id="2_itqj0"]
@@ -11,9 +11,6 @@
 [ext_resource type="Texture2D" uid="uid://bofrt6byqqgvp" path="res://textures/grid/orange/texture_08.png" id="9_2imve"]
 [ext_resource type="Script" path="res://addons/qodot/game_definitions/fgd/solid_classes/button.gd" id="10_r2kui"]
 [ext_resource type="PackedScene" uid="uid://bsgwkv72xs4ab" path="res://scenes/game_objects/entities/player.tscn" id="11_al5ng"]
-[ext_resource type="Script" path="res://scripts/Managers/CameraManager.cs" id="12_nwfpr"]
-[ext_resource type="PackedScene" uid="uid://bd6bt8t0u5aqj" path="res://scenes/game_objects/weapons/g_17_pistol.tscn" id="13_dyvuu"]
-[ext_resource type="Texture2D" uid="uid://dt1sbjvvc1356" path="res://assets/crosshair.png" id="13_kivkm"]
 [ext_resource type="Script" path="res://scripts/Managers/PlayerUIManager.cs" id="14_wpsvg"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_xms1l"]
@@ -244,39 +241,9 @@ mesh = SubResource("ArrayMesh_ddag8")
 [node name="entity_4_brush_0_collision_shape" type="CollisionShape3D" parent="QodotMap/entity_4_button"]
 shape = SubResource("ConvexPolygonShape3D_f6gmq")
 
-[node name="Player" parent="." instance=ExtResource("11_al5ng")]
-_p = null
-
-[node name="Camera" type="Node3D" parent="." node_paths=PackedStringArray("Follow")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.308, 2.57853, 5.89811)
-script = ExtResource("12_nwfpr")
-Follow = NodePath("../Player/Head")
-FollowSpeed = 100.0
-
-[node name="Camera" type="Camera3D" parent="Camera"]
-cull_mask = 524287
-current = true
-fov = 105.0
-
-[node name="G17Pistol" parent="Camera/Camera" instance=ExtResource("13_dyvuu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.835, -1.15, -1.605)
-
-[node name="Crosshair" type="TextureRect" parent="Camera/Camera"]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 12.0
-offset_bottom = 12.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("13_kivkm")
-
-[node name="HitscanRay" type="RayCast3D" parent="Camera/Camera"]
-target_position = Vector3(0, -1, 1000)
+[node name="Player" parent="." node_paths=PackedStringArray("_ui") instance=ExtResource("11_al5ng")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+_ui = NodePath("../PlayerUI")
 
 [node name="PlayerUI" type="CanvasLayer" parent="." node_paths=PackedStringArray("_staminaBars", "_w", "_a", "_s", "_d", "_shift", "_lctrl", "_space")]
 script = ExtResource("14_wpsvg")
@@ -476,5 +443,3 @@ max_value = 1.0
 [connection signal="OnTriggerEnter" from="QodotMap/entity_4_button" to="QodotMap/entity_3_mover" method="UseEnter"]
 [connection signal="OnTriggerExit" from="QodotMap/entity_4_button" to="QodotMap/entity_3_mover" method="UseExit"]
 [connection signal="pressed" from="QodotMap/entity_4_button" to="QodotMap/entity_3_mover" method="use"]
-
-[editable path="Player"]

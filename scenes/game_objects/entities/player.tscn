@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://bsgwkv72xs4ab"]
+[gd_scene load_steps=18 format=3 uid="uid://bsgwkv72xs4ab"]
 
 [ext_resource type="Script" path="res://scripts/GameObjects/Player.cs" id="1_8gga7"]
 [ext_resource type="PhysicsMaterial" uid="uid://cknorhfrivu38" path="res://resources/physics_mat/no_friction_mat.tres" id="1_l3ghh"]
@@ -7,6 +7,9 @@
 [ext_resource type="Script" path="res://scripts/Components/ShapeCastComponent.cs" id="4_16gja"]
 [ext_resource type="Script" path="res://scripts/Components/GroundCheckComponent.cs" id="5_e2m20"]
 [ext_resource type="Resource" uid="uid://okxparq80j4b" path="res://resources/ground_properties/default_ground_props.tres" id="6_5d0dr"]
+[ext_resource type="Script" path="res://scripts/Managers/CameraManager.cs" id="8_ckwyo"]
+[ext_resource type="Texture2D" uid="uid://dt1sbjvvc1356" path="res://assets/crosshair.png" id="8_ixsmc"]
+[ext_resource type="PackedScene" uid="uid://bd6bt8t0u5aqj" path="res://scenes/game_objects/weapons/g_17_pistol.tscn" id="9_5l5pq"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1ogde"]
 size = Vector3(0.2, 1.8, 0.8)
@@ -28,7 +31,7 @@ size = Vector3(0.8, 1.8, 0.2)
 size = Vector3(0.619141, 0.4, 0.452148)
 
 [node name="Player" type="RigidBody3D" node_paths=PackedStringArray("_groundCheck", "_wallCheck") groups=["player"]]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 1.42522, 1.60731, 1.67124)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 collision_layer = 1056
 physics_material_override = ExtResource("1_l3ghh")
 can_sleep = false
@@ -87,3 +90,32 @@ DefaultGroundProperties = ExtResource("6_5d0dr")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="GroundCheck"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.199776, 0)
 shape = SubResource("BoxShape3D_iiuxv")
+
+[node name="ViewportManager" type="Node3D" parent="." node_paths=PackedStringArray("Follow")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0)
+script = ExtResource("8_ckwyo")
+Follow = NodePath("../Head")
+FollowSpeed = 100.0
+
+[node name="FirstPersonCamera" type="Camera3D" parent="ViewportManager"]
+current = true
+
+[node name="Crosshair" type="TextureRect" parent="ViewportManager/FirstPersonCamera"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 12.0
+offset_bottom = 12.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("8_ixsmc")
+
+[node name="G17Pistol" parent="ViewportManager/FirstPersonCamera" instance=ExtResource("9_5l5pq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.835, -1.15, -1.605)
+
+[node name="HitscanRay" type="RayCast3D" parent="ViewportManager/FirstPersonCamera"]
+target_position = Vector3(0, -1, -1000)
