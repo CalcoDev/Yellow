@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dt1sbjvvc1356"
-path.s3tc="res://.godot/imported/crosshair.png-7a5ee98d03b748045923e3a0fa977b20.s3tc.ctex"
+uid="uid://clst5yarv70la"
+path.s3tc="res://.godot/imported/hitmarker.png-8b31c009fc2a30f88f5aa52d1c8e95b5.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/crosshair.png"
-dest_files=["res://.godot/imported/crosshair.png-7a5ee98d03b748045923e3a0fa977b20.s3tc.ctex"]
+source_file="res://assets/hitmarker.png"
+dest_files=["res://.godot/imported/hitmarker.png-8b31c009fc2a30f88f5aa52d1c8e95b5.s3tc.ctex"]
 
 [params]
 

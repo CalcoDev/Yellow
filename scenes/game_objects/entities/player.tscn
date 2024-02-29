@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://bsgwkv72xs4ab"]
+[gd_scene load_steps=37 format=3 uid="uid://bsgwkv72xs4ab"]
 
 [ext_resource type="Script" path="res://scripts/GameObjects/Player.cs" id="1_8gga7"]
 [ext_resource type="PhysicsMaterial" uid="uid://cknorhfrivu38" path="res://resources/physics_mat/no_friction_mat.tres" id="1_l3ghh"]
@@ -300,6 +300,33 @@ tracks/1/keys = {
 "values": [Vector3(0, 1.5708, 0), Vector3(0, 1.5708, -0.523599), Vector3(0, 1.5708, 12.5664)]
 }
 
+[sub_resource type="Animation" id="Animation_2vo4r"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AK47:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.5, 1, -2)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AK47:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 1.5708, 0)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_hbjbu"]
 _data = {
 "AK47 Activate": SubResource("Animation_sb6hm"),
@@ -311,7 +338,8 @@ _data = {
 "G17 Deactivate": SubResource("Animation_jhxll"),
 "G17 OOA": SubResource("Animation_ukrgp"),
 "G17 Reload": SubResource("Animation_v7ydk"),
-"G17 Shoot": SubResource("Animation_flma1")
+"G17 Shoot": SubResource("Animation_flma1"),
+"RESET": SubResource("Animation_2vo4r")
 }
 
 [node name="Player" type="RigidBody3D" node_paths=PackedStringArray("_groundCheck", "_wallCheck") groups=["player"]]
@@ -438,7 +466,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
 transform = Transform3D(-0.2, 0, 5.07036e-07, 0, 0.2, 0, -5.07036e-07, 0, -0.2, 0, 0, 0)
 
 [node name="AK47" parent="ViewportManager/FirstPersonCamera/WeaponManager/Models" instance=ExtResource("11_vnlja")]
-transform = Transform3D(-2.18557e-08, 7.64274e-15, 0.5, 1.74846e-07, 0.5, 0, -0.5, 1.74846e-07, -2.18557e-08, 0.5, 1, -2)
+transform = Transform3D(-2.18557e-08, 0, 0.5, 0, 0.5, 0, -0.5, 0, -2.18557e-08, 0.5, 1, -2)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="ViewportManager/FirstPersonCamera/WeaponManager/Models"]
 libraries = {

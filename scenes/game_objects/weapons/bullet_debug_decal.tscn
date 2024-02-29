@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://d7gaoign53i4"]
+
+[ext_resource type="Texture2D" uid="uid://clst5yarv70la" path="res://assets/hitmarker.png" id="1_q3f65"]
+
+[node name="BulletDebugDecal" type="Sprite3D"]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
+modulate = Color(0.564706, 0.392157, 1, 1)
+billboard = 2
+texture_filter = 0
+texture = ExtResource("1_q3f65")

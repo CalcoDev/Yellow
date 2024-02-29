@@ -28,6 +28,8 @@ public partial class WeaponManager : Node3D
 
 	private RayCast3D _hitscanRay;
 
+	private PackedScene _debugBulletDecal;
+
 	[Signal]
 	public delegate void AmmoChangedEventHandler(WeaponResource currentWeapon);
 
@@ -38,6 +40,7 @@ public partial class WeaponManager : Node3D
 	{
 		_animationPlayer = GetNode("Models/AnimationPlayer") as AnimationPlayer;
 		_hitscanRay = GetNode("HitscanRay") as RayCast3D;
+		_debugBulletDecal = ResourceLoader.Load("res://scenes/game_objects/weapons/bullet_debug_decal.tscn") as PackedScene;
 		Initialize();
 	}
 	public override void _Process(double delta)
@@ -124,8 +127,14 @@ public partial class WeaponManager : Node3D
 		_currentWeapon.CurrentAmmo--;
 		
 		_hitscanRay.ForceRaycastUpdate();
-		if(_hitscanRay.IsColliding())
+		if (_hitscanRay.IsColliding())
+		{
 			GD.Print("Collided with " + _hitscanRay.GetCollider());
+			
+			var hitIndicator = _debugBulletDecal.Instantiate() as Node3D;
+			GetTree().Root.AddChild(hitIndicator);
+			hitIndicator.GlobalPosition = _hitscanRay.GetCollisionPoint();
+		}
 		else
 			GD.Print("Missed the shot.");
 
