@@ -257,6 +257,7 @@ _lctrl = NodePath("Keystrokes/LCTRL")
 _space = NodePath("Keystrokes/Space")
 
 [node name="Keystrokes" type="ColorRect" parent="PlayerUI"]
+visible = false
 offset_right = 286.0
 offset_bottom = 411.0
 color = Color(0, 0, 0, 0.243137)

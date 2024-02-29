@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://bsgwkv72xs4ab"]
+[gd_scene load_steps=36 format=3 uid="uid://bsgwkv72xs4ab"]
 
 [ext_resource type="Script" path="res://scripts/GameObjects/Player.cs" id="1_8gga7"]
 [ext_resource type="PhysicsMaterial" uid="uid://cknorhfrivu38" path="res://resources/physics_mat/no_friction_mat.tres" id="1_l3ghh"]
@@ -9,11 +9,19 @@
 [ext_resource type="Resource" uid="uid://okxparq80j4b" path="res://resources/ground_properties/default_ground_props.tres" id="6_5d0dr"]
 [ext_resource type="Script" path="res://scripts/Managers/CameraManager.cs" id="8_ckwyo"]
 [ext_resource type="Texture2D" uid="uid://dt1sbjvvc1356" path="res://assets/crosshair.png" id="8_ixsmc"]
+[ext_resource type="Script" path="res://scripts/Managers/WeaponUIManager.cs" id="9_qp8fq"]
 [ext_resource type="Script" path="res://scripts/Managers/WeaponManager.cs" id="10_b0cpw"]
 [ext_resource type="Resource" uid="uid://2hq4dsenjqd" path="res://resources/weapon/AK47.tres" id="11_7x5ua"]
 [ext_resource type="PackedScene" uid="uid://bl8sb7msaewkq" path="res://assets/low_poly_ak-47.glb" id="11_vnlja"]
 [ext_resource type="PackedScene" uid="uid://dpjvi22inhjl" path="res://assets/low-poly_g17.glb" id="12_t6jfe"]
 [ext_resource type="Resource" uid="uid://dq7dms1su1ujl" path="res://resources/weapon/G17.tres" id="12_u6xim"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_uwg8c"]
+font_size = 32
+
+[sub_resource type="LabelSettings" id="LabelSettings_nt4hi"]
+font_size = 32
+font_color = Color(0.741176, 0.741176, 0.741176, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1ogde"]
 size = Vector3(0.2, 1.8, 0.8)
@@ -90,6 +98,22 @@ tracks/1/keys = {
 "values": [Vector3(0, 1.5708, 0), Vector3(0, 3.14159, 0)]
 }
 
+[sub_resource type="Animation" id="Animation_otfbl"]
+resource_name = "AK47 OOA"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AK47:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0.5, 1, -2), Vector3(0.5, 1, -1.8), Vector3(0.5, 1, -2.2), Vector3(0.5, 1, -1.5), Vector3(0.5, 1, -1.8), Vector3(0.5, 1, -2.2), Vector3(0.5, 1, -2)]
+}
+
 [sub_resource type="Animation" id="Animation_0pc3k"]
 resource_name = "AK47 Shoot"
 length = 0.2
@@ -116,23 +140,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.0001, 0.0002, 0.0003, 0.04, 0.2),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
 "update": 0,
-"values": [Vector3(0, 1.5708, 0), Vector3(0, 3.14159, 0), Vector3(0, 3.14159, 0), Vector3(0, 1.5708, 0), Vector3(0, 1.5708, 0.610865), Vector3(0, 1.5708, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_otfbl"]
-resource_name = "AK47 OOA"
-length = 0.6
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("AK47:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
-"update": 0,
-"values": [Vector3(0.5, 1, -2), Vector3(0.5, 1, -1.8), Vector3(0.5, 1, -2.2), Vector3(0.5, 1, -1.5), Vector3(0.5, 1, -1.8), Vector3(0.5, 1, -2.2), Vector3(0.5, 1, -2)]
+"values": [Vector3(0, 1.5708, 0), Vector3(0, 3.14159, 0), Vector3(0, 3.14159, 0), Vector3(0, 1.5708, 0), Vector3(0, 1.5708, 0.261799), Vector3(0, 1.5708, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_dfqg8"]
@@ -191,6 +199,22 @@ tracks/1/keys = {
 "values": [Vector3(0, 1.5708, 0), Vector3(0, 3.14159, 0)]
 }
 
+[sub_resource type="Animation" id="Animation_ukrgp"]
+resource_name = "G17 OOA"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("G17:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(1.5, 1, -2), Vector3(1.5, 1, -1.8), Vector3(1.5, 1, -2.2), Vector3(1.5, 1, -2), Vector3(1.5, 1, -1.8), Vector3(1.5, 1, -2.2), Vector3(1.5, 1, -2)]
+}
+
 [sub_resource type="Animation" id="Animation_flma1"]
 resource_name = "G17 Shoot"
 length = 0.2
@@ -220,9 +244,37 @@ tracks/1/keys = {
 "values": [Vector3(0, 1.5708, 0), Vector3(0, 1.5708, 0.174533), Vector3(0, 1.5708, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_ukrgp"]
-resource_name = "G17 OOA"
-length = 0.6
+[sub_resource type="Animation" id="Animation_cwupi"]
+resource_name = "AK47 Reload"
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AK47:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4, 0.7, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0.5, 1, -2), Vector3(0.5, 0.6, -2), Vector3(0.5, 2, -2), Vector3(0.5, 1, -2)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AK47:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.35, 1),
+"transitions": PackedFloat32Array(1, 1, 1.93187),
+"update": 0,
+"values": [Vector3(0, 1.5708, 0), Vector3(0, 1.5708, -0.523599), Vector3(0, 1.5708, 12.5664)]
+}
+
+[sub_resource type="Animation" id="Animation_v7ydk"]
+resource_name = "G17 Reload"
+step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -230,10 +282,22 @@ tracks/0/path = NodePath("G17:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.4, 0.7, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
-"values": [Vector3(1.5, 1, -2), Vector3(1.5, 1, -1.8), Vector3(1.5, 1, -2.2), Vector3(1.5, 1, -2), Vector3(1.5, 1, -1.8), Vector3(1.5, 1, -2.2), Vector3(1.5, 1, -2)]
+"values": [Vector3(1.5, 1, -2), Vector3(1.5, 0.6, -2), Vector3(1.5, 2, -2), Vector3(1.5, 1, -2)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("G17:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.35, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 1.5708, 0), Vector3(0, 1.5708, -0.523599), Vector3(0, 1.5708, 12.5664)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_hbjbu"]
@@ -241,10 +305,12 @@ _data = {
 "AK47 Activate": SubResource("Animation_sb6hm"),
 "AK47 Deactivate": SubResource("Animation_ffqf4"),
 "AK47 OOA": SubResource("Animation_otfbl"),
+"AK47 Reload": SubResource("Animation_cwupi"),
 "AK47 Shoot": SubResource("Animation_0pc3k"),
 "G17 Activate": SubResource("Animation_dfqg8"),
 "G17 Deactivate": SubResource("Animation_jhxll"),
 "G17 OOA": SubResource("Animation_ukrgp"),
+"G17 Reload": SubResource("Animation_v7ydk"),
 "G17 Shoot": SubResource("Animation_flma1")
 }
 
@@ -261,6 +327,34 @@ _groundCheck = NodePath("GroundCheck")
 _wallCheck = NodePath("Head/ShapeCastComponent")
 Sensitivity = 44.0
 _p = ExtResource("3_x1l4f")
+
+[node name="WeaponUI" type="CanvasLayer" parent="."]
+script = ExtResource("9_qp8fq")
+
+[node name="MainContainer" type="VBoxContainer" parent="WeaponUI"]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="WeaponAmmo" type="HBoxContainer" parent="WeaponUI/MainContainer"]
+layout_mode = 2
+
+[node name="CurrentAmmo" type="Label" parent="WeaponUI/MainContainer/WeaponAmmo"]
+layout_mode = 2
+text = " 0"
+label_settings = SubResource("LabelSettings_uwg8c")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ReserveAmmo" type="Label" parent="WeaponUI/MainContainer/WeaponAmmo"]
+layout_mode = 2
+text = " / 90"
+label_settings = SubResource("LabelSettings_nt4hi")
+
+[node name="WeaponName" type="HBoxContainer" parent="WeaponUI/MainContainer"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="WeaponUI/MainContainer/WeaponName"]
+layout_mode = 2
 
 [node name="Head" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
@@ -332,9 +426,6 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("8_ixsmc")
 
-[node name="HitscanRay" type="RayCast3D" parent="ViewportManager/FirstPersonCamera"]
-target_position = Vector3(0, -1, -1000)
-
 [node name="WeaponManager" type="Node3D" parent="ViewportManager/FirstPersonCamera"]
 script = ExtResource("10_b0cpw")
 WeaponResources = Array[Object]([ExtResource("11_7x5ua"), ExtResource("12_u6xim")])
@@ -344,12 +435,20 @@ StartWeapons = PackedStringArray("AK47", "G17")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
 
 [node name="G17" parent="ViewportManager/FirstPersonCamera/WeaponManager/Models" instance=ExtResource("12_t6jfe")]
-transform = Transform3D(-8.74228e-09, 0, 0.2, 0, 0.2, 0, -0.2, 0, -8.74228e-09, 1.5, 1, -2)
+transform = Transform3D(-0.2, 0, 5.07036e-07, 0, 0.2, 0, -5.07036e-07, 0, -0.2, 0, 0, 0)
 
 [node name="AK47" parent="ViewportManager/FirstPersonCamera/WeaponManager/Models" instance=ExtResource("11_vnlja")]
-transform = Transform3D(-0.5, 0, -4.37114e-08, 0, 0.5, 0, 4.37114e-08, 0, -0.5, 0, 0, 0)
+transform = Transform3D(-2.18557e-08, 7.64274e-15, 0.5, 1.74846e-07, 0.5, 0, -0.5, 1.74846e-07, -2.18557e-08, 0.5, 1, -2)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="ViewportManager/FirstPersonCamera/WeaponManager/Models"]
 libraries = {
 "": SubResource("AnimationLibrary_hbjbu")
 }
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="ViewportManager/FirstPersonCamera/WeaponManager/Models"]
+
+[node name="HitscanRay" type="RayCast3D" parent="ViewportManager/FirstPersonCamera/WeaponManager"]
+target_position = Vector3(0, -1, -1000)
+
+[connection signal="AmmoChanged" from="ViewportManager/FirstPersonCamera/WeaponManager" to="WeaponUI" method="UpdateAmmoLabel"]
+[connection signal="WeaponChanged" from="ViewportManager/FirstPersonCamera/WeaponManager" to="WeaponUI" method="UpdateAllWeaponInfo"]

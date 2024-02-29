@@ -72,10 +72,6 @@ public partial class Player : RigidBody3D
 	private bool _boost = false;
 	private bool _falling = false;
 	private bool _heavyFall = false;
-	
-	// Ray
-	[Node("ViewportManager/FirstPersonCamera/HitscanRay")]
-	private RayCast3D _hitscanRay;
 
 	public override void _Notification(int what)
 	{
@@ -247,15 +243,6 @@ public partial class Player : RigidBody3D
 		_moveDir = (forward + right).Normalized();
 
 		_ui.DisplayStamina(_stamina);
-
-		if (Input.IsActionJustPressed("use_primary"))
-		{
-			_hitscanRay.ForceRaycastUpdate();
-			if(!_hitscanRay.IsColliding())
-				GD.Print("Missed shot.");
-			else
-				GD.Print("Collided with " + _hitscanRay.GetCollider());
-		}
 	}
 
 	private Vector3 _diffDir;
