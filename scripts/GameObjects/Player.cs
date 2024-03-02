@@ -123,8 +123,8 @@ public partial class Player : RigidBody3D
 			var tween = CreateTween();
 			var offset = _p.CameraLandOffset * Mathf.Clamp(LinearVelocity.Y / 10f, 1f, 4f);
 			var td = 0.1f * Mathf.Clamp(LinearVelocity.Y / 20f, 1f, 2f) * 0.5f;
-			tween.TweenProperty(_playerCamera, "Offset", Vector3.Down * offset, td);
-			tween.Chain().TweenProperty(_playerCamera, "Offset", Vector3.Zero, td * 1.5f);
+			tween.TweenProperty(_playerCamera, "HardOffset", Vector3.Down * offset, td);
+			tween.Chain().TweenProperty(_playerCamera, "HardOffset", Vector3.Zero, td * 1.5f);
 			tween.Play();
 		};
 
@@ -416,7 +416,7 @@ public partial class Player : RigidBody3D
 		_dashDir = _moveDir.LengthSquared() > 0.01f ? _moveDir : _head.Forward();
 		_dashTimer = _p.DashDuration;
 
-		_playerCamera.Offset += _head.Forward() * _p.CameraDashOffset;
+		_playerCamera.Cam.Fov += _p.CameraDashFovMod;
 	}
 
 	private void StopDash()
@@ -425,8 +425,7 @@ public partial class Player : RigidBody3D
 		_boost = false;
 		
 		_falling = true;
-		
-		_playerCamera.Offset -= _head.Forward() * _p.CameraDashOffset;
+		_playerCamera.Cam.Fov -= _p.CameraDashFovMod;
 	}
 
 	private void DashJump(bool halfJump)
@@ -450,7 +449,9 @@ public partial class Player : RigidBody3D
 		_maxSlideSpeedBufferTimer = 0f;
 
 		// TODO(calco): Temporary, just showcasing slide
-		_head.Position += Vector3.Down;
+		_head.Position += Vector3.Down * _p.CameraSlideDownMod;
+		
+		_playerCamera.Cam.Fov += _p.CameraSlideFovMod;
 	}
 
 	private void EndSlide()
@@ -458,11 +459,14 @@ public partial class Player : RigidBody3D
 		_maxSlideSpeedBufferTimer = 0f;
 
 		// TODO(calco): Temporary, just showcasing slide
-		_head.Position += Vector3.Up;
+		_head.Position += Vector3.Up * _p.CameraSlideDownMod;
+		
 		var d = _playerCamera.RotationDegrees;
 		d.X = 0;
 		_playerCamera.RotationDegrees = d;
 		IsSliding = false;
+
+		_playerCamera.Cam.Fov -= _p.CameraSlideFovMod;
 	}
 
 	private void SlideJump()

@@ -30,6 +30,7 @@ public partial class CameraComponent : Node3D
 	private Node3D _follow;
 
 	[Export] public float FollowSpeed;
+	[Export] public Vector3 HardOffset;
 	[Export] public Vector3 Offset;
 
     public override void _EnterTree()
@@ -49,13 +50,19 @@ public partial class CameraComponent : Node3D
 		}
 	}
 
+	private Vector3 _prevOffset;
     public override void _Process(double delta)
 	{
 		if (ShouldFollow && _follow != null) {
 			var targetPos = _follow.GlobalPosition;
 			GlobalPosition = GlobalPosition.Lerp(targetPos, Game.DeltaTime * FollowSpeed);
-			_cam.Position = Offset;
+		
+			GlobalPosition = GlobalPosition - _prevOffset + Offset;
+			// _prevOffset = Offset;
 			Offset = Vector3.Zero;
+			
+			_cam.Position = HardOffset;
+			HardOffset = Vector3.Zero;
 		}
 	}
 

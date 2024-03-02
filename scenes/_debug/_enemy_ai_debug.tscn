@@ -746,6 +746,19 @@ texture = ExtResource("13_lgoi8")
 transform = Transform3D(0.999991, 0.00431642, 3.77028e-06, 3.90686e-05, -0.00817749, -0.999967, -0.00431626, 0.999957, -0.00817758, -0.0448756, -0.0689167, -1.60845)
 material_override = SubResource("StandardMaterial3D_hwyjx")
 amount = 250
+amount_ratio = 0.0
+randomness = 0.27
+fixed_fps = 60
+visibility_aabb = AABB(-1.03543, -0.647987, -0.754999, 2.07086, 1.29597, 1.49144)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_7y1ed")
+draw_pass_1 = SubResource("CylinderMesh_dk1dr")
+
+[node name="VFXDash" type="GPUParticles3D" parent="Player/Head/Camera/Camera"]
+transform = Transform3D(0.999991, 0.00431642, 3.77028e-06, 3.90686e-05, -0.00817749, -0.999967, -0.00431626, 0.999957, -0.00817758, -0.0448756, -0.0689167, -1.60845)
+material_override = SubResource("StandardMaterial3D_hwyjx")
+amount = 250
+amount_ratio = 0.0
 randomness = 0.27
 fixed_fps = 60
 visibility_aabb = AABB(-1.03543, -0.647987, -0.754999, 2.07086, 1.29597, 1.49144)
