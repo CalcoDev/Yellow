@@ -24,6 +24,7 @@ public partial class Player : RigidBody3D
 	[ExportSubgroup("VFX")]
 	[Export] private GpuParticles3D _vfxSpeedLines;
 	[Export] private DistanceParticles _vfxDash;
+	[Export] private GpuParticles3D _vfxSlide;
 	[Export] private GpuParticles3D _vfxJump;
 	[Export] private GpuParticles3D _vfxLand;
 
@@ -163,8 +164,8 @@ public partial class Player : RigidBody3D
 	private bool _prevDidMoveWallSlide = false;
 	public override void _Process(double delta)
 	{
-		var right = _head.GlobalTransform.Basis.X * -_input.Movement.X;
-		var forward = _head.GlobalTransform.Basis.Z * _input.Movement.Y;
+		var right = _head.Right() * -_input.Movement.X;
+		var forward = _head.Forward() * _input.Movement.Y;
 		_moveDir = (forward + right).Normalized();
 
 		// NOTE(drts): controller
@@ -176,6 +177,7 @@ public partial class Player : RigidBody3D
 
 		// Tilt camera
 		if (!IsSliding) {
+			// TODO(calco): Causes camera to go haywire sometimes
 			var tz = _input.Movement.X * _p.CameraSideTiltAngle;
 			var cz = Mathf.Lerp(_playerCamera.Cam.RotationDegrees.Z, tz, Game.DeltaTime * 20f);
 			_playerCamera.Cam.RotationDegrees = _playerCamera.Cam.RotationDegrees.WithZ(cz);
@@ -429,16 +431,13 @@ public partial class Player : RigidBody3D
 		_vfxDash.LookAt(_head.GlobalPosition, Vector3.Up);
 		_vfxDash.GlobalPosition = _head.GlobalPosition;
 		_vfxDash.Rotate(-dir.Cross(Vector3.Up).Normalized(), Mathf.Pi / 2f);
-		if (Mathf.Abs(_input.Movement.X) > 0.05f && Mathf.Abs(_input.Movement.Y) > 0.05f) {
-			_vfxDash.RotateY(Mathf.Pi / 2f);
-		}
 		_vfxDash.Emitting = true;
 		((CylinderMesh)_vfxDash.DrawPass1).Height = _p.DashDuration * _p.DashSpeed * 10f;
 	}
 
 	private Vector3 GetHeadOffsetBasedOnInputDir(Vector2 dir)
 	{
-		var x = _head.Right() * Mathf.Sign(dir.X);
+		var x = -_head.Right() * Mathf.Sign(dir.X);
 		var z = _head.Forward() * Mathf.Sign(dir.Y);
 		var f = (x + z).Normalized();
 		return f == Vector3.Zero ? _head.Forward() : f;
@@ -478,6 +477,17 @@ public partial class Player : RigidBody3D
 		_head.Position += Vector3.Down * _p.CameraSlideDownMod;
 		
 		_playerCamera.Cam.Fov += _p.CameraSlideFovMod;
+
+		var dir = GetHeadOffsetBasedOnInputDir(_input.Movement);
+		_vfxSlide.GlobalPosition = _head.GlobalPosition - dir * 2f;
+		_vfxSlide.LookAt(_head.GlobalPosition, Vector3.Up);
+		_vfxSlide.GlobalPosition = _head.GlobalPosition + dir * 0.35f + Vector3.Down * 0.15f;
+		_vfxSlide.Rotate(-dir.Cross(Vector3.Up).Normalized(), Mathf.Pi / 2f);
+		var vel = 5f;
+		_vfxSlide.ProcessMaterial.Set("initial_velocity_min", vel);
+		_vfxSlide.ProcessMaterial.Set("initial_velocity_max", vel);
+
+		_vfxSlide.Emitting = true;
 	}
 
 	private void EndSlide()
@@ -493,6 +503,7 @@ public partial class Player : RigidBody3D
 		IsSliding = false;
 
 		_playerCamera.Cam.Fov -= _p.CameraSlideFovMod;
+		_vfxSlide.Emitting = false;
 	}
 
 	private void SlideJump()

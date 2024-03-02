@@ -71,14 +71,36 @@ public partial class CameraComponent : Node3D
 	public void MouseRotation(float x, float y)
 	{
 		RotateY(x);
-		_cam.RotateX(-y);
-		
-		const float MIN_ROT = -89.99f * (Mathf.Pi / 180f);
-		const float MAX_ROT = 89.99f * (Mathf.Pi / 180f);
+
+		const float MAX_ADD = 0.1f;
+		if (
+			(_cam.RotationDegrees.X < 0f && _cam.RotationDegrees.X < -88f && y > 0f) ||
+			(_cam.RotationDegrees.X > 0f && _cam.RotationDegrees.X > 88f && y < 0f)
+		) {
+			int addCnt = Mathf.CeilToInt(y / MAX_ADD);
+			for (int i = 0; i < addCnt; ++i) {
+				var add = Mathf.Min(MAX_ADD * Mathf.Sign(y), y);
+				y -= add;
+				_cam.RotateX(-y);
+				if (ClampRot()) {
+					break;
+				}
+			}
+		} else {
+			_cam.RotateX(-y);
+		}
+	}
+
+	private bool ClampRot()
+	{
+		const float MIN_ROT = -88.99f * (Mathf.Pi / 180f);
+		const float MAX_ROT = 88.99f * (Mathf.Pi / 180f);
+		var prev = _cam.Rotation.X;
 		_cam.Rotation = new (
 			Mathf.Clamp(_cam.Rotation.X, MIN_ROT, MAX_ROT),
-			_cam.Rotation.Y,
-			_cam.Rotation.Z
+			0f,
+			0f
 		);
+		return prev == _cam.Rotation.X;
 	}
 }
