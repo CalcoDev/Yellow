@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Yellow"
-run/main_scene="res://scenes/main.tscn"
+run/main_scene="res://scenes/_debug/_enemy_ai_debug.tscn"
 config/features=PackedStringArray("4.2", "C#")
 run/max_fps=240
 config/icon="res://icon.svg"
@@ -129,7 +129,7 @@ fullscreen={
 
 3d/physics_engine="JoltPhysics3D"
 3d/default_gravity=30.0
-common/default_gravity=30.0
+common/default_gravity=45.0
 jolt_3d/collisions/areas_detect_static_bodies=true
 
 [rendering]

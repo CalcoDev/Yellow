@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://biadus1lby6yd"
-path.s3tc="res://.godot/imported/icon_qodot_node3d.svg-34e38a00186815329c3590ab244948d7.s3tc.ctex"
+uid="uid://ci523676t1acg"
+path.s3tc="res://.godot/imported/ground_tiles_smallest.png-45967212b6da53c1c3aa555ef8e71a0e.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://addons/qodot/icons/icon_qodot_node3d.svg"
-dest_files=["res://.godot/imported/icon_qodot_node3d.svg-34e38a00186815329c3590ab244948d7.s3tc.ctex"]
+source_file="res://textures/calcopod_environment/ground_tiles_smallest.png"
+dest_files=["res://.godot/imported/ground_tiles_smallest.png-45967212b6da53c1c3aa555ef8e71a0e.s3tc.ctex"]
 
 [params]
 
@@ -33,6 +33,3 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=0
-svg/scale=1.0
-editor/scale_with_editor_scale=false
-editor/convert_colors_with_editor_theme=false

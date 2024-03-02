@@ -16,6 +16,7 @@ public partial class GroundCheckComponent : Area3D
 
     // Sth
     public bool IsOnGround { get; private set; }
+    public bool WasOnGround { get; private set; }
     public GroundProperties GroundProperties { get; private set; }
 
     [Signal]
@@ -46,6 +47,7 @@ public partial class GroundCheckComponent : Area3D
     public override void _Process(double delta)
     {
         // NOTE(calco): Cringe, I know, but it allows for better frame control
+        WasOnGround = IsOnGround;
         if (IsOnGround != _touchingGround) {
             IsOnGround = _touchingGround;
             EmitSignal(IsOnGround ? SignalName.OnIsGrounded : SignalName.OnIsNotGrounded);

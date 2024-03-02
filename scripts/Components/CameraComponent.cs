@@ -22,7 +22,13 @@ public partial class CameraComponent : Node3D
 
     [ExportSubgroup("Follow")]
 	[Export] public bool ShouldFollow;
-	[Export] public Node3D Follow;
+	
+	// NOTE(calco): Godot is very very very dumb
+	[Export] private bool FollowParent;
+	
+	[Export(PropertyHint.NodePathValidTypes, "Node3D")] public NodePath Follow;
+	private Node3D _follow;
+
 	[Export] public float FollowSpeed;
 	[Export] public Vector3 Offset;
 
@@ -33,14 +39,20 @@ public partial class CameraComponent : Node3D
 		}
 
 		if (ShouldFollow) {
+			if (Follow != null) {
+				_follow = GetNode<Node3D>(Follow);
+			}
+			if (FollowParent) {
+				_follow = GetParent<Node3D>();
+			}
 			TopLevel = true;
 		}
 	}
 
     public override void _Process(double delta)
 	{
-		if (ShouldFollow && Follow != null) {
-			var targetPos = Follow.GlobalPosition;
+		if (ShouldFollow && _follow != null) {
+			var targetPos = _follow.GlobalPosition;
 			GlobalPosition = GlobalPosition.Lerp(targetPos, Game.DeltaTime * FollowSpeed);
 			_cam.Position = Offset;
 			Offset = Vector3.Zero;
