@@ -3,6 +3,7 @@ using Yellow.Managers;
 
 namespace Yellow.Components;
 
+[GlobalClass]
 public partial class CameraComponent : Node3D
 {
     [ExportGroup("References")]

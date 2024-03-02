@@ -3,6 +3,7 @@ using Yellow.Components;
 using Yellow.Extensions;
 using Yellow.Managers;
 using Yellow.Misc;
+using Yellow.Nodes;
 using Yellow.Resources;
 
 namespace Yellow.GameObjects;
@@ -22,7 +23,7 @@ public partial class Player : RigidBody3D
 	
 	[ExportSubgroup("VFX")]
 	[Export] private GpuParticles3D _vfxSpeedLines;
-	[Export] private GpuParticles3D _vfxDash;
+	[Export] private DistanceParticles _vfxDash;
 	[Export] private GpuParticles3D _vfxJump;
 	[Export] private GpuParticles3D _vfxLand;
 
@@ -174,9 +175,11 @@ public partial class Player : RigidBody3D
 		_playerCamera.MouseRotation(-lookHoriz, lookVert);
 
 		// Tilt camera
-		var tz = _input.Movement.X * _p.CameraSideTiltAngle;
-		var cz = Mathf.Lerp(_playerCamera.Cam.RotationDegrees.Z, tz, Game.DeltaTime * 20f);
-		_playerCamera.Cam.RotationDegrees = _playerCamera.Cam.RotationDegrees.WithZ(cz);
+		if (!IsSliding) {
+			var tz = _input.Movement.X * _p.CameraSideTiltAngle;
+			var cz = Mathf.Lerp(_playerCamera.Cam.RotationDegrees.Z, tz, Game.DeltaTime * 20f);
+			_playerCamera.Cam.RotationDegrees = _playerCamera.Cam.RotationDegrees.WithZ(cz);
+		}
 
   		if (!IsSliding) {
 			_stamina = Mathf.Clamp(_stamina + Game.DeltaTime, 0f, _p.MaxStamina);
@@ -249,7 +252,7 @@ public partial class Player : RigidBody3D
 
 			// TODO(calco): Temporary, just showcasing slide
 			var d = _playerCamera.Rotation;
-			d.X = Mathf.DegToRad(5 * Mathf.Sign(_input.Movement.X));
+			d.Z = Mathf.DegToRad(5 * Mathf.Sign(_input.Movement.X));
 			_playerCamera.Rotation = d;
 		} else {
 			_maxSlideSpeedBufferTimer -= Game.DeltaTime;
@@ -269,7 +272,7 @@ public partial class Player : RigidBody3D
 		// NOTE(calco): Visual Effects
 		// TODO(calco): Maybe don't zero out y velocity?
 		var speed = LinearVelocity.WithY(0).Length();
-		var tAmount = Mathf.Clamp((speed - 5f) * 10f, 0, 250);
+		var tAmount = Mathf.Clamp((speed - 8f) * 5f, 0, 250);
 		var amount = Mathf.Lerp(_vfxSpeedLines.AmountRatio, tAmount, Game.DeltaTime * 5f);
 		if (speed < 5f || (amount == 0 && _vfxSpeedLines.Emitting)) {
 			_vfxSpeedLines.Emitting = false;
@@ -286,6 +289,9 @@ public partial class Player : RigidBody3D
 		var rng = GD.RandRange(0, 0.2f);
 		_vfxSpeedLines.ProcessMaterial.Set("initial_velocity_min", baseVelocity * (1f - rng));
 		_vfxSpeedLines.ProcessMaterial.Set("initial_velocity_max", baseVelocity * (1f + rng));
+
+		// dash
+		// _vfxDash.Rotation = Vector3.Zero;
 	}
 
 	private Vector3 _diffDir;
@@ -417,6 +423,25 @@ public partial class Player : RigidBody3D
 		_dashTimer = _p.DashDuration;
 
 		_playerCamera.Cam.Fov += _p.CameraDashFovMod;
+
+		var dir = GetHeadOffsetBasedOnInputDir(_input.Movement);
+		_vfxDash.GlobalPosition = _head.GlobalPosition - dir * 2f;
+		_vfxDash.LookAt(_head.GlobalPosition, Vector3.Up);
+		_vfxDash.GlobalPosition = _head.GlobalPosition;
+		_vfxDash.Rotate(-dir.Cross(Vector3.Up).Normalized(), Mathf.Pi / 2f);
+		if (Mathf.Abs(_input.Movement.X) > 0.05f && Mathf.Abs(_input.Movement.Y) > 0.05f) {
+			_vfxDash.RotateY(Mathf.Pi / 2f);
+		}
+		_vfxDash.Emitting = true;
+		((CylinderMesh)_vfxDash.DrawPass1).Height = _p.DashDuration * _p.DashSpeed * 10f;
+	}
+
+	private Vector3 GetHeadOffsetBasedOnInputDir(Vector2 dir)
+	{
+		var x = _head.Right() * Mathf.Sign(dir.X);
+		var z = _head.Forward() * Mathf.Sign(dir.Y);
+		var f = (x + z).Normalized();
+		return f == Vector3.Zero ? _head.Forward() : f;
 	}
 
 	private void StopDash()
@@ -426,6 +451,7 @@ public partial class Player : RigidBody3D
 		
 		_falling = true;
 		_playerCamera.Cam.Fov -= _p.CameraDashFovMod;
+		_vfxDash.Emitting = false;
 	}
 
 	private void DashJump(bool halfJump)
@@ -462,7 +488,7 @@ public partial class Player : RigidBody3D
 		_head.Position += Vector3.Up * _p.CameraSlideDownMod;
 		
 		var d = _playerCamera.RotationDegrees;
-		d.X = 0;
+		d.Z = 0;
 		_playerCamera.RotationDegrees = d;
 		IsSliding = false;
 
