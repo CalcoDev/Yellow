@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://bsgwkv72xs4ab"]
+[gd_scene load_steps=38 format=3 uid="uid://bsgwkv72xs4ab"]
 
 [ext_resource type="Script" path="res://scripts/GameObjects/Player.cs" id="1_8gga7"]
 [ext_resource type="PhysicsMaterial" uid="uid://cknorhfrivu38" path="res://resources/physics_mat/no_friction_mat.tres" id="1_l3ghh"]
@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://bl8sb7msaewkq" path="res://assets/low_poly_ak-47.glb" id="11_vnlja"]
 [ext_resource type="PackedScene" uid="uid://dpjvi22inhjl" path="res://assets/low-poly_g17.glb" id="12_t6jfe"]
 [ext_resource type="Resource" uid="uid://dq7dms1su1ujl" path="res://resources/weapon/G17.tres" id="12_u6xim"]
+[ext_resource type="AudioStream" uid="uid://dh0ytk03eybnb" path="res://assets/ak-47-shots-fx_119bpm.wav" id="16_tbjfe"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_uwg8c"]
 font_size = 32
@@ -112,6 +113,34 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
 "update": 0,
 "values": [Vector3(0.5, 1, -2), Vector3(0.5, 1, -1.8), Vector3(0.5, 1, -2.2), Vector3(0.5, 1, -1.5), Vector3(0.5, 1, -1.8), Vector3(0.5, 1, -2.2), Vector3(0.5, 1, -2)]
+}
+
+[sub_resource type="Animation" id="Animation_cwupi"]
+resource_name = "AK47 Reload"
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AK47:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4, 0.7, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0.5, 1, -2), Vector3(0.5, 0.6, -2), Vector3(0.5, 2, -2), Vector3(0.5, 1, -2)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AK47:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.35, 1),
+"transitions": PackedFloat32Array(1, 1, 1.93187),
+"update": 0,
+"values": [Vector3(0, 1.5708, 0), Vector3(0, 1.5708, -0.523599), Vector3(0, 1.5708, 12.5664)]
 }
 
 [sub_resource type="Animation" id="Animation_0pc3k"]
@@ -215,6 +244,34 @@ tracks/0/keys = {
 "values": [Vector3(1.5, 1, -2), Vector3(1.5, 1, -1.8), Vector3(1.5, 1, -2.2), Vector3(1.5, 1, -2), Vector3(1.5, 1, -1.8), Vector3(1.5, 1, -2.2), Vector3(1.5, 1, -2)]
 }
 
+[sub_resource type="Animation" id="Animation_v7ydk"]
+resource_name = "G17 Reload"
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("G17:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4, 0.7, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(1.5, 1, -2), Vector3(1.5, 0.6, -2), Vector3(1.5, 2, -2), Vector3(1.5, 1, -2)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("G17:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.35, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 1.5708, 0), Vector3(0, 1.5708, -0.523599), Vector3(0, 1.5708, 12.5664)]
+}
+
 [sub_resource type="Animation" id="Animation_flma1"]
 resource_name = "G17 Shoot"
 length = 0.2
@@ -242,62 +299,6 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Vector3(0, 1.5708, 0), Vector3(0, 1.5708, 0.174533), Vector3(0, 1.5708, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_cwupi"]
-resource_name = "AK47 Reload"
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("AK47:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.4, 0.7, 1),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [Vector3(0.5, 1, -2), Vector3(0.5, 0.6, -2), Vector3(0.5, 2, -2), Vector3(0.5, 1, -2)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("AK47:rotation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.35, 1),
-"transitions": PackedFloat32Array(1, 1, 1.93187),
-"update": 0,
-"values": [Vector3(0, 1.5708, 0), Vector3(0, 1.5708, -0.523599), Vector3(0, 1.5708, 12.5664)]
-}
-
-[sub_resource type="Animation" id="Animation_v7ydk"]
-resource_name = "G17 Reload"
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("G17:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.4, 0.7, 1),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [Vector3(1.5, 1, -2), Vector3(1.5, 0.6, -2), Vector3(1.5, 2, -2), Vector3(1.5, 1, -2)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("G17:rotation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.35, 1),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector3(0, 1.5708, 0), Vector3(0, 1.5708, -0.523599), Vector3(0, 1.5708, 12.5664)]
 }
 
 [sub_resource type="Animation" id="Animation_2vo4r"]
@@ -466,7 +467,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
 transform = Transform3D(-0.2, 0, 5.07036e-07, 0, 0.2, 0, -5.07036e-07, 0, -0.2, 0, 0, 0)
 
 [node name="AK47" parent="ViewportManager/FirstPersonCamera/WeaponManager/Models" instance=ExtResource("11_vnlja")]
-transform = Transform3D(-2.18557e-08, 0, 0.5, 0, 0.5, 0, -0.5, 0, -2.18557e-08, 0.5, 1, -2)
+transform = Transform3D(-1.81e-06, 0, 0.5, 0, 0.5, 0, -0.5, 0, -1.81e-06, 0.5, 1, -2)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="ViewportManager/FirstPersonCamera/WeaponManager/Models"]
 libraries = {
@@ -474,9 +475,12 @@ libraries = {
 }
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="ViewportManager/FirstPersonCamera/WeaponManager/Models"]
+stream = ExtResource("16_tbjfe")
+volume_db = -12.0
 
 [node name="HitscanRay" type="RayCast3D" parent="ViewportManager/FirstPersonCamera/WeaponManager"]
 target_position = Vector3(0, -1, -1000)
+collide_with_areas = true
 
 [connection signal="AmmoChanged" from="ViewportManager/FirstPersonCamera/WeaponManager" to="WeaponUI" method="UpdateAmmoLabel"]
 [connection signal="WeaponChanged" from="ViewportManager/FirstPersonCamera/WeaponManager" to="WeaponUI" method="UpdateAllWeaponInfo"]

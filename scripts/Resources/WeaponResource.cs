@@ -6,6 +6,7 @@ namespace Yellow.Resources;
 public partial class WeaponResource : Resource
 {
 	[Export] public string WeaponName;
+	[Export] public float Damage;
 	
 	[Export] public string ActivateAnim;
 	[Export] public string DeactivateAnim;
@@ -18,7 +19,7 @@ public partial class WeaponResource : Resource
 	[Export] public float ShootAnimLength;
 	[Export] public float OutOfAmmoAnimLength;
 	[Export] public float ReloadAnimLength;
-
+	
 	[Export] public int CurrentAmmo;
 	[Export] public int ReserveAmmo;
 	[Export] public int Magazine;

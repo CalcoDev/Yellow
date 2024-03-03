@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://bnfm3fc5l51mb"]
+[gd_scene load_steps=32 format=3 uid="uid://bnfm3fc5l51mb"]
 
 [ext_resource type="Script" path="res://scripts/Managers/Game.cs" id="1_me4x0"]
 [ext_resource type="Script" path="res://scripts/Managers/InputManager.cs" id="2_itqj0"]
@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://bofrt6byqqgvp" path="res://textures/grid/orange/texture_08.png" id="9_2imve"]
 [ext_resource type="Script" path="res://addons/qodot/game_definitions/fgd/solid_classes/button.gd" id="10_r2kui"]
 [ext_resource type="PackedScene" uid="uid://bsgwkv72xs4ab" path="res://scenes/game_objects/entities/player.tscn" id="11_al5ng"]
+[ext_resource type="PackedScene" uid="uid://yd4qormrspt8" path="res://scenes/game_objects/entities/weapon_test_wall.tscn" id="13_sc1xy"]
 [ext_resource type="Script" path="res://scripts/Managers/PlayerUIManager.cs" id="14_wpsvg"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_xms1l"]
@@ -435,6 +436,9 @@ layout_mode = 2
 size_flags_horizontal = 7
 size_flags_vertical = 3
 max_value = 1.0
+
+[node name="WeaponTestWall" parent="." instance=ExtResource("13_sc1xy")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 4.26875, 7.43502)
 
 [connection signal="OnTriggerEnter" from="QodotMap/entity_1_custom_trigger" to="QodotMap/entity_2_mover" method="UseEnter"]
 [connection signal="OnTriggerEnterParamless" from="QodotMap/entity_1_custom_trigger" to="QodotMap/entity_2_mover" method="use"]

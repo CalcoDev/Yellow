@@ -5,6 +5,7 @@
 [resource]
 script = ExtResource("1_rouor")
 WeaponName = "G17"
+Damage = 10.0
 ActivateAnim = "G17 Activate"
 DeactivateAnim = "G17 Deactivate"
 ShootAnim = "G17 Shoot"

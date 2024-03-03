@@ -5,6 +5,7 @@
 [resource]
 script = ExtResource("1_xjkqv")
 WeaponName = "AK47"
+Damage = 25.0
 ActivateAnim = "AK47 Activate"
 DeactivateAnim = "AK47 Deactivate"
 ShootAnim = "AK47 Shoot"

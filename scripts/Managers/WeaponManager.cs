@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
+using Yellow.Components;
+using Yellow.Extensions;
 using Yellow.Misc;
 using Yellow.Resources;
 
@@ -127,16 +129,15 @@ public partial class WeaponManager : Node3D
 		_currentWeapon.CurrentAmmo--;
 		
 		_hitscanRay.ForceRaycastUpdate();
-		if (_hitscanRay.IsColliding())
+
+		if (_hitscanRay.GetCollider() is Node3D collider)
 		{
-			GD.Print("Collided with " + _hitscanRay.GetCollider());
-			
-			var hitIndicator = _debugBulletDecal.Instantiate() as Node3D;
-			GetTree().Root.AddChild(hitIndicator);
-			hitIndicator.GlobalPosition = _hitscanRay.GetCollisionPoint();
+			if(collider is HurtboxComponent hc)
+			{
+				hc.HealthComponent.TakeDamage(_currentWeapon.Damage);
+				GD.Print("Damaged " + collider.Name + " for " + _currentWeapon.Damage);
+			}
 		}
-		else
-			GD.Print("Missed the shot.");
 
 		EmitSignal(SignalName.AmmoChanged, _currentWeapon);
 		_animationPlayer.Queue(_currentWeapon.ShootAnim);
@@ -162,6 +163,14 @@ public partial class WeaponManager : Node3D
 		_actionCooldown = _currentWeapon.OutOfAmmoAnimLength;
 	}
 
+	private void TryAddDecal(Node3D collider)
+	{
+		if (_debugBulletDecal.Instantiate() is not Node3D hitIndicator) return;
+
+		collider.AddChild(hitIndicator);
+		hitIndicator.GlobalPosition = _hitscanRay.GetCollisionPoint();	
+	}
+	
 	private void ChangeWeapon()
 	{
 		if(_actionCooldown > 0.0) return;

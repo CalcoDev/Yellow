@@ -4,7 +4,7 @@
 
 [node name="BulletDebugDecal" type="Sprite3D"]
 transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
-modulate = Color(0.564706, 0.392157, 1, 1)
-billboard = 2
+modulate = Color(1, 0, 0, 1)
 texture_filter = 0
+render_priority = 1
 texture = ExtResource("1_q3f65")
