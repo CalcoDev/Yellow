@@ -25,6 +25,8 @@ public partial class Player : RigidBody3D
 	[Export] private GpuParticles3D _vfxSpeedLines;
 	[Export] private DistanceParticles _vfxDash;
 	[Export] private GpuParticles3D _vfxSlide;
+	[Export] private DistanceParticles _vfxSlideSmoke;
+	[Export] private DistanceParticles _vfxSlideLines;
 	[Export] private GpuParticles3D _vfxJump;
 	[Export] private GpuParticles3D _vfxLand;
 
@@ -432,6 +434,7 @@ public partial class Player : RigidBody3D
 		_vfxDash.GlobalPosition = _head.GlobalPosition;
 		_vfxDash.Rotate(-dir.Cross(Vector3.Up).Normalized(), Mathf.Pi / 2f);
 		_vfxDash.Emitting = true;
+		_vfxDash.FreezeNextFrame = true;
 		((CylinderMesh)_vfxDash.DrawPass1).Height = _p.DashDuration * _p.DashSpeed * 10f;
 	}
 
@@ -481,13 +484,24 @@ public partial class Player : RigidBody3D
 		var dir = GetHeadOffsetBasedOnInputDir(_input.Movement);
 		_vfxSlide.GlobalPosition = _head.GlobalPosition - dir * 2f;
 		_vfxSlide.LookAt(_head.GlobalPosition, Vector3.Up);
-		_vfxSlide.GlobalPosition = _head.GlobalPosition + dir * 0.35f + Vector3.Down * 0.15f;
+		_vfxSlide.GlobalPosition = _head.GlobalPosition + dir * 0.65f + Vector3.Down * 0.45f;
 		_vfxSlide.Rotate(-dir.Cross(Vector3.Up).Normalized(), Mathf.Pi / 2f);
 		var vel = 5f;
 		_vfxSlide.ProcessMaterial.Set("initial_velocity_min", vel);
 		_vfxSlide.ProcessMaterial.Set("initial_velocity_max", vel);
 
 		_vfxSlide.Emitting = true;
+
+		_vfxSlideSmoke.GlobalPosition = _head.GlobalPosition - dir * 0.75f + Vector3.Down * 0.55f;
+		_vfxSlideSmoke.Emitting = true;
+		_vfxSlideSmoke.FreezeNextFrame = true;
+
+		_vfxSlideLines.GlobalPosition = _head.GlobalPosition - dir * 2f;
+		_vfxSlideLines.LookAt(_head.GlobalPosition, Vector3.Up);
+		_vfxSlideLines.GlobalPosition = _head.GlobalPosition;
+		_vfxSlideLines.Rotate(-dir.Cross(Vector3.Up).Normalized(), Mathf.Pi / 2f);
+		_vfxSlideLines.Emitting = true;
+		_vfxSlideLines.FreezeNextFrame = true;
 	}
 
 	private void EndSlide()
@@ -504,6 +518,8 @@ public partial class Player : RigidBody3D
 
 		_playerCamera.Cam.Fov -= _p.CameraSlideFovMod;
 		_vfxSlide.Emitting = false;
+		_vfxSlideSmoke.Emitting = false;
+		_vfxSlideLines.Emitting = false;
 	}
 
 	private void SlideJump()

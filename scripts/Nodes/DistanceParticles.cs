@@ -20,6 +20,7 @@ public partial class DistanceParticles : GpuParticles3D
         }
     }
     private bool _isEmittingCustom = true;
+    public bool FreezeNextFrame = false;
 
     private Vector3 _prevPos;
     private float _distAccum;
@@ -35,15 +36,18 @@ public partial class DistanceParticles : GpuParticles3D
             return;
         }
 
-        _distAccum += _prevPos.DistanceTo(GlobalPosition);
-        DoParticles();
+        if (!FreezeNextFrame) {
+            _distAccum += _prevPos.DistanceTo(GlobalPosition);
+            DoParticles();
+        }
+        FreezeNextFrame = false;
         _prevPos = GlobalPosition;
     }
 
     private void DoParticles()
     {
         if (_distAccum >= MinDistance) {
-            var shotCount = Mathf.CeilToInt(_distAccum / MinDistance);
+            var shotCount = Mathf.RoundToInt(_distAccum / MinDistance);
             _distAccum = 0f;
             for (int i = 0; i < shotCount; ++i) {
                 var pos = _prevPos.Lerp(GlobalPosition, (float)i / shotCount);

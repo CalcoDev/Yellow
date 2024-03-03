@@ -1,4 +1,4 @@
-[gd_scene load_steps=181 format=3 uid="uid://bwhbsfk774oh"]
+[gd_scene load_steps=195 format=3 uid="uid://bwhbsfk774oh"]
 
 [ext_resource type="Script" path="res://scripts/Managers/Game.cs" id="1_5jb4k"]
 [ext_resource type="Script" path="res://scripts/Managers/InputManager.cs" id="2_k3k0y"]
@@ -15,6 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://ccp5gr0jev7to" path="res://textures/grid/red/texture_01.png" id="8_roiar"]
 [ext_resource type="Script" path="res://scripts/Nodes/DistanceParticles.cs" id="8_vq4go"]
 [ext_resource type="Texture2D" uid="uid://brdgvphqfimr0" path="res://textures/grid/green/texture_13.png" id="9_1mwsq"]
+[ext_resource type="Texture2D" uid="uid://d1021i7to3x5u" path="res://assets/particles/smoke.png" id="9_64ncf"]
 [ext_resource type="Texture2D" uid="uid://bofrt6byqqgvp" path="res://textures/grid/orange/texture_08.png" id="9_fhnrt"]
 [ext_resource type="Script" path="res://scripts/Components/HealthComponent.cs" id="9_kh1qj"]
 [ext_resource type="Script" path="res://addons/qodot/game_definitions/fgd/solid_classes/button.gd" id="10_ffd2f"]
@@ -88,6 +89,13 @@ shading_mode = 0
 vertex_color_use_as_albedo = true
 albedo_texture = ExtResource("6_108ry")
 
+[sub_resource type="Curve" id="Curve_viom5"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_joyta"]
+curve = SubResource("Curve_viom5")
+
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_7y1ed"]
 emission_shape = 6
 emission_ring_axis = Vector3(0, 1, 0)
@@ -102,6 +110,7 @@ gravity = Vector3(0, 0, 0)
 scale_min = 0.05
 scale_max = 0.2
 color = Color(1, 1, 1, 0.0784314)
+alpha_curve = SubResource("CurveTexture_joyta")
 sub_emitter_mode = 1
 sub_emitter_frequency = 10.0
 
@@ -127,12 +136,91 @@ gravity = Vector3(0, 0, 0)
 scale_min = 0.05
 scale_max = 0.2
 color = Color(1, 0.937255, 0, 0.196078)
+sub_emitter_mode = 1
+sub_emitter_frequency = 100.0
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_qru5p"]
 top_radius = 0.2
 bottom_radius = 0.2
 height = 8.0
 radial_segments = 4
+
+[sub_resource type="Gradient" id="Gradient_gcyl2"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_nkm4a"]
+gradient = SubResource("Gradient_gcyl2")
+
+[sub_resource type="Curve" id="Curve_gynvg"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_0tbce"]
+curve_y = SubResource("Curve_gynvg")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_xxai0"]
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+angle_min = -180.0
+angle_max = 180.0
+direction = Vector3(0, 1, 0)
+initial_velocity_min = 2.0
+initial_velocity_max = 5.0
+angular_velocity_min = -180.0
+angular_velocity_max = 180.0
+directional_velocity_min = 1.0
+directional_velocity_max = 3.0
+directional_velocity_curve = SubResource("CurveXYZTexture_0tbce")
+gravity = Vector3(0, 0, 0)
+color = Color(1, 1, 1, 0.196078)
+color_ramp = SubResource("GradientTexture1D_nkm4a")
+turbulence_enabled = true
+turbulence_influence_max = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lvxw4"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("9_64ncf")
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_ioijr"]
+material = SubResource("StandardMaterial3D_lvxw4")
+size = Vector2(2, 2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7hurq"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("6_108ry")
+
+[sub_resource type="Curve" id="Curve_m06to"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -2.01765, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_sv0qs"]
+curve = SubResource("Curve_m06to")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_5l0d8"]
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.0
+emission_ring_radius = 0.5
+emission_ring_inner_radius = 0.5
+direction = Vector3(0, 1, 0)
+spread = 0.0
+initial_velocity_min = 1.0
+initial_velocity_max = 1.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.05
+scale_max = 0.2
+color = Color(1, 1, 1, 0.0784314)
+alpha_curve = SubResource("CurveTexture_sv0qs")
+sub_emitter_mode = 1
+sub_emitter_frequency = 10.0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_8aujk"]
 
@@ -763,12 +851,14 @@ camera_attributes = SubResource("CameraAttributesPractical_1keek")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.895841, -0.132147, -0.424271, 0.284018, -0.564027, 0.775376, -0.341764, -0.815114, -0.467746, 0, 22.7694, 0)
 
-[node name="Player" parent="." node_paths=PackedStringArray("_playerCamera", "_vfxSpeedLines", "_vfxDash", "_vfxSlide", "_ui") instance=ExtResource("11_fqyap")]
+[node name="Player" parent="." node_paths=PackedStringArray("_playerCamera", "_vfxSpeedLines", "_vfxDash", "_vfxSlide", "_vfxSlideSmoke", "_vfxSlideLines", "_ui") instance=ExtResource("11_fqyap")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -68.4016, -17.5905, 38.799)
 _playerCamera = NodePath("Head/Camera")
 _vfxSpeedLines = NodePath("Head/Camera/Camera/VFXSpeedLines")
 _vfxDash = NodePath("VFXDash")
 _vfxSlide = NodePath("VFXSlide")
+_vfxSlideSmoke = NodePath("VFXSlideSmoke")
+_vfxSlideLines = NodePath("VFXSlideLines")
 _ui = NodePath("../PlayerUI")
 
 [node name="Camera" type="Node3D" parent="Player/Head" index="0" node_paths=PackedStringArray("_cam")]
@@ -816,6 +906,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 1)
 material_override = SubResource("StandardMaterial3D_hwyjx")
 emitting = false
 amount = 500
+lifetime = 0.5
 explosiveness = 1.0
 fixed_fps = 60
 visibility_aabb = AABB(-1.03543, -0.647987, -0.754999, 2.07086, 1.29597, 1.49144)
@@ -834,9 +925,35 @@ explosiveness = 1.0
 randomness = 1.0
 fixed_fps = 60
 visibility_aabb = AABB(-1.03543, -0.647987, -0.754999, 2.07086, 1.29597, 1.49144)
-local_coords = true
 process_material = SubResource("ParticleProcessMaterial_siafk")
 draw_pass_1 = SubResource("CylinderMesh_qru5p")
+
+[node name="VFXSlideSmoke" type="GPUParticles3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.908772, 1.8788)
+emitting = false
+amount = 4000
+explosiveness = 1.0
+fixed_fps = 60
+process_material = SubResource("ParticleProcessMaterial_xxai0")
+draw_pass_1 = SubResource("QuadMesh_ioijr")
+script = ExtResource("8_vq4go")
+MinDistance = 5.0
+CustomAmount = 40
+
+[node name="VFXSlideLines" type="GPUParticles3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 1)
+material_override = SubResource("StandardMaterial3D_7hurq")
+emitting = false
+amount = 500
+lifetime = 0.75
+explosiveness = 1.0
+fixed_fps = 60
+visibility_aabb = AABB(-1.03543, -0.647987, -0.754999, 2.07086, 1.29597, 1.49144)
+process_material = SubResource("ParticleProcessMaterial_5l0d8")
+draw_pass_1 = SubResource("CylinderMesh_s35yf")
+script = ExtResource("8_vq4go")
+MinDistance = 5.0
+CustomAmount = 5
 
 [node name="FlyingCube" type="RigidBody3D" parent="." node_paths=PackedStringArray("_health", "_nav", "_hurtbox")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -62.8785, -16.9363, 39.178)
