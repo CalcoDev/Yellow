@@ -21,6 +21,9 @@ public partial class Player : RigidBody3D
 	[Export] private ShapeCastComponent _wallCheck;
 	[Export] private CameraComponent _playerCamera;
 
+	[ExportGroup("SFX")]
+	[Export] private float SFXWalkStepDist = 1f;
+	
 	[ExportSubgroup("VFX")]
 	[Export] private GpuParticles3D _vfxSpeedLines;
 	[Export] private DistanceParticles _vfxDash;
@@ -85,6 +88,11 @@ public partial class Player : RigidBody3D
 	private bool _falling = false;
 	private bool _heavyFall = false;
 
+	// SFX
+	private float _walkDistCheck = 0f;
+
+	private Vector3 _prevPos;
+
 	public override void _Notification(int what)
 	{
 		if (what == NotificationSceneInstantiated || what == NotificationEnterTree) {
@@ -113,12 +121,17 @@ public partial class Player : RigidBody3D
 		AddToGroup("player");
 
 		_groundCheck.OnIsGrounded += () => {
+			if (IsThwomping || _heavyFall) {
+				SoundManager.Instance.Play("player_land_heavy");
+			} else {
+				SoundManager.Instance.Play("player_land");
+			}
+
 			if (IsThwomping) {
 				EndThwomp();
 			}
-
 			IsJumping = false;
-			
+
 			_boost = false;
 			_falling = false;
 			_heavyFall = false;
@@ -296,6 +309,23 @@ public partial class Player : RigidBody3D
 
 		// dash
 		// _vfxDash.Rotation = Vector3.Zero;
+
+		// SFX
+		_walkDistCheck += _prevPos.WithY(0).DistanceTo(GlobalPosition.WithY(0));
+		if (_walkDistCheck > SFXWalkStepDist) {
+			_walkDistCheck = 0;
+			if (_groundCheck.IsOnGround && !IsSliding && !IsDashing) {
+				SoundManager.Instance.Play("player_walk");
+			}
+		}
+
+		if (IsSliding) {
+			SoundManager.Instance.Play("player_slide", true);
+		} else {
+			SoundManager.Instance.StopAllName("player_slide");
+		}
+
+		_prevPos = GlobalPosition;
 	}
 
 	private Vector3 _diffDir;
@@ -564,8 +594,6 @@ public partial class Player : RigidBody3D
 		if (_input.Slide == KeyState.Down) {
 			// TODO(calco): Add a sort of slam
 		}
-
-		SoundManager.Instance.Play("player_thwomp");
 	}
 
 	private void SuperJump()

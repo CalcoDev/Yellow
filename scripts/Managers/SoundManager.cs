@@ -55,6 +55,7 @@ public partial class SoundManager : Node
 	// Interface
 	public SoundIdentifier Play(
 		string name,
+		bool overrideLoop = false,
 		Vector3 position = new Vector3(),
 		float volume = -1,
 		float volumeMult = -1
@@ -73,7 +74,7 @@ public partial class SoundManager : Node
 			_comps.Add(sound.Name, comp);
         }
 
-        return new SoundIdentifier(comp, comp.Play(position, volume, volumeMult));
+        return new SoundIdentifier(comp, comp.Play(overrideLoop, position, volume, volumeMult));
 	}
 	
 	// TODO(calco): This is absolutely horrendous lmfao
@@ -86,9 +87,9 @@ public partial class SoundManager : Node
 		}
 	}
 	
-	public void SetPauseAllName(string name, bool paused)
+	public void SetPauseAllName(string name, bool paused, bool logError = false)
 	{
-		var player = GetSoundPlayer(name);
+		var player = GetSoundPlayer(name, logError);
 		if (player == null) {
 			return;
 		}
@@ -104,9 +105,9 @@ public partial class SoundManager : Node
 		}
 	}
 
-	public void StopAllName(string name)
+	public void StopAllName(string name, bool logError = false)
 	{
-		var player = GetSoundPlayer(name);
+		var player = GetSoundPlayer(name, logError);
 		if (player == null) {
 			return;
 		}

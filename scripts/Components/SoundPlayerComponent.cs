@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using Godot;
 using Yellow.Resources.Sounds;
 
@@ -20,11 +22,11 @@ public partial class SoundPlayerComponent : Node3D
     private AudioStreamPlayer _nonPlayer;
     private AudioStreamPlayer3D _player;
 
-    private readonly List<AudioStreamPlayer> _freeNonSpatial = new();
-	private readonly List<AudioStreamPlayer3D> _freeSpatial = new();
+    private readonly HashSet<AudioStreamPlayer> _freeNonSpatial = new();
+	private readonly HashSet<AudioStreamPlayer3D> _freeSpatial = new();
 	
-	private readonly List<AudioStreamPlayer> _inUseNonSpatial = new();
-	private readonly List<AudioStreamPlayer3D> _inUseSpatial= new();
+	private readonly HashSet<AudioStreamPlayer> _inUseNonSpatial = new();
+	private readonly HashSet<AudioStreamPlayer3D> _inUseSpatial= new();
     private bool _init = false;
 
     private int _soundStreamIndex = 0;
@@ -63,6 +65,7 @@ public partial class SoundPlayerComponent : Node3D
     }
 
     public Node Play(
+        bool overrideLoop = false,
         Vector3 position = new Vector3(),
         float volume = -1f,
         float volumeMult = -1f
@@ -91,30 +94,47 @@ public partial class SoundPlayerComponent : Node3D
         }
         
         if (Sound.IsSpatial) {
-			var player = GetSpatialAudioStreamPlayer();
+			var player = GetSpatialAudioStreamPlayer(overrideLoop);
 			player.GlobalPosition = position;
 			player.VolumeDb = vol;
-            player.Stream = Sound.Streams[_soundStreamIndex];
-			player.Play();
-			player.Finished += () => {
-				_inUseSpatial.Remove(player);
-                _freeSpatial.Add(player);
-                EmitSignal(SignalName.OnPlayEnd);
-			};
-            _inUseSpatial.Add(player);
+
+            var stream = Sound.Streams[_soundStreamIndex];
+            if (!player.Playing || player.Stream != stream) {
+                player.Stream = stream;
+                player.Play();
+            }
+            if (!_freeSpatial.Contains(player) && !_inUseSpatial.Contains(player)) {
+                player.Finished += () => {
+                    _inUseSpatial.Remove(player);
+                    _freeSpatial.Add(player);
+                    EmitSignal(SignalName.OnPlayEnd);
+                };
+            }
+
+            if (!_inUseSpatial.Contains(player)) {
+                _inUseSpatial.Add(player);
+            }
            
             retPlayer = player;
 		} else {
-			var player = GetNonSpatialAudioStreamPlayer();
+			var player = GetNonSpatialAudioStreamPlayer(overrideLoop);
 			player.VolumeDb = vol;
-            player.Stream = Sound.Streams[_soundStreamIndex];
-			player.Play();
-			player.Finished += () => {
-				_inUseNonSpatial.Remove(player);
-                _freeNonSpatial.Add(player);
-                EmitSignal(SignalName.OnPlayEnd);
-			};
-            _inUseNonSpatial.Add(player);
+   
+            var stream = Sound.Streams[_soundStreamIndex];
+            if (player.Playing || player.Stream != stream) {
+                player.Stream = stream;
+                player.Play();
+            }
+            if (!_freeNonSpatial.Contains(player) && !_inUseNonSpatial.Contains(player)) {
+                player.Finished += () => {
+                    _inUseNonSpatial.Remove(player);
+                    _freeNonSpatial.Add(player);
+                    EmitSignal(SignalName.OnPlayEnd);
+                };
+            }
+            if (!_inUseNonSpatial.Contains(player)) {
+                _inUseNonSpatial.Add(player);
+            }
             
             retPlayer = player;
 		}
@@ -145,18 +165,23 @@ public partial class SoundPlayerComponent : Node3D
         }
     }
 
-    private AudioStreamPlayer3D GetSpatialAudioStreamPlayer()
+    private AudioStreamPlayer3D GetSpatialAudioStreamPlayer(bool overrideLoop)
 	{
+        if (overrideLoop && _inUseNonSpatial.Count > 0) {
+            return _inUseSpatial.Last();
+        }
+
 		if (_freeSpatial.Count > 0) {
-            var e = _freeSpatial[0];
-            _freeSpatial.RemoveAt(0);
+            var e = _freeSpatial.First();
+            _freeSpatial.Remove(e);
 			return e;
 		}
 
         if (InstanceCount == MaxInstances) {
             GD.PushError($"ERROR: Tried playing spatial sound {Sound.Name} on component {Name}, but reached max instances! Wrapping around...");
-            _inUseSpatial[0].Stop();
-            return _inUseSpatial[0];
+            var e = _inUseSpatial.First();
+            e.Stop();
+            return e;
         }
 		
         InstanceCount += 1;
@@ -165,21 +190,25 @@ public partial class SoundPlayerComponent : Node3D
 		return asp;
 	}
 
-	private AudioStreamPlayer GetNonSpatialAudioStreamPlayer()
+	private AudioStreamPlayer GetNonSpatialAudioStreamPlayer(bool overrideLoop)
 	{
+        if (overrideLoop && _inUseNonSpatial.Count > 0) {
+            return _inUseNonSpatial.Last();
+        }
+
 		if (_freeNonSpatial.Count > 0) {
-            var e = _freeNonSpatial[0];
-            _freeNonSpatial.RemoveAt(0);
+            var e = _freeNonSpatial.First();
+            _freeNonSpatial.Remove(e);
 			return e;
 		}
 		
         if (InstanceCount == MaxInstances) {
             GD.PushError($"ERROR: Tried playing non-spatial sound {Sound.Name} on component {Name}, but reached max instances! Wrapping around...");
-            _inUseNonSpatial[0].Stop();
-            return _inUseNonSpatial[0];
+            var e = _inUseNonSpatial.First();
+            e.Stop();
+            return e;
         }
 		
-        GD.Print("CREATED NEW SOUND");
         InstanceCount += 1;
 		var asp = new AudioStreamPlayer();
 		AddChild(asp);

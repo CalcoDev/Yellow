@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="SoundSO" load_steps=3 format=3 uid="uid://d2s8y5gxnvvox"]
+
+[ext_resource type="AudioStream" uid="uid://cxlkt7i37hmse" path="res://assets/sounds/player/landing/landing_heavy.wav" id="1_ydymr"]
+[ext_resource type="Script" path="res://scripts/Resources/Sounds/SoundSO.cs" id="2_gwvpq"]
+
+[resource]
+script = ExtResource("2_gwvpq")
+Name = "player_land_heavy"
+Layer = 1
+PoolType = 1
+IsSpatial = false
+Looping = false
+Volume = 1.0
+Streams = Array[AudioStream]([ExtResource("1_ydymr")])

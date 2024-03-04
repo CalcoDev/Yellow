@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="SoundSO" load_steps=6 format=3 uid="uid://ca2f1i4k4ajpj"]
+
+[ext_resource type="AudioStream" uid="uid://m3j22pulhaep" path="res://assets/sounds/footsteps/stone/footstep_stone1.wav" id="1_ykstu"]
+[ext_resource type="Script" path="res://scripts/Resources/Sounds/SoundSO.cs" id="2_5e8o3"]
+[ext_resource type="AudioStream" uid="uid://bfchmlabqoshl" path="res://assets/sounds/footsteps/stone/footstep_stone2.wav" id="2_7u1s8"]
+[ext_resource type="AudioStream" uid="uid://58112sqjvryr" path="res://assets/sounds/footsteps/stone/footstep_stone3.wav" id="3_rirtm"]
+[ext_resource type="AudioStream" uid="uid://bcr7eh7hmin4b" path="res://assets/sounds/footsteps/stone/footstep_stone4.wav" id="4_es426"]
+
+[resource]
+script = ExtResource("2_5e8o3")
+Name = "player_walk"
+Layer = 1
+PoolType = 1
+IsSpatial = false
+Looping = false
+Volume = 1.0
+Streams = Array[AudioStream]([ExtResource("1_ykstu"), ExtResource("2_7u1s8"), ExtResource("3_rirtm"), ExtResource("4_es426")])
