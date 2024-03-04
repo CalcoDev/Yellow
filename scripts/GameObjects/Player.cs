@@ -465,6 +465,7 @@ public partial class Player : RigidBody3D
 	private void DashJump(bool halfJump)
 	{
 		Jump(_p.DashJumpHopForce, false);
+		_playerCamera.Cam.Fov -= _p.CameraDashFovMod;
 		IsDashing = false;
 		IsJumping = true;
 		IsDashJump = true;
