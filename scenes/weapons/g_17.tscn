@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://bs3i75m6os13m"]
+
+[ext_resource type="Script" path="res://scripts/GameObjects/Weapons/Gun.cs" id="1_pmssy"]
+[ext_resource type="Resource" uid="uid://dq7dms1su1ujl" path="res://resources/weapon/G17.tres" id="2_g3tdq"]
+[ext_resource type="PackedScene" uid="uid://dpjvi22inhjl" path="res://assets/low-poly_g17.glb" id="3_78g0k"]
+
+[node name="G17" type="Node3D"]
+script = ExtResource("1_pmssy")
+WeaponResource = ExtResource("2_g3tdq")
+
+[node name="Model" parent="." instance=ExtResource("3_78g0k")]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
+
+[node name="Hitscan" type="RayCast3D" parent="."]
+
+[node name="Animation" type="AnimationPlayer" parent="."]

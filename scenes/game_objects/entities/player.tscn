@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://bsgwkv72xs4ab"]
+[gd_scene load_steps=36 format=3 uid="uid://bsgwkv72xs4ab"]
 
 [ext_resource type="Script" path="res://scripts/GameObjects/Player.cs" id="1_8gga7"]
 [ext_resource type="PhysicsMaterial" uid="uid://cknorhfrivu38" path="res://resources/physics_mat/no_friction_mat.tres" id="1_l3ghh"]
@@ -10,12 +10,10 @@
 [ext_resource type="Script" path="res://scripts/Managers/CameraManager.cs" id="8_ckwyo"]
 [ext_resource type="Texture2D" uid="uid://dt1sbjvvc1356" path="res://assets/crosshair.png" id="8_ixsmc"]
 [ext_resource type="Script" path="res://scripts/Managers/WeaponUIManager.cs" id="9_qp8fq"]
-[ext_resource type="Script" path="res://scripts/Managers/WeaponManager.cs" id="10_b0cpw"]
-[ext_resource type="Resource" uid="uid://2hq4dsenjqd" path="res://resources/weapon/AK47.tres" id="11_7x5ua"]
-[ext_resource type="PackedScene" uid="uid://bl8sb7msaewkq" path="res://assets/low_poly_ak-47.glb" id="11_vnlja"]
-[ext_resource type="PackedScene" uid="uid://dpjvi22inhjl" path="res://assets/low-poly_g17.glb" id="12_t6jfe"]
-[ext_resource type="Resource" uid="uid://dq7dms1su1ujl" path="res://resources/weapon/G17.tres" id="12_u6xim"]
-[ext_resource type="AudioStream" uid="uid://dh0ytk03eybnb" path="res://assets/ak-47-shots-fx_119bpm.wav" id="16_tbjfe"]
+[ext_resource type="Script" path="res://scripts/GameObjects/Weapons/ItemManager.cs" id="11_m8p1v"]
+[ext_resource type="PackedScene" uid="uid://lgjdjaixuwl2" path="res://scenes/weapons/hand.tscn" id="12_u4oo0"]
+[ext_resource type="PackedScene" uid="uid://bs3i75m6os13m" path="res://scenes/weapons/g_17.tscn" id="13_14jxk"]
+[ext_resource type="PackedScene" uid="uid://lg8bwndwg8sj" path="res://scenes/weapons/ak_47.tscn" id="14_bchrb"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_uwg8c"]
 font_size = 32
@@ -455,32 +453,20 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("8_ixsmc")
 
-[node name="WeaponManager" type="Node3D" parent="ViewportManager/FirstPersonCamera"]
-script = ExtResource("10_b0cpw")
-WeaponResources = Array[Object]([ExtResource("11_7x5ua"), ExtResource("12_u6xim")])
-StartWeapons = PackedStringArray("AK47", "G17")
+[node name="ItemManager" type="Node3D" parent="ViewportManager/FirstPersonCamera"]
+script = ExtResource("11_m8p1v")
 
-[node name="Models" type="Node3D" parent="ViewportManager/FirstPersonCamera/WeaponManager"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
+[node name="Hand" parent="ViewportManager/FirstPersonCamera/ItemManager" instance=ExtResource("12_u4oo0")]
+visible = false
 
-[node name="G17" parent="ViewportManager/FirstPersonCamera/WeaponManager/Models" instance=ExtResource("12_t6jfe")]
-transform = Transform3D(-0.2, 0, 5.07036e-07, 0, 0.2, 0, -5.07036e-07, 0, -0.2, 0, 0, 0)
+[node name="G17" parent="ViewportManager/FirstPersonCamera/ItemManager" instance=ExtResource("13_14jxk")]
+visible = false
 
-[node name="AK47" parent="ViewportManager/FirstPersonCamera/WeaponManager/Models" instance=ExtResource("11_vnlja")]
-transform = Transform3D(-1.81e-06, 0, 0.5, 0, 0.5, 0, -0.5, 0, -1.81e-06, 0.5, 1, -2)
+[node name="AK47" parent="ViewportManager/FirstPersonCamera/ItemManager" instance=ExtResource("14_bchrb")]
+transform = Transform3D(-3.61999e-06, 0, 1, 0, 1, 0, -1, 0, -3.61999e-06, 0.5, 1, -2)
+visible = false
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="ViewportManager/FirstPersonCamera/WeaponManager/Models"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ViewportManager/FirstPersonCamera/ItemManager"]
 libraries = {
 "": SubResource("AnimationLibrary_hbjbu")
 }
-
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="ViewportManager/FirstPersonCamera/WeaponManager/Models"]
-stream = ExtResource("16_tbjfe")
-volume_db = -12.0
-
-[node name="HitscanRay" type="RayCast3D" parent="ViewportManager/FirstPersonCamera/WeaponManager"]
-target_position = Vector3(0, -1, -1000)
-collide_with_areas = true
-
-[connection signal="AmmoChanged" from="ViewportManager/FirstPersonCamera/WeaponManager" to="WeaponUI" method="UpdateAmmoLabel"]
-[connection signal="WeaponChanged" from="ViewportManager/FirstPersonCamera/WeaponManager" to="WeaponUI" method="UpdateAllWeaponInfo"]

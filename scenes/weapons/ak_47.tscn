@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://lg8bwndwg8sj"]
+
+[ext_resource type="Script" path="res://scripts/GameObjects/Weapons/Gun.cs" id="1_xmdjv"]
+[ext_resource type="Resource" uid="uid://2hq4dsenjqd" path="res://resources/weapon/AK47.tres" id="2_s3fgd"]
+[ext_resource type="PackedScene" uid="uid://bl8sb7msaewkq" path="res://assets/low_poly_ak-47.glb" id="3_o6ndg"]
+
+[node name="AK47" type="Node3D"]
+script = ExtResource("1_xmdjv")
+WeaponResource = ExtResource("2_s3fgd")
+
+[node name="Model" parent="." instance=ExtResource("3_o6ndg")]
+transform = Transform3D(-1.81e-06, 0, 0.5, 0, 0.5, 0, -0.5, 0, -1.81e-06, -0.734097, 0, 0)
+
+[node name="Hitscan" type="RayCast3D" parent="."]
+
+[node name="Animation" type="AnimationPlayer" parent="."]

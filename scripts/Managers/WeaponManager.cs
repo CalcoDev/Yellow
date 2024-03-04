@@ -120,47 +120,17 @@ public partial class WeaponManager : Node3D
 
 	private void Shoot()
 	{
-		if (_currentWeapon.CurrentAmmo <= 0)
-		{
-			OutOfAmmo();
-			return;
-		}
-
-		_currentWeapon.CurrentAmmo--;
 		
-		_hitscanRay.ForceRaycastUpdate();
-
-		if (_hitscanRay.GetCollider() is Node3D collider)
-		{
-			if(collider is HurtboxComponent hc)
-			{
-				hc.HealthComponent.TakeDamage(_currentWeapon.Damage);
-				GD.Print("Damaged " + collider.Name + " for " + _currentWeapon.Damage);
-			}
-		}
-
-		EmitSignal(SignalName.AmmoChanged, _currentWeapon);
-		_animationPlayer.Queue(_currentWeapon.ShootAnim);
-		_actionCooldown = _currentWeapon.ShootAnimLength;
 	}
 
 	private void Reload()
 	{
-		var ammoToLoad = Math.Min(_currentWeapon.ReserveAmmo, _currentWeapon.Magazine - _currentWeapon.CurrentAmmo);
-		if(ammoToLoad == 0) return;
 		
-		_currentWeapon.ReserveAmmo -= ammoToLoad;
-		_currentWeapon.CurrentAmmo += ammoToLoad;
-		EmitSignal(SignalName.AmmoChanged, _currentWeapon);
-        
-		_animationPlayer.Queue(_currentWeapon.ReloadAnim);
-		_actionCooldown = _currentWeapon.ReloadAnimLength;
 	}
 
 	private void OutOfAmmo()
 	{
-		_animationPlayer.Queue(_currentWeapon.OutOfAmmoAnim);
-		_actionCooldown = _currentWeapon.OutOfAmmoAnimLength;
+		
 	}
 
 	private void TryAddDecal(Node3D collider)
