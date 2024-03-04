@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://scripts/Managers/Game.cs" id="1_xylgx"]
 [ext_resource type="Script" path="res://scripts/Managers/InputManager.cs" id="2_b1kx5"]
 [ext_resource type="Resource" uid="uid://c36hv0o6g0udo" path="res://definitions/qodot_fgd.tres" id="2_el4fi"]
-[ext_resource type="Resource" uid="uid://yf2osyn4pvt3" path="res://resources/player_input.tres" id="3_10npm"]
+[ext_resource type="Resource" uid="uid://yf2osyn4pvt3" path="res://resources/input/player_input.tres" id="3_10npm"]
 [ext_resource type="Texture2D" uid="uid://cxoqhsrxebcve" path="res://textures/grid/dark/texture_08.png" id="6_lfin4"]
 [ext_resource type="Script" path="res://scripts/Qodot/QodotCustomTrigger.cs" id="7_35ema"]
 [ext_resource type="Script" path="res://addons/qodot/game_definitions/fgd/solid_classes/mover.gd" id="8_ts2hw"]

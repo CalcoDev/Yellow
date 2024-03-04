@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="SoundSO" load_steps=3 format=3 uid="uid://cpa28cdr5eo58"]
+
+[ext_resource type="AudioStream" uid="uid://bekmbe6spr1e3" path="res://assets/sounds/player/dash_jump/dash_jump_big.wav" id="1_bukgv"]
+[ext_resource type="Script" path="res://scripts/Resources/Sounds/SoundSO.cs" id="3_5787r"]
+
+[resource]
+script = ExtResource("3_5787r")
+Name = "player_dash_jump"
+Layer = 1
+PoolType = 1
+IsSpatial = false
+Looping = false
+Volume = 1.0
+Streams = Array[AudioStream]([ExtResource("1_bukgv")])

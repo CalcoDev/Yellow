@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="SoundSO" load_steps=4 format=3 uid="uid://b3srsd4jpq4i5"]
+
+[ext_resource type="AudioStream" uid="uid://cdc3dk1h74m8e" path="res://assets/sounds/player/jump/jump1.wav" id="1_7ew17"]
+[ext_resource type="AudioStream" uid="uid://6w006436p26d" path="res://assets/sounds/player/jump/jump2.wav" id="2_60gae"]
+[ext_resource type="Script" path="res://scripts/Resources/Sounds/SoundSO.cs" id="3_vm6la"]
+
+[resource]
+script = ExtResource("3_vm6la")
+Name = "player_jump"
+Layer = 1
+PoolType = 1
+IsSpatial = false
+Looping = false
+Volume = 1.0
+Streams = Array[AudioStream]([ExtResource("1_7ew17"), ExtResource("2_60gae")])

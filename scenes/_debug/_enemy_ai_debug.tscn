@@ -1,8 +1,9 @@
-[gd_scene load_steps=195 format=3 uid="uid://bwhbsfk774oh"]
+[gd_scene load_steps=196 format=3 uid="uid://bwhbsfk774oh"]
 
 [ext_resource type="Script" path="res://scripts/Managers/Game.cs" id="1_5jb4k"]
+[ext_resource type="Script" path="res://scripts/Managers/SoundManager.cs" id="2_6jesf"]
 [ext_resource type="Script" path="res://scripts/Managers/InputManager.cs" id="2_k3k0y"]
-[ext_resource type="Resource" uid="uid://yf2osyn4pvt3" path="res://resources/player_input.tres" id="3_1bvsd"]
+[ext_resource type="Resource" uid="uid://yf2osyn4pvt3" path="res://resources/input/player_input.tres" id="3_1bvsd"]
 [ext_resource type="Script" path="res://scripts/Components/CameraComponent.cs" id="4_ljcue"]
 [ext_resource type="Script" path="res://addons/qodot/src/nodes/qodot_map.gd" id="4_x84cu"]
 [ext_resource type="Resource" uid="uid://c36hv0o6g0udo" path="res://definitions/qodot_fgd.tres" id="5_bpfil"]
@@ -839,6 +840,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0993204, 0.0205519, 0.09398
 [node name="Game" type="Node" parent="."]
 script = ExtResource("1_5jb4k")
 
+[node name="SoundManager" type="Node" parent="."]
+script = ExtResource("2_6jesf")
+
 [node name="InputManager" type="Node" parent="."]
 script = ExtResource("2_k3k0y")
 _input = ExtResource("3_1bvsd")
@@ -919,6 +923,7 @@ CustomAmount = 5
 [node name="VFXSlide" type="GPUParticles3D" parent="Player"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 1.13897)
 material_override = SubResource("StandardMaterial3D_yrtyl")
+emitting = false
 amount = 10
 lifetime = 0.1
 explosiveness = 1.0

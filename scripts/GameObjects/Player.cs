@@ -20,7 +20,7 @@ public partial class Player : RigidBody3D
 	[Export] private GroundCheckComponent _groundCheck;
 	[Export] private ShapeCastComponent _wallCheck;
 	[Export] private CameraComponent _playerCamera;
-	
+
 	[ExportSubgroup("VFX")]
 	[Export] private GpuParticles3D _vfxSpeedLines;
 	[Export] private DistanceParticles _vfxDash;
@@ -403,7 +403,7 @@ public partial class Player : RigidBody3D
 	}
 
 	// MOVEMENT
-	private void Jump(float force = -1f)
+	private void Jump(float force = -1f, bool playAudio = true)
 	{
 		IsJumping = true;
 		IsDashJump = false;
@@ -412,6 +412,10 @@ public partial class Player : RigidBody3D
 		_boost = false;
 		// TODO(calco): Set other default state, isslidejump?
 		ApplyImpulse(Vector3.Up * (force == -1f ? _p.JumpForce : force));
+
+		if (playAudio) {
+			SoundManager.Instance.Play("player_jump");
+		}
 	}
 
 	private void StartDash()
@@ -436,6 +440,8 @@ public partial class Player : RigidBody3D
 		_vfxDash.Emitting = true;
 		_vfxDash.FreezeNextFrame = true;
 		((CylinderMesh)_vfxDash.DrawPass1).Height = _p.DashDuration * _p.DashSpeed * 10f;
+		
+		SoundManager.Instance.Play("player_dash");
 	}
 
 	private Vector3 GetHeadOffsetBasedOnInputDir(Vector2 dir)
@@ -458,7 +464,7 @@ public partial class Player : RigidBody3D
 
 	private void DashJump(bool halfJump)
 	{
-		Jump(_p.DashJumpHopForce);
+		Jump(_p.DashJumpHopForce, false);
 		IsDashing = false;
 		IsJumping = true;
 		IsDashJump = true;
@@ -466,6 +472,8 @@ public partial class Player : RigidBody3D
 		
 		_ifDashJump = true;
 		ApplyImpulse(_dashDir * _p.DashJumpLeapForce * (halfJump ? 0.5f : 1f));
+		
+		SoundManager.Instance.Play("player_dash_jump");
 	}
 
 	private void StartSlide()
@@ -520,6 +528,8 @@ public partial class Player : RigidBody3D
 		_vfxSlide.Emitting = false;
 		_vfxSlideSmoke.Emitting = false;
 		_vfxSlideLines.Emitting = false;
+
+		SoundManager.Instance.Play("player_slide_end");
 	}
 
 	private void SlideJump()
@@ -553,6 +563,8 @@ public partial class Player : RigidBody3D
 		if (_input.Slide == KeyState.Down) {
 			// TODO(calco): Add a sort of slam
 		}
+
+		SoundManager.Instance.Play("player_thwomp");
 	}
 
 	private void SuperJump()

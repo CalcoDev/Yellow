@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/GameObjects/Player.cs" id="1_8gga7"]
 [ext_resource type="PhysicsMaterial" uid="uid://cknorhfrivu38" path="res://resources/physics_mat/no_friction_mat.tres" id="1_l3ghh"]
-[ext_resource type="Resource" uid="uid://yf2osyn4pvt3" path="res://resources/player_input.tres" id="2_ihh5m"]
+[ext_resource type="Resource" uid="uid://yf2osyn4pvt3" path="res://resources/input/player_input.tres" id="2_ihh5m"]
 [ext_resource type="Resource" uid="uid://uccyjnd3efm" path="res://resources/player_movement/player_movement_default.tres" id="3_x1l4f"]
 [ext_resource type="Script" path="res://scripts/Components/ShapeCastComponent.cs" id="4_16gja"]
 [ext_resource type="Script" path="res://scripts/Components/GroundCheckComponent.cs" id="5_e2m20"]
