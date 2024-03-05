@@ -18,6 +18,7 @@ public partial class Player : RigidBody3D
 	[ExportGroup("References")]
 	[Export] private PlayerInput _input;
 	[Export] private GroundCheckComponent _groundCheck;
+	[Export] private ShapeCastComponent _slopeCheck;
 	[Export] private ShapeCastComponent _wallCheck;
 	[Export] private CameraComponent _playerCamera;
 
@@ -144,19 +145,6 @@ public partial class Player : RigidBody3D
 			tween.Chain().TweenProperty(_playerCamera, "HardOffset", Vector3.Zero, td * 1.5f);
 			tween.Play();
 		};
-
-		// _groundCheck.OnIsGrounded += () => {
-			// TODO(calco): ground thing
-			// if (LinearVelocity.Y > 5f) {
-				// var twen = CreateTween();
-				// var start = Vector3.Zero;
-				// var final = Vector3.Down * 0.5f;
-				// twen.TweenProperty(_head, "position", final, 0.1f);
-				// twen.Chain().TweenProperty(_head, "position", start, 0.1f);
-				// twen.Play();
-				// twen.Finished += () => twen.Free();
-			// }
-		// };
 	}
 
 	public override void _Input(InputEvent e)
@@ -334,9 +322,18 @@ public partial class Player : RigidBody3D
 	private bool _ifDashing;
 	private bool _ifDashJump;
 	private bool _ifWallSliding = false;
+	private bool _ifWasGrounded = false;
+	private float _ifLastGroundSlope = 0f;
 	public override void _IntegrateForces(PhysicsDirectBodyState3D state)
 	{
 		_moveDir2 = _moveDir * Game.FixedDeltaTime * _p.RunSpeed;
+		if (_slopeCheck.IsOnSlope && !IsJumping) {
+			var old = _moveDir2;
+			_moveDir = _moveDir.Slide(_slopeCheck.ClosestNormal).Normalized();
+			_moveDir2 = _moveDir * Game.FixedDeltaTime * _p.RunSpeed;
+			// TODO(calco): This doesn't make sense but kinda works.
+			_moveDir2 = _moveDir2.WithX(old.X).WithZ(old.Z);
+		}
 
 		if (IsSliding) {
 			GravityScale = _groundCheck.IsOnGround ? 0f : 1f;
@@ -376,12 +373,15 @@ public partial class Player : RigidBody3D
 		if (_groundCheck.IsOnGround && !IsJumping) {
 			GravityScale = _moveDir.LengthSquared() < 0.01f ? 0 : 1;
 
-			float y = LinearVelocity.Y;
 			float t = 0.25f * (1f + _groundCheck.GroundProperties.Friction);
 			state.LinearVelocity = state.LinearVelocity.Lerp(_moveDir2, t);
 			
-			state.LinearVelocity = new(state.LinearVelocity.X, y, state.LinearVelocity.Z);
 			state.SetConstantForce(Vector3.Zero);
+			
+			// TODO(calco): Multiply this by sth.
+			if (_slopeCheck.IsOnSlope) {
+				state.LinearVelocity += -_slopeCheck.ClosestNormal;
+			}
 
 			_diff = false;
 		}
@@ -427,6 +427,11 @@ public partial class Player : RigidBody3D
 				state.ApplyForce(f * mult);
 			}
 		}
+
+		_ifWasGrounded = _groundCheck.IsOnGround;
+		if (_groundCheck.IsOnGround && _slopeCheck.WasColliding) {
+			_ifLastGroundSlope = _slopeCheck.SlopeAngle;
+		}
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -443,6 +448,7 @@ public partial class Player : RigidBody3D
 		_heavyFall = false;
 		_boost = false;
 		// TODO(calco): Set other default state, isslidejump?
+		LinearVelocity = LinearVelocity.WithY(0);
 		ApplyImpulse(Vector3.Up * (force == -1f ? _p.JumpForce : force));
 
 		if (playAudio) {
@@ -513,7 +519,8 @@ public partial class Player : RigidBody3D
 	{
 		IsSliding = true;
 		_slideDir = _moveDir.LengthSquared() > 0.01f ? _moveDir : _head.Forward();
-		_slideSpeed = Mathf.Max(LinearVelocity.Length(), _p.SlideBaseSpeed);
+		// TODO(calco): With Y 0???
+		_slideSpeed = Mathf.Max(LinearVelocity.WithY(0).Length(), _p.SlideBaseSpeed);
 		_slideSpeed = Mathf.Max(_slideSpeed, _maxSlideSpeedBuffer);
 		_maxSlideSpeedBufferTimer = 0f;
 
@@ -571,7 +578,8 @@ public partial class Player : RigidBody3D
 		Jump(_p.SlideHopForce);
 		_boost = true;
 		
-		var l = LinearVelocity.Length();
+		// TODO(calco): Figure out length mult
+		var l = LinearVelocity.WithY(0).Length();
 		var mult = 1f;
 	
 		var f = Mathf.Clamp(_slideSpeed * _p.SlideLeapMultiplier, 0f, 20f) * mult;

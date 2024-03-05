@@ -60,37 +60,28 @@ public partial class HurtboxComponent : Area3D
 
     private void TryToHit(HitboxComponent hitbox)
     {
-        // Want to do if:
-        // Ignore invincibility OR
-        // Not ignoring invincibility AND invincibility timer is finished OR
-        // Not ignoring invincibility AND invincibility time is 0
-
-        bool a = hitbox.IgnoreInvincibility;
-        bool b = !hitbox.IgnoreInvincibility && _invincibilityTimer <= 0f;
-        bool c = !hitbox.IgnoreInvincibility && InvincibilityTime <= 0f;
-
-        if (!a && !b && !c)
-            return;
-
         bool sameFaction = FactionComponent.FactionType == hitbox.FactionComponent.FactionType;
         if (FactionComponent == null || sameFaction)
             return;
+        TakeDamage(hitbox.IgnoreInvincibility, hitbox);
+    }
 
+    public void TakeDamage(bool ignoreInvincibility = false, HitboxComponent hitbox = null)
+    {
+        // CONTINUE IF
+        // Ignore invincibility OR
+        // Not ignoring invincibility AND invincibility timer is finished OR
+        // Not ignoring invincibility AND invincibility time is 0
+        bool a = ignoreInvincibility;
+        bool b = !ignoreInvincibility && _invincibilityTimer <= 0f;
+        bool c = !ignoreInvincibility && InvincibilityTime <= 0f;
+        if (!(!a || !b) || !c) {
+            return;
+        }
+        
         EmitSignal(SignalName.OnHit, hitbox);
-        hitbox.EmitSignal(HitboxComponent.SignalName.OnHit, this, hitbox);
+        hitbox?.EmitSignal(HitboxComponent.SignalName.OnHit, this, hitbox);
         HealthComponent?.TakeDamage(hitbox.Damage);
-
-        // var p = new FloatingText.FloatingTextParams()
-        // {
-        //     Text = hitbox.Damage.ToString(),
-        //     Position = GlobalPosition,
-        //     Offset = Vector2.Up * 32f,
-        //     Duration = .3f,
-        //     HoverDuration = 0.05f,
-        //     ShrinkDuration = 0.25f
-        // };
-        // GameDirector.Instance.SpawnFloatingText(p);
-
         _invincibilityTimer = InvincibilityTime;
     }
 

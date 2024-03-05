@@ -691,10 +691,8 @@ script = ExtResource("9_kh1qj")
 [node name="FactionComponent" type="Node" parent="FlyingCube"]
 script = ExtResource("10_gjfc0")
 
-[node name="HurtboxComponent" type="Area3D" parent="FlyingCube" node_paths=PackedStringArray("HealthComponent", "FactionComponent")]
+[node name="HurtboxComponent" type="Area3D" parent="FlyingCube"]
 script = ExtResource("11_36ynq")
-HealthComponent = NodePath("../HealthComponent")
-FactionComponent = NodePath("../FactionComponent")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="FlyingCube/HurtboxComponent"]
 shape = SubResource("BoxShape3D_8aujk")
@@ -1123,9 +1121,6 @@ mesh = SubResource("ArrayMesh_aycen")
 [node name="entity_4_brush_0_collision_shape" type="CollisionShape3D" parent="NavigationRegion3D/QodotMap/entity_4_mover"]
 shape = SubResource("ConvexPolygonShape3D_tppff")
 
-[connection signal="OnTriggerEnter" from="NavigationRegion3D/QodotMap/entity_1_custom_trigger" to="NavigationRegion3D/QodotMap/entity_2_mover" method="UseEnter"]
-[connection signal="OnTriggerEnterParamless" from="NavigationRegion3D/QodotMap/entity_1_custom_trigger" to="NavigationRegion3D/QodotMap/entity_2_mover" method="use"]
-[connection signal="OnTriggerExit" from="NavigationRegion3D/QodotMap/entity_1_custom_trigger" to="NavigationRegion3D/QodotMap/entity_2_mover" method="UseExit"]
 [connection signal="OnPressed" from="NavigationRegion3D/QodotMap/entity_3_button" to="NavigationRegion3D/QodotMap/entity_4_mover" method="UsePressed"]
 [connection signal="OnReleased" from="NavigationRegion3D/QodotMap/entity_3_button" to="NavigationRegion3D/QodotMap/entity_4_mover" method="UseReleased"]
 [connection signal="OnTriggerEnter" from="NavigationRegion3D/QodotMap/entity_3_button" to="NavigationRegion3D/QodotMap/entity_4_mover" method="UseEnter"]
