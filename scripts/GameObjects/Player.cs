@@ -322,7 +322,7 @@ public partial class Player : RigidBody3D
 		if (IsSliding) {
 			SoundManager.Instance.Play("player_slide", true);
 		} else {
-			SoundManager.Instance.StopAllName("player_slide");
+			SoundManager.Instance.StopAllName("player_slide", true);
 		}
 
 		_prevPos = GlobalPosition;

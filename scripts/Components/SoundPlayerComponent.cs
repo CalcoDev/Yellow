@@ -99,8 +99,10 @@ public partial class SoundPlayerComponent : Node3D
 			player.VolumeDb = vol;
 
             var stream = Sound.Streams[_soundStreamIndex];
-            if (!player.Playing || player.Stream != stream) {
+            if (player.Stream != stream) {
                 player.Stream = stream;
+            }
+            if (!_inUseSpatial.Contains(player) || !overrideLoop) {
                 player.Play();
             }
             if (!_freeSpatial.Contains(player) && !_inUseSpatial.Contains(player)) {
@@ -121,8 +123,10 @@ public partial class SoundPlayerComponent : Node3D
 			player.VolumeDb = vol;
    
             var stream = Sound.Streams[_soundStreamIndex];
-            if (player.Playing || player.Stream != stream) {
+            if (player.Stream != stream) {
                 player.Stream = stream;
+            }
+            if (!_inUseNonSpatial.Contains(player) || !overrideLoop) {
                 player.Play();
             }
             if (!_freeNonSpatial.Contains(player) && !_inUseNonSpatial.Contains(player)) {
@@ -147,10 +151,12 @@ public partial class SoundPlayerComponent : Node3D
     {
         foreach (var player in _inUseSpatial) {
             player.Stop();
+            player.EmitSignal(AudioStreamPlayer3D.SignalName.Finished);
         }
         
         foreach (var player in _inUseNonSpatial) {
             player.Stop();
+            player.EmitSignal(AudioStreamPlayer.SignalName.Finished);
         }
     }
 
@@ -185,7 +191,7 @@ public partial class SoundPlayerComponent : Node3D
         }
 		
         InstanceCount += 1;
-		var asp = new AudioStreamPlayer3D();
+        var asp = new AudioStreamPlayer3D();
 		AddChild(asp);
 		return asp;
 	}
