@@ -1,0 +1,34 @@
+[gd_scene load_steps=10 format=3 uid="uid://lg8bwndwg8sj"]
+
+[ext_resource type="Script" path="res://scripts/GameObjects/Weapons/Gun.cs" id="1_xmdjv"]
+[ext_resource type="Resource" uid="uid://2hq4dsenjqd" path="res://resources/weapon/AK47.tres" id="2_s3fgd"]
+[ext_resource type="PackedScene" uid="uid://bl8sb7msaewkq" path="res://assets/low_poly_ak-47.glb" id="3_o6ndg"]
+[ext_resource type="Animation" uid="uid://tayfycxuwa3n" path="res://scenes/weapons/anim/AK47 Activate.res" id="4_iidd3"]
+[ext_resource type="Animation" uid="uid://bkuqdkhcnpnb8" path="res://scenes/weapons/anim/AK47 Deactivate.res" id="5_ukey2"]
+[ext_resource type="Animation" uid="uid://sp06gow6ax6" path="res://scenes/weapons/anim/AK47 OOA.res" id="6_gq26d"]
+[ext_resource type="Animation" uid="uid://cmpk5me0u1h0w" path="res://scenes/weapons/anim/AK47 Reload.res" id="7_mr6vh"]
+[ext_resource type="Animation" uid="uid://cdhv8pdetftkd" path="res://scenes/weapons/anim/AK47 Shoot.res" id="8_71hfk"]
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_pc6cf"]
+_data = {
+"Equip": ExtResource("4_iidd3"),
+"OutOfAmmo": ExtResource("6_gq26d"),
+"Reload": ExtResource("7_mr6vh"),
+"Shoot": ExtResource("8_71hfk"),
+"Unequip": ExtResource("5_ukey2")
+}
+
+[node name="AK47" type="Node3D"]
+transform = Transform3D(-1, 0, 2.53518e-06, 0, 1, 0, -2.53518e-06, 0, -1, 0, 0, 0)
+script = ExtResource("1_xmdjv")
+WeaponResource = ExtResource("2_s3fgd")
+
+[node name="Model" parent="." instance=ExtResource("3_o6ndg")]
+transform = Transform3D(-1.81e-06, 0, 0.5, 0, 0.5, 0, -0.5, 0, -1.81e-06, -0.734097, 0, 0)
+
+[node name="Hitscan" type="RayCast3D" parent="."]
+
+[node name="Animation" type="AnimationPlayer" parent="."]
+libraries = {
+"AK47": SubResource("AnimationLibrary_pc6cf")
+}

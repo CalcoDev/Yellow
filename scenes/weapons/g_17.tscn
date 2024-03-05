@@ -1,0 +1,34 @@
+[gd_scene load_steps=10 format=3 uid="uid://bs3i75m6os13m"]
+
+[ext_resource type="Script" path="res://scripts/GameObjects/Weapons/Gun.cs" id="1_pmssy"]
+[ext_resource type="Resource" uid="uid://dq7dms1su1ujl" path="res://resources/weapon/G17.tres" id="2_g3tdq"]
+[ext_resource type="PackedScene" uid="uid://dpjvi22inhjl" path="res://assets/low-poly_g17.glb" id="3_78g0k"]
+[ext_resource type="Animation" uid="uid://ci8iyb21mv1lm" path="res://scenes/weapons/anim/G17 Activate.res" id="4_f6l3d"]
+[ext_resource type="Animation" uid="uid://bjkvxwfucu4r" path="res://scenes/weapons/anim/G17 Deactivate.res" id="5_lmtey"]
+[ext_resource type="Animation" uid="uid://ceektleebe2rf" path="res://scenes/weapons/anim/G17 OOA.res" id="6_f5780"]
+[ext_resource type="Animation" uid="uid://c4s4yaekvst4u" path="res://scenes/weapons/anim/G17 Reload.res" id="7_1rf1w"]
+[ext_resource type="Animation" uid="uid://dqtf60rv47s3u" path="res://scenes/weapons/anim/G17 Shoot.res" id="8_65htt"]
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_37gct"]
+_data = {
+"Equip": ExtResource("4_f6l3d"),
+"OutOfAmmo": ExtResource("6_f5780"),
+"Reload": ExtResource("7_1rf1w"),
+"Shoot": ExtResource("8_65htt"),
+"Unequip": ExtResource("5_lmtey")
+}
+
+[node name="G17" type="Node3D"]
+transform = Transform3D(-3.61999e-06, 0, 1, 0, 1, 0, -1, 0, -3.61999e-06, 1.5, 1, -2)
+script = ExtResource("1_pmssy")
+WeaponResource = ExtResource("2_g3tdq")
+
+[node name="Model" parent="." instance=ExtResource("3_78g0k")]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
+
+[node name="Hitscan" type="RayCast3D" parent="."]
+
+[node name="Animation" type="AnimationPlayer" parent="."]
+libraries = {
+"G17": SubResource("AnimationLibrary_37gct")
+}

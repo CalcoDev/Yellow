@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://bsgwkv72xs4ab"]
+[gd_scene load_steps=24 format=3 uid="uid://bsgwkv72xs4ab"]
 
 [ext_resource type="Script" path="res://scripts/GameObjects/Player.cs" id="1_8gga7"]
 [ext_resource type="PhysicsMaterial" uid="uid://cknorhfrivu38" path="res://resources/physics_mat/no_friction_mat.tres" id="1_l3ghh"]
@@ -7,6 +7,20 @@
 [ext_resource type="Script" path="res://scripts/Components/ShapeCastComponent.cs" id="4_16gja"]
 [ext_resource type="Script" path="res://scripts/Components/GroundCheckComponent.cs" id="5_e2m20"]
 [ext_resource type="Resource" uid="uid://okxparq80j4b" path="res://resources/ground_properties/default_ground_props.tres" id="6_5d0dr"]
+[ext_resource type="Script" path="res://scripts/Managers/CameraManager.cs" id="8_ckwyo"]
+[ext_resource type="Texture2D" uid="uid://dt1sbjvvc1356" path="res://assets/crosshair.png" id="8_ixsmc"]
+[ext_resource type="Script" path="res://scripts/Managers/WeaponUIManager.cs" id="9_qp8fq"]
+[ext_resource type="Script" path="res://scripts/GameObjects/Weapons/ItemManager.cs" id="11_m8p1v"]
+[ext_resource type="PackedScene" uid="uid://lgjdjaixuwl2" path="res://scenes/weapons/hand.tscn" id="12_u4oo0"]
+[ext_resource type="PackedScene" uid="uid://bs3i75m6os13m" path="res://scenes/weapons/g_17.tscn" id="13_14jxk"]
+[ext_resource type="PackedScene" uid="uid://lg8bwndwg8sj" path="res://scenes/weapons/ak_47.tscn" id="14_bchrb"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_uwg8c"]
+font_size = 32
+
+[sub_resource type="LabelSettings" id="LabelSettings_nt4hi"]
+font_size = 32
+font_color = Color(0.741176, 0.741176, 0.741176, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1ogde"]
 size = Vector3(0.2, 1.8, 0.8)
@@ -28,7 +42,7 @@ size = Vector3(0.8, 1.8, 0.2)
 size = Vector3(0.619141, 0.4, 0.452148)
 
 [node name="Player" type="RigidBody3D" node_paths=PackedStringArray("_groundCheck", "_wallCheck") groups=["player"]]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 1.42522, 1.60731, 1.67124)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 collision_layer = 1056
 physics_material_override = ExtResource("1_l3ghh")
 can_sleep = false
@@ -40,6 +54,34 @@ _groundCheck = NodePath("GroundCheck")
 _wallCheck = NodePath("Head/ShapeCastComponent")
 Sensitivity = 44.0
 _p = ExtResource("3_x1l4f")
+
+[node name="WeaponUI" type="CanvasLayer" parent="."]
+script = ExtResource("9_qp8fq")
+
+[node name="MainContainer" type="VBoxContainer" parent="WeaponUI"]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="WeaponAmmo" type="HBoxContainer" parent="WeaponUI/MainContainer"]
+layout_mode = 2
+
+[node name="CurrentAmmo" type="Label" parent="WeaponUI/MainContainer/WeaponAmmo"]
+layout_mode = 2
+text = " 0"
+label_settings = SubResource("LabelSettings_uwg8c")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ReserveAmmo" type="Label" parent="WeaponUI/MainContainer/WeaponAmmo"]
+layout_mode = 2
+text = " / 90"
+label_settings = SubResource("LabelSettings_nt4hi")
+
+[node name="WeaponName" type="HBoxContainer" parent="WeaponUI/MainContainer"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="WeaponUI/MainContainer/WeaponName"]
+layout_mode = 2
 
 [node name="Head" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
@@ -87,3 +129,44 @@ DefaultGroundProperties = ExtResource("6_5d0dr")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="GroundCheck"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.199776, 0)
 shape = SubResource("BoxShape3D_iiuxv")
+
+[node name="ViewportManager" type="Node3D" parent="." node_paths=PackedStringArray("Follow")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0)
+script = ExtResource("8_ckwyo")
+Follow = NodePath("../Head")
+FollowSpeed = 100.0
+
+[node name="FirstPersonCamera" type="Camera3D" parent="ViewportManager"]
+current = true
+
+[node name="Crosshair" type="TextureRect" parent="ViewportManager/FirstPersonCamera"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 12.0
+offset_bottom = 12.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("8_ixsmc")
+
+[node name="HitscanFromHead" type="RayCast3D" parent="ViewportManager/FirstPersonCamera"]
+target_position = Vector3(0, -1, -1000)
+collide_with_areas = true
+
+[node name="ItemManager" type="Node3D" parent="ViewportManager/FirstPersonCamera"]
+script = ExtResource("11_m8p1v")
+
+[node name="Hand" parent="ViewportManager/FirstPersonCamera/ItemManager" instance=ExtResource("12_u4oo0")]
+visible = false
+
+[node name="G17" parent="ViewportManager/FirstPersonCamera/ItemManager" node_paths=PackedStringArray("HitscanRay") instance=ExtResource("13_14jxk")]
+visible = false
+HitscanRay = NodePath("../../HitscanFromHead")
+
+[node name="AK47" parent="ViewportManager/FirstPersonCamera/ItemManager" node_paths=PackedStringArray("HitscanRay") instance=ExtResource("14_bchrb")]
+visible = false
+HitscanRay = NodePath("../../HitscanFromHead")

@@ -1,0 +1,41 @@
+[gd_scene load_steps=8 format=3 uid="uid://o0j7gy2ncghy"]
+
+[ext_resource type="Script" path="res://scripts/GameObjects/Enemies/Box.cs" id="1_a4j00"]
+[ext_resource type="Script" path="res://scripts/Components/HealthComponent.cs" id="1_ue73n"]
+[ext_resource type="Script" path="res://scripts/Components/FactionComponent.cs" id="2_tsic7"]
+[ext_resource type="Script" path="res://scripts/Components/HurtboxComponent.cs" id="3_pt0nm"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_w4011"]
+size = Vector3(0.5, 0.5, 0.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ec5wt"]
+albedo_color = Color(0.223529, 0.498039, 1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_t6h32"]
+material = SubResource("StandardMaterial3D_ec5wt")
+size = Vector3(0.5, 0.5, 0.5)
+
+[node name="Box" type="Node3D"]
+script = ExtResource("1_a4j00")
+
+[node name="HurtboxComponent" type="Area3D" parent="." node_paths=PackedStringArray("HealthComponent", "FactionComponent")]
+script = ExtResource("3_pt0nm")
+HealthComponent = NodePath("HealthComponent")
+FactionComponent = NodePath("FactionComponent")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HurtboxComponent"]
+shape = SubResource("BoxShape3D_w4011")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="HurtboxComponent"]
+mesh = SubResource("BoxMesh_t6h32")
+skeleton = NodePath("")
+
+[node name="HealthComponent" type="Node" parent="HurtboxComponent"]
+script = ExtResource("1_ue73n")
+MaxHealth = 1.0
+Health = 1.0
+
+[node name="FactionComponent" type="Node" parent="HurtboxComponent"]
+script = ExtResource("2_tsic7")
+
+[connection signal="OnDied" from="HurtboxComponent/HealthComponent" to="." method="OnKilled"]

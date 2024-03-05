@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="WeaponResource" load_steps=2 format=3 uid="uid://2hq4dsenjqd"]
+
+[ext_resource type="Script" path="res://scripts/Resources/WeaponResource.cs" id="1_xjkqv"]
+
+[resource]
+script = ExtResource("1_xjkqv")
+WeaponName = "AK47"
+Damage = 25.0
+ActivateAnim = "AK47/Equip"
+DeactivateAnim = "AK47/Unequip"
+ShootAnim = "AK47/Shoot"
+OutOfAmmoAnim = "AK47/OutOfAmmo"
+ReloadAnim = "AK47/Reload"
+ActivateAnimLength = 0.5
+DeactivateAnimLength = 0.5
+ShootAnimLength = 0.2
+OutOfAmmoAnimLength = 0.6
+ReloadAnimLength = 1.0
+CurrentAmmo = 30
+ReserveAmmo = 60
+Magazine = 30
+MaxAmmo = 90
+LowAmmoThreshold = 5
+Hitscan = true
+Automatic = true
