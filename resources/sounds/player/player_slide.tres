@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="SoundSO" load_steps=3 format=3 uid="uid://cs00wj6wwy3m0"]
+
+[ext_resource type="AudioStream" uid="uid://ceavq1ddfhech" path="res://assets/sounds/player/wall_scrape.wav" id="1_xuvav"]
+[ext_resource type="Script" path="res://scripts/Resources/Sounds/SoundSO.cs" id="5_dfp60"]
+
+[resource]
+script = ExtResource("5_dfp60")
+Name = "player_slide"
+Layer = 1
+PoolType = 1
+IsSpatial = false
+Looping = true
+Volume = 1.0
+Streams = Array[AudioStream]([ExtResource("1_xuvav")])

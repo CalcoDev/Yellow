@@ -11,10 +11,19 @@ config_version=5
 [application]
 
 config/name="Yellow"
-run/main_scene="res://scenes/main_guns.tscn"
+run/main_scene="res://scenes/_debug/_enemy_ai_debug.tscn"
 config/features=PackedStringArray("4.2", "C#")
 run/max_fps=240
 config/icon="res://icon.svg"
+
+[audio]
+
+buses/default_bus_layout="res://resources/audio/default_bus_layout.tres"
+
+[autoload]
+
+GameAl="*res://scenes/managers/game_al.tscn"
+SoundManagerAl="*res://scenes/managers/sound_manager_al.tscn"
 
 [display]
 
@@ -154,7 +163,7 @@ reload={
 
 3d/physics_engine="JoltPhysics3D"
 3d/default_gravity=30.0
-common/default_gravity=30.0
+common/default_gravity=45.0
 jolt_3d/collisions/areas_detect_static_bodies=true
 
 [rendering]

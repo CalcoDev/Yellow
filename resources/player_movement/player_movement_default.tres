@@ -4,6 +4,11 @@
 
 [resource]
 script = ExtResource("1_uis1a")
+CameraSideTiltAngle = 1.5
+CameraLandOffset = 0.4
+CameraDashFovMod = -10.0
+CameraSlideFovMod = -10.0
+CameraSlideDownMod = 1.0
 MaxStamina = 3.0
 RunSpeed = 600.0
 AirAccelMult = 1.5

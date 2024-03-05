@@ -1,8 +1,10 @@
 using Godot;
+using Yellow.Components;
 using Yellow.Misc;
 
 namespace Yellow.Managers;
 
+[GlobalClass]
 public partial class Game : Node
 {
 	public static Game Instance { get; private set; }
@@ -12,6 +14,10 @@ public partial class Game : Node
 	public static float FixedDeltaTime { get; private set; }
 	public static float Time { get; private set; }
 	public static float FixedTime { get; private set; }
+
+	// GAME
+	public static CameraComponent PlayerCamera { get; private set; }
+	public static CameraComponent ActiveCamera { get; private set; }
 
 	// FULLSCREEN
 	public static bool Fullscreen {
@@ -82,5 +88,16 @@ public partial class Game : Node
 	{
 		FixedDeltaTime = (float) delta;
 		FixedTime += FixedDeltaTime;
+	}
+
+	// TODO(calco): Sth more
+	public static void SetPlayerCamera(CameraComponent cam)
+	{
+		PlayerCamera = cam;
+	}
+	
+	public static void SetActiveCamera(CameraComponent cam)
+	{
+		ActiveCamera = cam;
 	}
 }
