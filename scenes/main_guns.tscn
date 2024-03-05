@@ -1,6 +1,5 @@
-[gd_scene load_steps=32 format=3 uid="uid://bnfm3fc5l51mb"]
+[gd_scene load_steps=30 format=3 uid="uid://bnfm3fc5l51mb"]
 
-[ext_resource type="Script" path="res://scripts/Managers/Game.cs" id="1_me4x0"]
 [ext_resource type="Script" path="res://scripts/Managers/InputManager.cs" id="2_itqj0"]
 [ext_resource type="Resource" uid="uid://yf2osyn4pvt3" path="res://resources/input/player_input.tres" id="3_dr8yf"]
 [ext_resource type="Script" path="res://addons/qodot/src/nodes/qodot_map.gd" id="4_vh5n1"]
@@ -12,7 +11,6 @@
 [ext_resource type="Script" path="res://addons/qodot/game_definitions/fgd/solid_classes/button.gd" id="10_r2kui"]
 [ext_resource type="PackedScene" uid="uid://bsgwkv72xs4ab" path="res://scenes/game_objects/entities/player.tscn" id="11_al5ng"]
 [ext_resource type="PackedScene" uid="uid://yd4qormrspt8" path="res://scenes/game_objects/entities/weapon_test_wall.tscn" id="13_sc1xy"]
-[ext_resource type="Script" path="res://scripts/Managers/PlayerUIManager.cs" id="14_wpsvg"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_xms1l"]
 
@@ -124,9 +122,6 @@ points = PackedVector3Array(-3, 0.5, -4, -3, -0.5, -4, 3, -0.5, -4, 3, 0.5, -4, 
 [node name="Main" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0993204, 0.0205519, 0.0939817)
 
-[node name="Game" type="Node" parent="."]
-script = ExtResource("1_me4x0")
-
 [node name="InputManager" type="Node" parent="."]
 script = ExtResource("2_itqj0")
 _input = ExtResource("3_dr8yf")
@@ -135,6 +130,9 @@ _update = true
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_lntm0")
 camera_attributes = SubResource("CameraAttributesPractical_1keek")
+
+[node name="Player" parent="." instance=ExtResource("11_al5ng")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.895841, -0.132147, -0.424271, 0.284018, -0.564027, 0.775376, -0.341764, -0.815114, -0.467746, 0, 22.7694, 0)
@@ -241,201 +239,6 @@ mesh = SubResource("ArrayMesh_ddag8")
 
 [node name="entity_4_brush_0_collision_shape" type="CollisionShape3D" parent="QodotMap/entity_4_button"]
 shape = SubResource("ConvexPolygonShape3D_f6gmq")
-
-[node name="Player" parent="." node_paths=PackedStringArray("_ui") instance=ExtResource("11_al5ng")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
-_ui = NodePath("../PlayerUI")
-
-[node name="PlayerUI" type="CanvasLayer" parent="." node_paths=PackedStringArray("_staminaBars", "_w", "_a", "_s", "_d", "_shift", "_lctrl", "_space")]
-script = ExtResource("14_wpsvg")
-_staminaBars = [NodePath("Grid/GridContainer/ProgressBar"), NodePath("Grid/GridContainer/ProgressBar2"), NodePath("Grid/GridContainer/ProgressBar3")]
-_w = NodePath("Keystrokes/W")
-_a = NodePath("Keystrokes/A")
-_s = NodePath("Keystrokes/S")
-_d = NodePath("Keystrokes/D")
-_shift = NodePath("Keystrokes/Shift")
-_lctrl = NodePath("Keystrokes/LCTRL")
-_space = NodePath("Keystrokes/Space")
-
-[node name="Keystrokes" type="ColorRect" parent="PlayerUI"]
-visible = false
-offset_right = 286.0
-offset_bottom = 411.0
-color = Color(0, 0, 0, 0.243137)
-
-[node name="W" type="ColorRect" parent="PlayerUI/Keystrokes"]
-layout_mode = 0
-offset_left = 106.0
-offset_top = 25.0
-offset_right = 173.0
-offset_bottom = 92.0
-
-[node name="Label" type="Label" parent="PlayerUI/Keystrokes/W"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "W"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="A" type="ColorRect" parent="PlayerUI/Keystrokes"]
-layout_mode = 0
-offset_left = 27.0
-offset_top = 99.0
-offset_right = 94.0
-offset_bottom = 166.0
-
-[node name="Label" type="Label" parent="PlayerUI/Keystrokes/A"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "A"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="S" type="ColorRect" parent="PlayerUI/Keystrokes"]
-layout_mode = 0
-offset_left = 105.0
-offset_top = 100.0
-offset_right = 172.0
-offset_bottom = 167.0
-
-[node name="Label" type="Label" parent="PlayerUI/Keystrokes/S"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "S
-"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="D" type="ColorRect" parent="PlayerUI/Keystrokes"]
-layout_mode = 0
-offset_left = 187.0
-offset_top = 101.0
-offset_right = 254.0
-offset_bottom = 168.0
-
-[node name="Label" type="Label" parent="PlayerUI/Keystrokes/D"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "D"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Shift" type="ColorRect" parent="PlayerUI/Keystrokes"]
-layout_mode = 0
-offset_left = 28.0
-offset_top = 179.0
-offset_right = 254.0
-offset_bottom = 242.0
-
-[node name="Label" type="Label" parent="PlayerUI/Keystrokes/Shift"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Shift
-"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="LCTRL" type="ColorRect" parent="PlayerUI/Keystrokes"]
-layout_mode = 0
-offset_left = 28.0
-offset_top = 254.0
-offset_right = 254.0
-offset_bottom = 317.0
-
-[node name="Label" type="Label" parent="PlayerUI/Keystrokes/LCTRL"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "LCTRL"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Space" type="ColorRect" parent="PlayerUI/Keystrokes"]
-layout_mode = 0
-offset_left = 28.0
-offset_top = 330.0
-offset_right = 254.0
-offset_bottom = 393.0
-
-[node name="Label" type="Label" parent="PlayerUI/Keystrokes/Space"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Space"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Grid" type="ColorRect" parent="PlayerUI"]
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -184.0
-offset_right = 480.0
-grow_vertical = 0
-color = Color(0, 0, 0, 0.243137)
-
-[node name="GridContainer" type="GridContainer" parent="PlayerUI/Grid"]
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -52.0
-grow_horizontal = 2
-grow_vertical = 0
-columns = 3
-
-[node name="ProgressBar" type="ProgressBar" parent="PlayerUI/Grid/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-max_value = 1.0
-value = 0.42
-
-[node name="ProgressBar2" type="ProgressBar" parent="PlayerUI/Grid/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 7
-size_flags_vertical = 3
-max_value = 1.0
-
-[node name="ProgressBar3" type="ProgressBar" parent="PlayerUI/Grid/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 7
-size_flags_vertical = 3
-max_value = 1.0
 
 [node name="WeaponTestWall" parent="." instance=ExtResource("13_sc1xy")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 4.26875, 7.43502)
