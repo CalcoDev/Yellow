@@ -123,6 +123,7 @@ public partial class Player : RigidBody3D
 		_groundCheck.OnIsGrounded += () => {
 			if (IsThwomping || _heavyFall) {
 				SoundManager.Instance.Play("player_land_heavy");
+				_playerCamera.ShakeLength(10, 20, 1, false);
 			} else {
 				SoundManager.Instance.Play("player_land");
 			}
@@ -170,7 +171,7 @@ public partial class Player : RigidBody3D
 			var x = -motion.Relative.X * sens;
 			var y = motion.Relative.Y * sens;
 			
-			_head.RotateY(x);
+			// _head.RotateY(x);
 			_playerCamera.MouseRotation(x, y);
 		}
 	}
@@ -179,16 +180,18 @@ public partial class Player : RigidBody3D
 	private bool _prevDidMoveWallSlide = false;
 	public override void _Process(double delta)
 	{
-		var right = _head.Right() * -_input.Movement.X;
-		var forward = _head.Forward() * _input.Movement.Y;
-		_moveDir = (forward + right).Normalized();
-
 		// NOTE(drts): controller
 		// TODO(calco): Should do a check for if controller active or not
 		float lookHoriz = Input.GetAxis("look_left", "look_right")/Sensitivity;
 		float lookVert = Input.GetAxis("look_up", "look_down")/Sensitivity;
-		_head.RotateY(-lookHoriz);
+		// _head.RotateY(-lookHoriz);
 		_playerCamera.MouseRotation(-lookHoriz, lookVert);
+
+		_head.Rotation = _playerCamera.Rotation + Vector3.Up * Mathf.Pi;
+		GD.Print(_playerCamera.Rotation);
+		var right = _head.Right() * -_input.Movement.X;
+		var forward = _head.Forward() * _input.Movement.Y;
+		_moveDir = (forward + right).Normalized();
 
 		// Tilt camera
 		if (!IsSliding) {

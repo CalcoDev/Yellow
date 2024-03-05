@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using Godot;
+using Yellow.Extensions;
 using Yellow.Managers;
 
 namespace Yellow.Components;
@@ -34,6 +36,75 @@ public partial class CameraComponent : Node3D
 	[Export] public Vector3 HardOffset;
 	[Export] public Vector3 Offset;
 
+	[ExportSubgroup("Shake")]
+	[Export] public bool CanShake = true;
+
+	private abstract class CameraShake
+	{
+		public float Strength;
+		public float Speed;
+
+		public abstract bool Update(float dt);
+		
+		// TODO(calco): This should be a thing.
+		// public abstract Vector3 GetShake();
+	}
+
+	private class ReductionCameraShake : CameraShake
+	{
+		public float ReductionRate;
+		
+		public override bool Update(float dt)
+		{
+			Strength -= ReductionRate;
+			return Strength > 0;
+		}
+
+        public ReductionCameraShake(float strength, float speed, float reductionRate)
+		{
+			Strength = strength;
+			Speed = speed;
+			ReductionRate = reductionRate;
+		}
+	}
+
+	private class LengthCameraShake : CameraShake
+	{
+		public float MaxLength;
+		public float MaxStrength;
+		public bool ReduceOverTime;
+		
+		public float LengthRemaining;
+
+        public override bool Update(float dt)
+        {
+            LengthRemaining -= dt;
+			if (ReduceOverTime) {
+				// TODO(calco): Implement different attenuation models.
+				Strength = GetShakeProgression() * MaxStrength;
+			}
+			return LengthRemaining > 0f;
+        }
+
+        public LengthCameraShake(float strength, float speed, float length, bool reduceOverTime)
+		{
+			Strength = strength;
+			MaxStrength = strength;
+			Speed = speed;
+			MaxLength = length;
+			LengthRemaining = length;
+			ReduceOverTime = reduceOverTime;
+		}
+
+		public float GetShakeProgression()
+		{
+			return LengthRemaining / MaxLength;
+		}
+	}
+	public bool IsShaking => _shakes.Count > 0;
+	private readonly List<CameraShake> _shakes = new();
+	private readonly FastNoiseLite _noise = new();
+
     public override void _EnterTree()
 	{
 		if (_isActive && Game.ActiveCamera != this) {
@@ -52,6 +123,7 @@ public partial class CameraComponent : Node3D
 	}
 
 	private Vector3 _prevOffset;
+	private Vector3 _prevShakeAngles;
     public override void _Process(double delta)
 	{
 		if (ShouldFollow && _follow != null) {
@@ -65,6 +137,56 @@ public partial class CameraComponent : Node3D
 			_cam.Position = HardOffset;
 			HardOffset = Vector3.Zero;
 		}
+
+		if (CanShake) {
+			_prevShakeAngles = Vector3.Zero;
+			var currShakeAngles = Vector3.Zero;
+			
+			var toRemove = new HashSet<CameraShake>();
+			foreach (var s in _shakes) {
+				if (!s.Update(Game.DeltaTime)) {
+					toRemove.Add(s);
+				}
+
+				// TODO(calco): Define a better way to do this.
+				var str = s.Strength;
+				var f = Game.Time * s.Speed;
+				var shakeAngles = str * new Vector3(
+					GetNoiseFromSeed(0, f),
+					GetNoiseFromSeed(1, f),
+					GetNoiseFromSeed(2, f)
+				);
+				currShakeAngles += shakeAngles;
+			}
+			foreach (var s in toRemove) {
+				_shakes.Remove(s);
+			}
+
+			// var r = _cam.RotationDegrees;
+			// r.X = r.X - _prevShakeAngles.X + currShakeAngles.X;
+			// r.Y = r.Y - _prevShakeAngles.Y + currShakeAngles.Y;
+			// r.Z = r.Z - _prevShakeAngles.Z + currShakeAngles.Z;
+			// _cam.RotationDegrees = r;
+			// GD.Print("SHAKE WITH: ", currShakeAngles);
+			
+			_prevShakeAngles = currShakeAngles;
+		}
+	}
+
+	// NOTE(calco): Shake helpers
+	public void ShakeStrength(float strength, float speed, float reductionRate)
+	{
+		_shakes.Add(new ReductionCameraShake(strength, speed, reductionRate));
+	}
+
+	public void ShakeLength(float strength, float speed, float length, bool reduceOverTime)
+	{
+		_shakes.Add(new LengthCameraShake(strength, speed, length, reduceOverTime));
+	}
+
+	public void StopShake()
+	{
+		_shakes.Clear();
 	}
 
     // NOTE(calco): Rotation helpers
@@ -102,5 +224,11 @@ public partial class CameraComponent : Node3D
 			0f
 		);
 		return prev == _cam.Rotation.X;
+	}
+
+	private float GetNoiseFromSeed(int seed, float f)
+	{
+		_noise.Seed = seed;
+		return _noise.GetNoise1D(f);
 	}
 }
