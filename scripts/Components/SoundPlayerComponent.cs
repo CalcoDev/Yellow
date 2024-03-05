@@ -107,6 +107,11 @@ public partial class SoundPlayerComponent : Node3D
             }
             if (!_freeSpatial.Contains(player) && !_inUseSpatial.Contains(player)) {
                 player.Finished += () => {
+                    if (Sound.Looping) {
+                        player.Play();
+                        EmitSignal(SignalName.OnPlayEnd);
+                        return;
+                    }
                     _inUseSpatial.Remove(player);
                     _freeSpatial.Add(player);
                     EmitSignal(SignalName.OnPlayEnd);
@@ -131,6 +136,11 @@ public partial class SoundPlayerComponent : Node3D
             }
             if (!_freeNonSpatial.Contains(player) && !_inUseNonSpatial.Contains(player)) {
                 player.Finished += () => {
+                    if (Sound.Looping) {
+                        player.Play();
+                        EmitSignal(SignalName.OnPlayEnd);
+                        return;
+                    }
                     _inUseNonSpatial.Remove(player);
                     _freeNonSpatial.Add(player);
                     EmitSignal(SignalName.OnPlayEnd);
