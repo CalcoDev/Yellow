@@ -24,6 +24,10 @@ public partial class SoundManager : Node
 
 	public static SoundManager Instance { get; private set; }
 
+	// TODO(calco): Add other audio busses later
+	public static StringName SFXAudioBus => "SFX";
+	public static StringName MusicAudioBus => "Music";
+
 	// NOTE(calco): Redefinition of private stuff, for easier access.
 	// Bad, but whatever.
 
@@ -53,6 +57,14 @@ public partial class SoundManager : Node
 	}
 
 	// Interface
+	public bool IsAudioPlaying(string name)
+	{
+        if (!_comps.TryGetValue(name, out SoundPlayerComponent comp)) {
+			return false;
+		}
+		return comp.IsPlaying;
+	}
+
 	public SoundIdentifier Play(
 		string name,
 		bool overrideLoop = false,
@@ -135,7 +147,6 @@ public partial class SoundManager : Node
 
 				var res = ResourceLoader.Load<Resource>(fullPath);
 				if (res is SoundSO sound) {
-					GD.Print("DBG: Found sound: ", sound.Name);
 					_sounds.Add(sound.Name, sound);
 				}
 

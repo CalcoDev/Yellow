@@ -16,6 +16,15 @@ config/features=PackedStringArray("4.2", "C#")
 run/max_fps=240
 config/icon="res://icon.svg"
 
+[audio]
+
+buses/default_bus_layout="res://resources/audio/default_bus_layout.tres"
+
+[autoload]
+
+GameAl="*res://scenes/managers/game_al.tscn"
+SoundManagerAl="*res://scenes/managers/sound_manager_al.tscn"
+
 [display]
 
 window/size/viewport_width=1920

@@ -5,8 +5,8 @@
 [resource]
 script = ExtResource("1_fipgj")
 Movement = Vector2(0, 0)
-Jump = 0
-Slide = 0
-Dash = 0
-LMB = 0
-RMB = 0
+Jump = 3
+Slide = 3
+Dash = 3
+LMB = 3
+RMB = 3

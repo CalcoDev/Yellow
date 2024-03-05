@@ -187,7 +187,6 @@ public partial class Player : RigidBody3D
 		_playerCamera.MouseRotation(-lookHoriz, lookVert);
 
 		_head.Rotation = _playerCamera.Rotation + Vector3.Up * Mathf.Pi;
-		GD.Print(_playerCamera.Rotation);
 		var right = _head.Right() * -_input.Movement.X;
 		var forward = _head.Forward() * _input.Movement.Y;
 		_moveDir = (forward + right).Normalized();
@@ -321,9 +320,9 @@ public partial class Player : RigidBody3D
 			}
 		}
 
-		if (IsSliding || (IsWallSliding && !_groundCheck.IsOnGround)) {
+		if (IsSliding || (!_groundCheck.IsOnGround && LinearVelocity.Y >= 0f && IsWallSliding)) {
 			SoundManager.Instance.Play("player_slide", true);
-		} else {
+		} else if (SoundManager.Instance.IsAudioPlaying("player_slide")) {
 			SoundManager.Instance.StopAllName("player_slide", true);
 		}
 

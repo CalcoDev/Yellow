@@ -4,6 +4,7 @@ using Yellow.Misc;
 
 namespace Yellow.Managers;
 
+[GlobalClass]
 public partial class Game : Node
 {
 	public static Game Instance { get; private set; }

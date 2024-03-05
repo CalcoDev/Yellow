@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Godot;
+using Yellow.Managers;
 using Yellow.Resources.Sounds;
 
 namespace Yellow.Components;
@@ -19,6 +20,8 @@ public partial class SoundPlayerComponent : Node3D
     [Signal]
     public delegate void OnPlayEndEventHandler();
 
+    public bool IsPlaying { get; private set; }
+
     private AudioStreamPlayer _nonPlayer;
     private AudioStreamPlayer3D _player;
 
@@ -35,6 +38,14 @@ public partial class SoundPlayerComponent : Node3D
     public override void _Ready()
     {
         InstanceCount = 0;
+        OnPlayBegin += () => {
+            IsPlaying = true;
+        };
+        OnPlayEnd += () => {
+            if (_inUseSpatial.Count + _inUseNonSpatial.Count == 0) {
+                IsPlaying = false;
+            }
+        };
     }
 
     public void SetSound(SoundSO sound)
@@ -75,7 +86,7 @@ public partial class SoundPlayerComponent : Node3D
             SetSound(Sound);
         }
 
-        var vol = volume >= 0f ? volume : Sound.Volume * volumeMult;
+        var vol = volume >= 0f ? volume : Sound.Volume * (volumeMult >= 0f ? volumeMult : 1f);
         Node retPlayer = null;
 
         switch (Sound.PoolType) {
@@ -93,11 +104,19 @@ public partial class SoundPlayerComponent : Node3D
 #pragma warning restore CS0162 // Unreachable code detected
                 break;
         }
-        
+
+        var audioBus = Sound.Layer switch
+        {
+            SoundLayer.Music => SoundManager.MusicAudioBus,
+            SoundLayer.SFX => SoundManager.SFXAudioBus,
+            _ => throw new System.NotImplementedException(),
+        };
+
         if (Sound.IsSpatial) {
 			var player = GetSpatialAudioStreamPlayer(overrideLoop);
 			player.GlobalPosition = position;
 			player.VolumeDb = vol;
+            player.Bus = audioBus;
 
             var stream = Sound.Streams[_soundStreamIndex];
             if (player.Stream != stream) {
@@ -127,6 +146,7 @@ public partial class SoundPlayerComponent : Node3D
 		} else {
 			var player = GetNonSpatialAudioStreamPlayer(overrideLoop);
 			player.VolumeDb = vol;
+            player.Bus = audioBus;
    
             var stream = Sound.Streams[_soundStreamIndex];
             if (player.Stream != stream) {

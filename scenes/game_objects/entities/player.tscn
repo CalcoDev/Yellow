@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://bsgwkv72xs4ab"]
+[gd_scene load_steps=50 format=3 uid="uid://bsgwkv72xs4ab"]
 
 [ext_resource type="Script" path="res://scripts/GameObjects/Player.cs" id="1_8gga7"]
 [ext_resource type="PhysicsMaterial" uid="uid://cknorhfrivu38" path="res://resources/physics_mat/no_friction_mat.tres" id="1_l3ghh"]
@@ -7,13 +7,17 @@
 [ext_resource type="Script" path="res://scripts/Components/ShapeCastComponent.cs" id="4_16gja"]
 [ext_resource type="Script" path="res://scripts/Components/GroundCheckComponent.cs" id="5_e2m20"]
 [ext_resource type="Resource" uid="uid://okxparq80j4b" path="res://resources/ground_properties/default_ground_props.tres" id="6_5d0dr"]
-[ext_resource type="Script" path="res://scripts/Managers/CameraManager.cs" id="8_ckwyo"]
+[ext_resource type="Script" path="res://scripts/Components/CameraComponent.cs" id="6_fvhrc"]
+[ext_resource type="Script" path="res://scripts/Managers/PlayerUIManager.cs" id="6_y88wm"]
+[ext_resource type="Texture2D" uid="uid://dptow3a648wji" path="res://assets/vfx/dash_particle.png" id="8_cymeo"]
 [ext_resource type="Texture2D" uid="uid://dt1sbjvvc1356" path="res://assets/crosshair.png" id="8_ixsmc"]
 [ext_resource type="Script" path="res://scripts/Managers/WeaponUIManager.cs" id="9_qp8fq"]
 [ext_resource type="Script" path="res://scripts/GameObjects/Weapons/ItemManager.cs" id="11_m8p1v"]
 [ext_resource type="PackedScene" uid="uid://lgjdjaixuwl2" path="res://scenes/weapons/hand.tscn" id="12_u4oo0"]
 [ext_resource type="PackedScene" uid="uid://bs3i75m6os13m" path="res://scenes/weapons/g_17.tscn" id="13_14jxk"]
 [ext_resource type="PackedScene" uid="uid://lg8bwndwg8sj" path="res://scenes/weapons/ak_47.tscn" id="14_bchrb"]
+[ext_resource type="Script" path="res://scripts/Nodes/DistanceParticles.cs" id="14_tj5qp"]
+[ext_resource type="Texture2D" uid="uid://d1021i7to3x5u" path="res://assets/particles/smoke.png" id="15_6qo3n"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_uwg8c"]
 font_size = 32
@@ -21,6 +25,35 @@ font_size = 32
 [sub_resource type="LabelSettings" id="LabelSettings_nt4hi"]
 font_size = 32
 font_color = Color(0.741176, 0.741176, 0.741176, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3kh8x"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("8_cymeo")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_6g25k"]
+lifetime_randomness = 1.0
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.0
+emission_ring_radius = 1.5
+emission_ring_inner_radius = 1.5
+direction = Vector3(0, 1, 0)
+spread = 0.0
+initial_velocity_min = 1.0
+initial_velocity_max = 1.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.05
+scale_max = 0.2
+sub_emitter_mode = 1
+sub_emitter_frequency = 10.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_dk1dr"]
+top_radius = 0.2
+bottom_radius = 0.2
+height = 4.0
+radial_segments = 4
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1ogde"]
 size = Vector3(0.2, 1.8, 0.8)
@@ -34,6 +67,145 @@ size = Vector3(0.8, 1.8, 0.2)
 [sub_resource type="BoxShape3D" id="BoxShape3D_km8yv"]
 size = Vector3(0.8, 1.8, 0.2)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hwyjx"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("8_cymeo")
+
+[sub_resource type="Curve" id="Curve_viom5"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_joyta"]
+curve = SubResource("Curve_viom5")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_7y1ed"]
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.0
+emission_ring_radius = 0.5
+emission_ring_inner_radius = 0.5
+direction = Vector3(0, 1, 0)
+spread = 0.0
+initial_velocity_min = 1.0
+initial_velocity_max = 1.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.05
+scale_max = 0.2
+color = Color(1, 1, 1, 0.0784314)
+alpha_curve = SubResource("CurveTexture_joyta")
+sub_emitter_mode = 1
+sub_emitter_frequency = 10.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_s35yf"]
+top_radius = 0.2
+bottom_radius = 0.2
+height = 16.0
+radial_segments = 4
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yrtyl"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("8_cymeo")
+grow_amount = -0.27
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_siafk"]
+particle_flag_align_y = true
+direction = Vector3(0, 1, 0)
+initial_velocity_min = 5.0
+initial_velocity_max = 5.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.05
+scale_max = 0.2
+color = Color(1, 0.937255, 0, 0.196078)
+sub_emitter_mode = 1
+sub_emitter_frequency = 100.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_qru5p"]
+top_radius = 0.2
+bottom_radius = 0.2
+height = 8.0
+radial_segments = 4
+
+[sub_resource type="Gradient" id="Gradient_gcyl2"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_nkm4a"]
+gradient = SubResource("Gradient_gcyl2")
+
+[sub_resource type="Curve" id="Curve_gynvg"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_0tbce"]
+curve_y = SubResource("Curve_gynvg")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_xxai0"]
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+angle_min = -180.0
+angle_max = 180.0
+direction = Vector3(0, 1, 0)
+initial_velocity_min = 2.0
+initial_velocity_max = 5.0
+angular_velocity_min = -180.0
+angular_velocity_max = 180.0
+directional_velocity_min = 1.0
+directional_velocity_max = 3.0
+directional_velocity_curve = SubResource("CurveXYZTexture_0tbce")
+gravity = Vector3(0, 0, 0)
+color = Color(1, 1, 1, 0.196078)
+color_ramp = SubResource("GradientTexture1D_nkm4a")
+turbulence_enabled = true
+turbulence_influence_max = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lvxw4"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("15_6qo3n")
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_ioijr"]
+material = SubResource("StandardMaterial3D_lvxw4")
+size = Vector2(2, 2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7hurq"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("8_cymeo")
+
+[sub_resource type="Curve" id="Curve_m06to"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -2.01765, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_sv0qs"]
+curve = SubResource("Curve_m06to")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_5l0d8"]
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.0
+emission_ring_radius = 0.5
+emission_ring_inner_radius = 0.5
+direction = Vector3(0, 1, 0)
+spread = 0.0
+initial_velocity_min = 1.0
+initial_velocity_max = 1.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.05
+scale_max = 0.2
+color = Color(1, 1, 1, 0.0784314)
+alpha_curve = SubResource("CurveTexture_sv0qs")
+sub_emitter_mode = 1
+sub_emitter_frequency = 10.0
+
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_0m1ta"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bh7jh"]
@@ -41,8 +213,8 @@ size = Vector3(0.8, 1.8, 0.2)
 [sub_resource type="BoxShape3D" id="BoxShape3D_iiuxv"]
 size = Vector3(0.619141, 0.4, 0.452148)
 
-[node name="Player" type="RigidBody3D" node_paths=PackedStringArray("_groundCheck", "_wallCheck") groups=["player"]]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+[node name="Player" type="RigidBody3D" node_paths=PackedStringArray("_groundCheck", "_wallCheck", "_playerCamera", "_vfxSpeedLines", "_vfxDash", "_vfxSlide", "_vfxSlideSmoke", "_vfxSlideLines", "_ui") groups=["player"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -68.4016, -17.5905, 38.799)
 collision_layer = 1056
 physics_material_override = ExtResource("1_l3ghh")
 can_sleep = false
@@ -52,8 +224,16 @@ script = ExtResource("1_8gga7")
 _input = ExtResource("2_ihh5m")
 _groundCheck = NodePath("GroundCheck")
 _wallCheck = NodePath("Head/ShapeCastComponent")
+_playerCamera = NodePath("Head/Camera")
+SFXWalkStepDist = 2.0
+_vfxSpeedLines = NodePath("Head/Camera/Camera/VFXSpeedLines")
+_vfxDash = NodePath("VFX/VFXDash")
+_vfxSlide = NodePath("VFX/VFXSlide")
+_vfxSlideSmoke = NodePath("VFX/VFXSlideSmoke")
+_vfxSlideLines = NodePath("VFX/VFXSlideLines")
 Sensitivity = 44.0
 _p = ExtResource("3_x1l4f")
+_ui = NodePath("PlayerUI")
 
 [node name="WeaponUI" type="CanvasLayer" parent="."]
 script = ExtResource("9_qp8fq")
@@ -83,8 +263,260 @@ layout_mode = 2
 [node name="Name" type="Label" parent="WeaponUI/MainContainer/WeaponName"]
 layout_mode = 2
 
+[node name="PlayerUI" type="CanvasLayer" parent="." node_paths=PackedStringArray("_staminaBars", "_w", "_a", "_s", "_d", "_shift", "_lctrl", "_space")]
+script = ExtResource("6_y88wm")
+_staminaBars = [NodePath("Grid/GridContainer/ProgressBar"), NodePath("Grid/GridContainer/ProgressBar2"), NodePath("Grid/GridContainer/ProgressBar3")]
+_w = NodePath("Keystrokes/W")
+_a = NodePath("Keystrokes/A")
+_s = NodePath("Keystrokes/S")
+_d = NodePath("Keystrokes/D")
+_shift = NodePath("Keystrokes/Shift")
+_lctrl = NodePath("Keystrokes/LCTRL")
+_space = NodePath("Keystrokes/Space")
+
+[node name="Keystrokes" type="ColorRect" parent="PlayerUI"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -286.0
+offset_bottom = 411.0
+grow_horizontal = 0
+color = Color(0, 0, 0, 0.243137)
+
+[node name="W" type="ColorRect" parent="PlayerUI/Keystrokes"]
+layout_mode = 0
+offset_left = 106.0
+offset_top = 25.0
+offset_right = 173.0
+offset_bottom = 92.0
+
+[node name="Label" type="Label" parent="PlayerUI/Keystrokes/W"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "W"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="A" type="ColorRect" parent="PlayerUI/Keystrokes"]
+layout_mode = 0
+offset_left = 27.0
+offset_top = 99.0
+offset_right = 94.0
+offset_bottom = 166.0
+
+[node name="Label" type="Label" parent="PlayerUI/Keystrokes/A"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "A"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="S" type="ColorRect" parent="PlayerUI/Keystrokes"]
+layout_mode = 0
+offset_left = 105.0
+offset_top = 100.0
+offset_right = 172.0
+offset_bottom = 167.0
+
+[node name="Label" type="Label" parent="PlayerUI/Keystrokes/S"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "S
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="D" type="ColorRect" parent="PlayerUI/Keystrokes"]
+layout_mode = 0
+offset_left = 187.0
+offset_top = 101.0
+offset_right = 254.0
+offset_bottom = 168.0
+
+[node name="Label" type="Label" parent="PlayerUI/Keystrokes/D"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "D"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Shift" type="ColorRect" parent="PlayerUI/Keystrokes"]
+layout_mode = 0
+offset_left = 28.0
+offset_top = 179.0
+offset_right = 254.0
+offset_bottom = 242.0
+
+[node name="Label" type="Label" parent="PlayerUI/Keystrokes/Shift"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Shift
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LCTRL" type="ColorRect" parent="PlayerUI/Keystrokes"]
+layout_mode = 0
+offset_left = 28.0
+offset_top = 254.0
+offset_right = 254.0
+offset_bottom = 317.0
+
+[node name="Label" type="Label" parent="PlayerUI/Keystrokes/LCTRL"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "LCTRL"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Space" type="ColorRect" parent="PlayerUI/Keystrokes"]
+layout_mode = 0
+offset_left = 28.0
+offset_top = 330.0
+offset_right = 254.0
+offset_bottom = 393.0
+
+[node name="Label" type="Label" parent="PlayerUI/Keystrokes/Space"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Space"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Grid" type="ColorRect" parent="PlayerUI"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -184.0
+offset_right = 480.0
+grow_vertical = 0
+color = Color(0, 0, 0, 0.243137)
+
+[node name="GridContainer" type="GridContainer" parent="PlayerUI/Grid"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -52.0
+grow_horizontal = 2
+grow_vertical = 0
+columns = 3
+
+[node name="ProgressBar" type="ProgressBar" parent="PlayerUI/Grid/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+max_value = 1.0
+value = 0.42
+
+[node name="ProgressBar2" type="ProgressBar" parent="PlayerUI/Grid/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 7
+size_flags_vertical = 3
+max_value = 1.0
+
+[node name="ProgressBar3" type="ProgressBar" parent="PlayerUI/Grid/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 7
+size_flags_vertical = 3
+max_value = 1.0
+
 [node name="Head" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+
+[node name="Camera" type="Node3D" parent="Head" node_paths=PackedStringArray("_cam")]
+transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 0, 0)
+script = ExtResource("6_fvhrc")
+_cam = NodePath("Camera")
+IsActive = true
+ShouldFollow = true
+FollowParent = true
+FollowSpeed = 100.0
+
+[node name="Camera" type="Camera3D" parent="Head/Camera"]
+cull_mask = 524287
+current = true
+fov = 105.0
+
+[node name="Crosshair" type="TextureRect" parent="Head/Camera/Camera"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 12.0
+offset_bottom = 12.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("8_ixsmc")
+
+[node name="VFXSpeedLines" type="GPUParticles3D" parent="Head/Camera/Camera"]
+transform = Transform3D(0.999991, 0.00431642, 3.77028e-06, 3.90686e-05, -0.00817749, -0.999967, -0.00431626, 0.999957, -0.00817758, -0.0448756, -0.0689167, -1.60845)
+material_override = SubResource("StandardMaterial3D_3kh8x")
+amount = 100
+amount_ratio = 0.0
+randomness = 0.27
+fixed_fps = 60
+visibility_aabb = AABB(-1.03543, -0.647987, -0.754999, 2.07086, 1.29597, 1.49144)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_6g25k")
+draw_pass_1 = SubResource("CylinderMesh_dk1dr")
+
+[node name="HitscanFromHead" type="RayCast3D" parent="Head/Camera/Camera"]
+transform = Transform3D(1, 0, -2.38419e-07, 0, 1, 0, 2.38419e-07, 0, 1, 0, -2, 0)
+target_position = Vector3(0, -1, -1000)
+collide_with_areas = true
+
+[node name="ItemManager" type="Node3D" parent="Head/Camera/Camera"]
+transform = Transform3D(1, 0, -2.38419e-07, 0, 1, 0, 2.38419e-07, 0, 1, 0, -2, 0)
+script = ExtResource("11_m8p1v")
+
+[node name="Hand" parent="Head/Camera/Camera/ItemManager" instance=ExtResource("12_u4oo0")]
+visible = false
+
+[node name="G17" parent="Head/Camera/Camera/ItemManager" instance=ExtResource("13_14jxk")]
+visible = false
+
+[node name="AK47" parent="Head/Camera/Camera/ItemManager" instance=ExtResource("14_bchrb")]
+visible = false
 
 [node name="ShapeCastComponent" type="Node3D" parent="Head"]
 transform = Transform3D(8.74228e-08, 0, -1, 0, 1, 0, 1, 0, 8.74228e-08, 0, -1, 0)
@@ -111,6 +543,63 @@ shape = SubResource("BoxShape3D_km8yv")
 target_position = Vector3(0, 0, -0.6)
 debug_shape_custom_color = Color(1, 0, 0, 1)
 
+[node name="VFX" type="Node3D" parent="."]
+
+[node name="VFXDash" type="GPUParticles3D" parent="VFX"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 1)
+material_override = SubResource("StandardMaterial3D_hwyjx")
+emitting = false
+amount = 500
+lifetime = 0.5
+explosiveness = 1.0
+fixed_fps = 60
+visibility_aabb = AABB(-1.03543, -0.647987, -0.754999, 2.07086, 1.29597, 1.49144)
+process_material = SubResource("ParticleProcessMaterial_7y1ed")
+draw_pass_1 = SubResource("CylinderMesh_s35yf")
+script = ExtResource("14_tj5qp")
+MinDistance = 20.0
+CustomAmount = 5
+
+[node name="VFXSlide" type="GPUParticles3D" parent="VFX"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 1.13897)
+material_override = SubResource("StandardMaterial3D_yrtyl")
+emitting = false
+amount = 10
+lifetime = 0.1
+explosiveness = 1.0
+randomness = 1.0
+fixed_fps = 60
+visibility_aabb = AABB(-1.03543, -0.647987, -0.754999, 2.07086, 1.29597, 1.49144)
+process_material = SubResource("ParticleProcessMaterial_siafk")
+draw_pass_1 = SubResource("CylinderMesh_qru5p")
+
+[node name="VFXSlideSmoke" type="GPUParticles3D" parent="VFX"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.908772, 1.8788)
+emitting = false
+amount = 4000
+explosiveness = 1.0
+fixed_fps = 60
+process_material = SubResource("ParticleProcessMaterial_xxai0")
+draw_pass_1 = SubResource("QuadMesh_ioijr")
+script = ExtResource("14_tj5qp")
+MinDistance = 5.0
+CustomAmount = 40
+
+[node name="VFXSlideLines" type="GPUParticles3D" parent="VFX"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 1)
+material_override = SubResource("StandardMaterial3D_7hurq")
+emitting = false
+amount = 500
+lifetime = 0.75
+explosiveness = 1.0
+fixed_fps = 60
+visibility_aabb = AABB(-1.03543, -0.647987, -0.754999, 2.07086, 1.29597, 1.49144)
+process_material = SubResource("ParticleProcessMaterial_5l0d8")
+draw_pass_1 = SubResource("CylinderMesh_s35yf")
+script = ExtResource("14_tj5qp")
+MinDistance = 5.0
+CustomAmount = 5
+
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 layers = 524288
@@ -129,44 +618,3 @@ DefaultGroundProperties = ExtResource("6_5d0dr")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="GroundCheck"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.199776, 0)
 shape = SubResource("BoxShape3D_iiuxv")
-
-[node name="ViewportManager" type="Node3D" parent="." node_paths=PackedStringArray("Follow")]
-transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0)
-script = ExtResource("8_ckwyo")
-Follow = NodePath("../Head")
-FollowSpeed = 100.0
-
-[node name="FirstPersonCamera" type="Camera3D" parent="ViewportManager"]
-current = true
-
-[node name="Crosshair" type="TextureRect" parent="ViewportManager/FirstPersonCamera"]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 12.0
-offset_bottom = 12.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("8_ixsmc")
-
-[node name="HitscanFromHead" type="RayCast3D" parent="ViewportManager/FirstPersonCamera"]
-target_position = Vector3(0, -1, -1000)
-collide_with_areas = true
-
-[node name="ItemManager" type="Node3D" parent="ViewportManager/FirstPersonCamera"]
-script = ExtResource("11_m8p1v")
-
-[node name="Hand" parent="ViewportManager/FirstPersonCamera/ItemManager" instance=ExtResource("12_u4oo0")]
-visible = false
-
-[node name="G17" parent="ViewportManager/FirstPersonCamera/ItemManager" node_paths=PackedStringArray("HitscanRay") instance=ExtResource("13_14jxk")]
-visible = false
-HitscanRay = NodePath("../../HitscanFromHead")
-
-[node name="AK47" parent="ViewportManager/FirstPersonCamera/ItemManager" node_paths=PackedStringArray("HitscanRay") instance=ExtResource("14_bchrb")]
-visible = false
-HitscanRay = NodePath("../../HitscanFromHead")
