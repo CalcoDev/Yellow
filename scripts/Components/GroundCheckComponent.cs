@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 using Yellow.Extensions;
 using Yellow.Misc;
@@ -18,6 +19,10 @@ public partial class GroundCheckComponent : Area3D
     public bool IsOnGround { get; private set; }
     public bool WasOnGround { get; private set; }
     public GroundProperties GroundProperties { get; private set; }
+
+    public bool IsOnMovingPlatform { get; private set; }
+    public Vector3 MovingPlatformVelocity { get; private set; }
+    private readonly HashSet<PhysicsBody3D> _movingPlatforms = new();
 
     [Signal]
     public delegate void OnEnterGroundEventHandler(PhysicsBody3D ground);
@@ -53,6 +58,7 @@ public partial class GroundCheckComponent : Area3D
             EmitSignal(IsOnGround ? SignalName.OnIsGrounded : SignalName.OnIsNotGrounded);
         }
 
+        ComputeMovingPlatformVelocity();
         // TODO(calco): Maybe add some logic to remove unusable bodies.
         // TODO(calco): Also handle something to do with enemies
     }
@@ -82,6 +88,14 @@ public partial class GroundCheckComponent : Area3D
 
         EmitSignal(SignalName.OnEnterGround, pBody);
 
+        if (IsMovingPlatform(pBody)) {
+            IsOnMovingPlatform = true;
+            if (_movingPlatforms.Count == 0) {
+                MovingPlatformVelocity = GetMovingPlatformVelocity(pBody);
+            }
+            _movingPlatforms.Add(pBody);
+        }
+
         // TODO(calco): Figure out if slope and the slope angle.
         // TODO(calco): Handle moving platforms
     }
@@ -105,11 +119,52 @@ public partial class GroundCheckComponent : Area3D
         
         EmitSignal(SignalName.OnExitGround, pBody);
 
+        if (IsMovingPlatform(pBody)) {
+            _movingPlatforms.Remove(pBody);
+
+            if (_movingPlatforms.Count == 0) {
+                IsOnMovingPlatform = false;
+            }
+            if (_movingPlatforms.Count == 0) {
+                MovingPlatformVelocity = GetMovingPlatformVelocity(pBody);
+            }
+            _movingPlatforms.Add(pBody);
+        }
+
         if (_colls.Count == 0) {
             _touchingGround = false;
             GroundProperties = DefaultGroundProperties;
         }
 
         // TODO(calco): Handle moving platforms
+    }
+
+    public static bool IsMovingPlatform(Node3D body)
+    {
+        return body.IsInGroup("moving_platform");
+    }
+
+    public static Vector3 GetMovingPlatformVelocity(Node3D body)
+    {
+        if (body.IsInGroup("qodot_mover")) {
+            return body.Get("MoverVelocity").As<Vector3>();
+        }
+
+        if (body is RigidBody3D rb) {
+            return rb.LinearVelocity;
+        }
+
+        // TODO(calco): Handle characterbody3d or other stuff lol
+
+        return Vector3.Zero;
+    }
+
+    private void ComputeMovingPlatformVelocity()
+    {
+        // TODO(calco): This was chosen compltely arbitrarily
+        MovingPlatformVelocity = Vector3.Zero;
+        if (IsOnMovingPlatform) {
+            MovingPlatformVelocity = GetMovingPlatformVelocity(_movingPlatforms.Last());
+        }
     }
 }

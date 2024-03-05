@@ -324,6 +324,7 @@ public partial class Player : RigidBody3D
 	private bool _ifWallSliding = false;
 	private bool _ifWasGrounded = false;
 	private float _ifLastGroundSlope = 0f;
+	private Vector3 _ifPrevMovePlatformOffset = Vector3.Zero;
 	public override void _IntegrateForces(PhysicsDirectBodyState3D state)
 	{
 		_moveDir2 = _moveDir * Game.FixedDeltaTime * _p.RunSpeed;
@@ -436,7 +437,9 @@ public partial class Player : RigidBody3D
 
 	public override void _PhysicsProcess(double delta)
 	{
-		
+		if (_groundCheck.IsOnMovingPlatform) {
+			GlobalPosition += _groundCheck.MovingPlatformVelocity * Game.FixedDeltaTime;
+		}
 	}
 
 	// MOVEMENT
@@ -497,6 +500,8 @@ public partial class Player : RigidBody3D
 		
 		_falling = true;
 		_playerCamera.Cam.Fov -= _p.CameraDashFovMod;
+		_vfxDash.Emitting = false;
+
 		_vfxDash.Emitting = false;
 	}
 
