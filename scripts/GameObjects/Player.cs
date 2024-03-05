@@ -319,7 +319,7 @@ public partial class Player : RigidBody3D
 			}
 		}
 
-		if (IsSliding) {
+		if (IsSliding || (IsWallSliding && !_groundCheck.IsOnGround)) {
 			SoundManager.Instance.Play("player_slide", true);
 		} else {
 			SoundManager.Instance.StopAllName("player_slide", true);

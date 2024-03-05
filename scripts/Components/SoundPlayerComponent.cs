@@ -27,6 +27,7 @@ public partial class SoundPlayerComponent : Node3D
 	
 	private readonly HashSet<AudioStreamPlayer> _inUseNonSpatial = new();
 	private readonly HashSet<AudioStreamPlayer3D> _inUseSpatial= new();
+    private readonly HashSet<Node> _forceStopped = new();
     private bool _init = false;
 
     private int _soundStreamIndex = 0;
@@ -107,7 +108,7 @@ public partial class SoundPlayerComponent : Node3D
             }
             if (!_freeSpatial.Contains(player) && !_inUseSpatial.Contains(player)) {
                 player.Finished += () => {
-                    if (Sound.Looping) {
+                    if (Sound.Looping && !_forceStopped.Contains(player)) {
                         player.Play();
                         EmitSignal(SignalName.OnPlayEnd);
                         return;
@@ -136,7 +137,7 @@ public partial class SoundPlayerComponent : Node3D
             }
             if (!_freeNonSpatial.Contains(player) && !_inUseNonSpatial.Contains(player)) {
                 player.Finished += () => {
-                    if (Sound.Looping) {
+                    if (Sound.Looping && !_forceStopped.Contains(player)) {
                         player.Play();
                         EmitSignal(SignalName.OnPlayEnd);
                         return;
@@ -153,6 +154,7 @@ public partial class SoundPlayerComponent : Node3D
             retPlayer = player;
 		}
 
+        _forceStopped.Remove(retPlayer);
         EmitSignal(SignalName.OnPlayBegin);
         return retPlayer;
     }
@@ -162,11 +164,13 @@ public partial class SoundPlayerComponent : Node3D
         foreach (var player in _inUseSpatial) {
             player.Stop();
             player.EmitSignal(AudioStreamPlayer3D.SignalName.Finished);
+            _forceStopped.Add(player);
         }
         
         foreach (var player in _inUseNonSpatial) {
             player.Stop();
             player.EmitSignal(AudioStreamPlayer.SignalName.Finished);
+            _forceStopped.Add(player);
         }
     }
 
