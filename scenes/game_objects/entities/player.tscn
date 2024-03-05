@@ -462,7 +462,6 @@ max_value = 1.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 
 [node name="Camera" type="Node3D" parent="Head" node_paths=PackedStringArray("_cam")]
-transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 0, 0)
 script = ExtResource("6_fvhrc")
 _cam = NodePath("Camera")
 IsActive = true
@@ -471,6 +470,7 @@ FollowParent = true
 FollowSpeed = 100.0
 
 [node name="Camera" type="Camera3D" parent="Head/Camera"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 cull_mask = 524287
 current = true
 fov = 105.0
