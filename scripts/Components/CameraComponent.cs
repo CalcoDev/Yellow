@@ -150,7 +150,7 @@ public partial class CameraComponent : Node3D
 
 				// TODO(calco): Define a better way to do this.
 				var str = s.Strength;
-				var f = Game.Time * s.Speed;
+				var f = Game.Time * s.Speed * 100f;
 				var shakeAngles = str * new Vector3(
 					GetNoiseFromSeed(0, f),
 					GetNoiseFromSeed(1, f),
@@ -162,14 +162,11 @@ public partial class CameraComponent : Node3D
 				_shakes.Remove(s);
 			}
 
-			// var r = _cam.RotationDegrees;
-			// r.X = r.X - _prevShakeAngles.X + currShakeAngles.X;
-			// r.Y = r.Y - _prevShakeAngles.Y + currShakeAngles.Y;
-			// r.Z = r.Z - _prevShakeAngles.Z + currShakeAngles.Z;
-			// _cam.RotationDegrees = r;
-			// GD.Print("SHAKE WITH: ", currShakeAngles);
-			
-			_prevShakeAngles = currShakeAngles;
+			var r = _cam.RotationDegrees;
+			r.X = currShakeAngles.X;
+			r.Y = 180f + currShakeAngles.Y;
+			r.Z = currShakeAngles.Z;
+			_cam.RotationDegrees = r;
 		}
 	}
 
@@ -192,38 +189,24 @@ public partial class CameraComponent : Node3D
     // NOTE(calco): Rotation helpers
 	public void MouseRotation(float x, float y)
 	{
-		RotateY(x);
-
-		const float MAX_ADD = 0.1f;
-		if (
-			(_cam.RotationDegrees.X < 0f && _cam.RotationDegrees.X < -88f && y > 0f) ||
-			(_cam.RotationDegrees.X > 0f && _cam.RotationDegrees.X > 88f && y < 0f)
-		) {
-			int addCnt = Mathf.CeilToInt(y / MAX_ADD);
-			for (int i = 0; i < addCnt; ++i) {
-				var add = Mathf.Min(MAX_ADD * Mathf.Sign(y), y);
-				y -= add;
-				_cam.RotateX(-y);
-				if (ClampRot()) {
-					break;
-				}
-			}
-		} else {
-			_cam.RotateX(-y);
-		}
+		var r = Rotation;
+		r.Y += x;
+		r.X += y;
+		Rotation = r;
+		ClampRot();
 	}
 
 	private bool ClampRot()
 	{
 		const float MIN_ROT = -88.99f * (Mathf.Pi / 180f);
 		const float MAX_ROT = 88.99f * (Mathf.Pi / 180f);
-		var prev = _cam.Rotation.X;
-		_cam.Rotation = new (
-			Mathf.Clamp(_cam.Rotation.X, MIN_ROT, MAX_ROT),
-			0f,
-			0f
+		var prev = Rotation.X;
+		Rotation = new (
+			Mathf.Clamp(Rotation.X, MIN_ROT, MAX_ROT),
+			Rotation.Y,
+			Rotation.Z
 		);
-		return prev == _cam.Rotation.X;
+		return prev == Rotation.X;
 	}
 
 	private float GetNoiseFromSeed(int seed, float f)

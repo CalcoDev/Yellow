@@ -1000,6 +1000,15 @@
 ( 728 -2104 80 ) ( 584 -2248 64 ) ( 584 -2248 80 ) calcopod_environment/ground_tiles_small [ 0.7071067811865476 0.7071067811865476 0 0 ] [ 0 0 -1 4 ] 0 1 1
 ( 592 -2016 64 ) ( 736 -2160 80 ) ( 592 -2016 80 ) calcopod_environment/ground_tiles_small [ -0.7071067811865476 0.7071067811865476 0 11.313721 ] [ 0 0 -1 4 ] 0 1 1
 }
+// brush 101
+{
+( 384 -1392 -304 ) ( 384 -1472 -304 ) ( 384 -1472 -336 ) calcopod_environment/ground_tiles_smallest [ 0 -1 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 384 -1472 -304 ) ( 560 -1472 -304 ) ( 560 -1472 -336 ) calcopod_environment/ground_tiles_smallest [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 560 -1472 -336 ) ( 560 -1392 -336 ) ( 384 -1392 -336 ) calcopod_environment/ground_tiles_smallest [ -1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
+( 384 -1392 -304 ) ( 560 -1392 -304 ) ( 560 -1472 -304 ) calcopod_environment/ground_tiles_smallest [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
+( 560 -1392 -336 ) ( 560 -1392 -304 ) ( 384 -1392 -304 ) calcopod_environment/ground_tiles_smallest [ -1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 560 -1472 -304 ) ( 560 -1392 -304 ) ( 560 -1392 -336 ) calcopod_environment/ground_tiles_smallest [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
+}
 }
 // entity 1
 {
@@ -1068,5 +1077,35 @@
 ( 64 -496 128 ) ( -64 -464 128 ) ( 64 -464 128 ) grid/orange/texture_08 [ -1.8369701987210297e-16 -1 0 -48 ] [ -1 1.8369701987210297e-16 0 0 ] 90 1 1
 ( -64 -464 128 ) ( 64 -464 16 ) ( 64 -464 128 ) grid/orange/texture_08 [ -1 1.8369701987210297e-16 0 0 ] [ 0 0 -1 0 ] 0 1 1
 ( 64 -496 128 ) ( 64 -464 16 ) ( 64 -496 16 ) grid/orange/texture_08 [ 1.8369701987210297e-16 1 0 48 ] [ 0 0 -1 0 ] 0 1 1
+}
+}
+// entity 5
+{
+"classname" "custom_trigger"
+"target" "le_floor"
+// brush 0
+{
+( 160 -1472 -304 ) ( 160 -1392 -336 ) ( 160 -1392 -304 ) calcopod_environment/grass_01 [ 0 -1 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 592 -1472 -304 ) ( 368 -1472 -336 ) ( 368 -1472 -304 ) calcopod_environment/grass_01 [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 592 -1392 -304 ) ( 368 -1392 -304 ) ( 368 -1472 -304 ) calcopod_environment/grass_01 [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
+( 592 -1392 -192 ) ( 368 -1472 -192 ) ( 368 -1392 -192 ) calcopod_environment/grass_01 [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
+( 592 -1392 -304 ) ( 368 -1392 -336 ) ( 592 -1392 -336 ) calcopod_environment/grass_01 [ -1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 288 -1472 -304 ) ( 288 -1392 -304 ) ( 288 -1392 -336 ) calcopod_environment/grass_01 [ 0 -1 0 0 ] [ 0 0 -1 0 ] 0 1 1
+}
+}
+// entity 6
+{
+"classname" "mover"
+"targetname" "le_floor"
+"translation" "100 0 -100"
+"speed" "0.2"
+// brush 0
+{
+( 96 -1264 -304 ) ( 96 -1584 -304 ) ( 96 -1584 -336 ) calcopod_environment/grass_01 [ 0 -1 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 96 -1584 -304 ) ( 384 -1584 -304 ) ( 384 -1584 -336 ) calcopod_environment/grass_01 [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 384 -1584 -336 ) ( 384 -1264 -336 ) ( 96 -1264 -336 ) calcopod_environment/grass_01 [ -1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
+( 96 -1264 -304 ) ( 384 -1264 -304 ) ( 384 -1584 -304 ) calcopod_environment/grass_01 [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
+( 384 -1264 -336 ) ( 384 -1264 -304 ) ( 96 -1264 -304 ) calcopod_environment/grass_01 [ -1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 384 -1584 -304 ) ( 384 -1264 -304 ) ( 384 -1264 -336 ) calcopod_environment/grass_01 [ 0 -1 0 0 ] [ 0 0 -1 0 ] 0 1 1
 }
 }

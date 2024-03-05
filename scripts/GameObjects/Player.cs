@@ -18,6 +18,7 @@ public partial class Player : RigidBody3D
 	[ExportGroup("References")]
 	[Export] private PlayerInput _input;
 	[Export] private GroundCheckComponent _groundCheck;
+	[Export] private ShapeCastComponent _slopeCheck;
 	[Export] private ShapeCastComponent _wallCheck;
 	[Export] private CameraComponent _playerCamera;
 
@@ -120,13 +121,15 @@ public partial class Player : RigidBody3D
 		AddToGroup("player");
 
 		_groundCheck.OnIsGrounded += () => {
-			if (IsThwomping || _heavyFall) {
-				SoundManager.Instance.Play("player_land_heavy");
-				_playerCamera.ShakeLength(10, 20, 1, false);
-			} else {
-				SoundManager.Instance.Play("player_land");
+			if (!IsSliding) {
+				if (IsThwomping || _heavyFall) {
+					SoundManager.Instance.Play("player_land_heavy");
+					_playerCamera.ShakeLength(10, 1, 0.2f, true);
+				} else {
+					SoundManager.Instance.Play("player_land");
+				}
 			}
-
+			
 			if (IsThwomping) {
 				EndThwomp();
 			}
@@ -144,19 +147,6 @@ public partial class Player : RigidBody3D
 			tween.Chain().TweenProperty(_playerCamera, "HardOffset", Vector3.Zero, td * 1.5f);
 			tween.Play();
 		};
-
-		// _groundCheck.OnIsGrounded += () => {
-			// TODO(calco): ground thing
-			// if (LinearVelocity.Y > 5f) {
-				// var twen = CreateTween();
-				// var start = Vector3.Zero;
-				// var final = Vector3.Down * 0.5f;
-				// twen.TweenProperty(_head, "position", final, 0.1f);
-				// twen.Chain().TweenProperty(_head, "position", start, 0.1f);
-				// twen.Play();
-				// twen.Finished += () => twen.Free();
-			// }
-		// };
 	}
 
 	public override void _Input(InputEvent e)
@@ -169,12 +159,10 @@ public partial class Player : RigidBody3D
 			var sens = Mathf.Lerp(0f, 1f, Sensitivity / 100f) / 350f;
 			var x = -motion.Relative.X * sens;
 			var y = motion.Relative.Y * sens;
-			
-			// _head.RotateY(x);
-			_playerCamera.MouseRotation(x, y);
+			HandleCameraRotation(x, y);
 		}
 	}
-	
+
 	private bool _didMoveWallSlide = false;
 	private bool _prevDidMoveWallSlide = false;
 	public override void _Process(double delta)
@@ -183,12 +171,11 @@ public partial class Player : RigidBody3D
 		// TODO(calco): Should do a check for if controller active or not
 		float lookHoriz = Input.GetAxis("look_left", "look_right")/Sensitivity;
 		float lookVert = Input.GetAxis("look_up", "look_down")/Sensitivity;
-		// _head.RotateY(-lookHoriz);
-		_playerCamera.MouseRotation(-lookHoriz, lookVert);
+		HandleCameraRotation(-lookHoriz, lookVert);
 
-		_head.Rotation = _playerCamera.Rotation + Vector3.Up * Mathf.Pi;
-		var right = _head.Right() * -_input.Movement.X;
-		var forward = _head.Forward() * _input.Movement.Y;
+		// NOTE(calco): invert because I think of it as LHS not RHS
+		var right = _head.RightXZ() * -_input.Movement.X;
+		var forward = _head.ForwardXZ() * _input.Movement.Y;
 		_moveDir = (forward + right).Normalized();
 
 		// Tilt camera
@@ -320,7 +307,7 @@ public partial class Player : RigidBody3D
 			}
 		}
 
-		if (IsSliding || (!_groundCheck.IsOnGround && LinearVelocity.Y >= 0f && IsWallSliding)) {
+		if ((IsSliding && _groundCheck.IsOnGround) || (!_groundCheck.IsOnGround && LinearVelocity.Y >= 0f && IsWallSliding)) {
 			SoundManager.Instance.Play("player_slide", true);
 		} else if (SoundManager.Instance.IsAudioPlaying("player_slide")) {
 			SoundManager.Instance.StopAllName("player_slide", true);
@@ -334,9 +321,19 @@ public partial class Player : RigidBody3D
 	private bool _ifDashing;
 	private bool _ifDashJump;
 	private bool _ifWallSliding = false;
+	private bool _ifWasGrounded = false;
+	private float _ifLastGroundSlope = 0f;
+	private Vector3 _ifPrevMovePlatformOffset = Vector3.Zero;
 	public override void _IntegrateForces(PhysicsDirectBodyState3D state)
 	{
 		_moveDir2 = _moveDir * Game.FixedDeltaTime * _p.RunSpeed;
+		if (_slopeCheck.IsOnSlope && !IsJumping) {
+			var old = _moveDir2;
+			_moveDir = _moveDir.Slide(_slopeCheck.ClosestNormal).Normalized();
+			_moveDir2 = _moveDir * Game.FixedDeltaTime * _p.RunSpeed;
+			// TODO(calco): This doesn't make sense but kinda works.
+			_moveDir2 = _moveDir2.WithX(old.X).WithZ(old.Z);
+		}
 
 		if (IsSliding) {
 			GravityScale = _groundCheck.IsOnGround ? 0f : 1f;
@@ -376,12 +373,15 @@ public partial class Player : RigidBody3D
 		if (_groundCheck.IsOnGround && !IsJumping) {
 			GravityScale = _moveDir.LengthSquared() < 0.01f ? 0 : 1;
 
-			float y = LinearVelocity.Y;
 			float t = 0.25f * (1f + _groundCheck.GroundProperties.Friction);
 			state.LinearVelocity = state.LinearVelocity.Lerp(_moveDir2, t);
 			
-			state.LinearVelocity = new(state.LinearVelocity.X, y, state.LinearVelocity.Z);
 			state.SetConstantForce(Vector3.Zero);
+			
+			// TODO(calco): Multiply this by sth.
+			if (_slopeCheck.IsOnSlope) {
+				state.LinearVelocity += -_slopeCheck.ClosestNormal;
+			}
 
 			_diff = false;
 		}
@@ -427,11 +427,18 @@ public partial class Player : RigidBody3D
 				state.ApplyForce(f * mult);
 			}
 		}
+
+		_ifWasGrounded = _groundCheck.IsOnGround;
+		if (_groundCheck.IsOnGround && _slopeCheck.WasColliding) {
+			_ifLastGroundSlope = _slopeCheck.SlopeAngle;
+		}
 	}
 
 	public override void _PhysicsProcess(double delta)
 	{
-		
+		if (_groundCheck.IsOnMovingPlatform) {
+			GlobalPosition += _groundCheck.MovingPlatformVelocity * Game.FixedDeltaTime;
+		}
 	}
 
 	// MOVEMENT
@@ -443,6 +450,7 @@ public partial class Player : RigidBody3D
 		_heavyFall = false;
 		_boost = false;
 		// TODO(calco): Set other default state, isslidejump?
+		LinearVelocity = LinearVelocity.WithY(0);
 		ApplyImpulse(Vector3.Up * (force == -1f ? _p.JumpForce : force));
 
 		if (playAudio) {
@@ -459,7 +467,7 @@ public partial class Player : RigidBody3D
 		IsDashing = true;
 		IsJumping = false;
 		_ifDashing = true;
-		_dashDir = _moveDir.LengthSquared() > 0.01f ? _moveDir : _head.Forward();
+		_dashDir = _moveDir.LengthSquared() > 0.01f ? _moveDir : _head.ForwardXZ();
 		_dashTimer = _p.DashDuration;
 
 		_playerCamera.Cam.Fov += _p.CameraDashFovMod;
@@ -478,10 +486,10 @@ public partial class Player : RigidBody3D
 
 	private Vector3 GetHeadOffsetBasedOnInputDir(Vector2 dir)
 	{
-		var x = -_head.Right() * Mathf.Sign(dir.X);
-		var z = _head.Forward() * Mathf.Sign(dir.Y);
+		var x = -_head.RightXZ() * Mathf.Sign(dir.X);
+		var z = _head.ForwardXZ() * Mathf.Sign(dir.Y);
 		var f = (x + z).Normalized();
-		return f == Vector3.Zero ? _head.Forward() : f;
+		return f == Vector3.Zero ? _head.ForwardXZ() : f;
 	}
 
 	private void StopDash()
@@ -491,6 +499,8 @@ public partial class Player : RigidBody3D
 		
 		_falling = true;
 		_playerCamera.Cam.Fov -= _p.CameraDashFovMod;
+		_vfxDash.Emitting = false;
+
 		_vfxDash.Emitting = false;
 	}
 
@@ -512,8 +522,9 @@ public partial class Player : RigidBody3D
 	private void StartSlide()
 	{
 		IsSliding = true;
-		_slideDir = _moveDir.LengthSquared() > 0.01f ? _moveDir : _head.Forward();
-		_slideSpeed = Mathf.Max(LinearVelocity.Length(), _p.SlideBaseSpeed);
+		_slideDir = _moveDir.LengthSquared() > 0.01f ? _moveDir : _head.ForwardXZ();
+		// TODO(calco): With Y 0???
+		_slideSpeed = Mathf.Max(LinearVelocity.WithY(0).Length(), _p.SlideBaseSpeed);
 		_slideSpeed = Mathf.Max(_slideSpeed, _maxSlideSpeedBuffer);
 		_maxSlideSpeedBufferTimer = 0f;
 
@@ -571,7 +582,8 @@ public partial class Player : RigidBody3D
 		Jump(_p.SlideHopForce);
 		_boost = true;
 		
-		var l = LinearVelocity.Length();
+		// TODO(calco): Figure out length mult
+		var l = LinearVelocity.WithY(0).Length();
 		var mult = 1f;
 	
 		var f = Mathf.Clamp(_slideSpeed * _p.SlideLeapMultiplier, 0f, 20f) * mult;
@@ -611,5 +623,11 @@ public partial class Player : RigidBody3D
 		LinearVelocity = LinearVelocity.WithX(0).WithY(0);
 		Jump(_p.WallJumpHopForce);
 		ApplyImpulse(_wallCheck.ClosestNormal * _p.WallJumpLeapForce);
+	}
+
+	private void HandleCameraRotation(float x, float y)
+	{
+		_playerCamera.MouseRotation(x, y);
+		_head.Rotation = _playerCamera.Rotation;
 	}
 }

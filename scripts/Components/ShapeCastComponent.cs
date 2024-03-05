@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Godot;
 using Yellow.Misc;
+using Yellow.Resources;
 
 namespace Yellow.Components;
 
@@ -11,6 +12,7 @@ public partial class ShapeCastComponent : Node3D
     [ExportGroup("Settings")]
     [Export(PropertyHint.Layers3DPhysics)] public uint LayerMask;
     [Export] public float SlopeAngleThreshold;
+    [Export] public bool SlopeAngleThresholdLess;
 
     [Signal]
     public delegate void OnIsCollidingEventHandler();
@@ -20,6 +22,7 @@ public partial class ShapeCastComponent : Node3D
 
     // Stuff
     public bool IsColliding { get; private set; }
+    public bool WasColliding { get; private set; }
     public bool IsOnSlope { get; private set; }
     
     public float SlopeAngle { get; private set; }
@@ -86,9 +89,15 @@ public partial class ShapeCastComponent : Node3D
             }
         }
 
-        ClosestPoint = closestColInfo.point;
-        ClosestNormal = closestColInfo.normal;
-        SlopeAngle = Mathf.RadToDeg(ClosestNormal.AngleTo(Vector3.Up));
-        IsOnSlope = SlopeAngle > SlopeAngleThreshold;
+        if (IsColliding) {
+            ClosestPoint = closestColInfo.point;
+            ClosestNormal = closestColInfo.normal.Normalized();
+            SlopeAngle = Mathf.RadToDeg(ClosestNormal.AngleTo(Vector3.Up));
+            IsOnSlope = Mathf.Abs(SlopeAngle) >= 0.005f && SlopeAngleThresholdLess ? SlopeAngle < SlopeAngleThreshold : SlopeAngle > SlopeAngleThreshold;
+        } else {
+            IsOnSlope = false;
+        }
+
+        WasColliding = IsColliding;
     }
 }

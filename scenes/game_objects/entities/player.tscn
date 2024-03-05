@@ -213,7 +213,7 @@ sub_emitter_frequency = 10.0
 [sub_resource type="BoxShape3D" id="BoxShape3D_iiuxv"]
 size = Vector3(0.619141, 0.4, 0.452148)
 
-[node name="Player" type="RigidBody3D" node_paths=PackedStringArray("_groundCheck", "_wallCheck", "_playerCamera", "_vfxSpeedLines", "_vfxDash", "_vfxSlide", "_vfxSlideSmoke", "_vfxSlideLines", "_ui") groups=["player"]]
+[node name="Player" type="RigidBody3D" node_paths=PackedStringArray("_groundCheck", "_slopeCheck", "_wallCheck", "_playerCamera", "_vfxSpeedLines", "_vfxDash", "_vfxSlide", "_vfxSlideSmoke", "_vfxSlideLines", "_ui") groups=["player"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -68.4016, -17.5905, 38.799)
 collision_layer = 1056
 physics_material_override = ExtResource("1_l3ghh")
@@ -222,8 +222,9 @@ lock_rotation = true
 continuous_cd = true
 script = ExtResource("1_8gga7")
 _input = ExtResource("2_ihh5m")
-_groundCheck = NodePath("GroundCheck")
-_wallCheck = NodePath("Head/ShapeCastComponent")
+_groundCheck = NodePath("GroundCheckComponent")
+_slopeCheck = NodePath("SlopeCheck")
+_wallCheck = NodePath("Head/WallCheck")
 _playerCamera = NodePath("Head/Camera")
 SFXWalkStepDist = 2.0
 _vfxSpeedLines = NodePath("Head/Camera/Camera/VFXSpeedLines")
@@ -236,6 +237,7 @@ _p = ExtResource("3_x1l4f")
 _ui = NodePath("PlayerUI")
 
 [node name="WeaponUI" type="CanvasLayer" parent="."]
+visible = false
 script = ExtResource("9_qp8fq")
 
 [node name="MainContainer" type="VBoxContainer" parent="WeaponUI"]
@@ -264,6 +266,7 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="PlayerUI" type="CanvasLayer" parent="." node_paths=PackedStringArray("_staminaBars", "_w", "_a", "_s", "_d", "_shift", "_lctrl", "_space")]
+visible = false
 script = ExtResource("6_y88wm")
 _staminaBars = [NodePath("Grid/GridContainer/ProgressBar"), NodePath("Grid/GridContainer/ProgressBar2"), NodePath("Grid/GridContainer/ProgressBar3")]
 _w = NodePath("Keystrokes/W")
@@ -461,7 +464,6 @@ max_value = 1.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 
 [node name="Camera" type="Node3D" parent="Head" node_paths=PackedStringArray("_cam")]
-transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 0, 0)
 script = ExtResource("6_fvhrc")
 _cam = NodePath("Camera")
 IsActive = true
@@ -470,6 +472,7 @@ FollowParent = true
 FollowSpeed = 100.0
 
 [node name="Camera" type="Camera3D" parent="Head/Camera"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 cull_mask = 524287
 current = true
 fov = 105.0
@@ -518,27 +521,27 @@ visible = false
 [node name="AK47" parent="Head/Camera/Camera/ItemManager" instance=ExtResource("14_bchrb")]
 visible = false
 
-[node name="ShapeCastComponent" type="Node3D" parent="Head"]
+[node name="WallCheck" type="Node3D" parent="Head"]
 transform = Transform3D(8.74228e-08, 0, -1, 0, 1, 0, 1, 0, 8.74228e-08, 0, -1, 0)
 script = ExtResource("4_16gja")
 LayerMask = 1
 
-[node name="Front" type="ShapeCast3D" parent="Head/ShapeCastComponent"]
+[node name="Front" type="ShapeCast3D" parent="Head/WallCheck"]
 shape = SubResource("BoxShape3D_1ogde")
 target_position = Vector3(0.6, 0, 0)
 debug_shape_custom_color = Color(1, 0, 0, 1)
 
-[node name="Back" type="ShapeCast3D" parent="Head/ShapeCastComponent"]
+[node name="Back" type="ShapeCast3D" parent="Head/WallCheck"]
 shape = SubResource("BoxShape3D_1ojxg")
 target_position = Vector3(-0.6, 0, 0)
 debug_shape_custom_color = Color(1, 0, 0, 1)
 
-[node name="Right" type="ShapeCast3D" parent="Head/ShapeCastComponent"]
+[node name="Right" type="ShapeCast3D" parent="Head/WallCheck"]
 shape = SubResource("BoxShape3D_r6oh0")
 target_position = Vector3(0, 0, 0.6)
 debug_shape_custom_color = Color(1, 0, 0, 1)
 
-[node name="Right2" type="ShapeCast3D" parent="Head/ShapeCastComponent"]
+[node name="Right2" type="ShapeCast3D" parent="Head/WallCheck"]
 shape = SubResource("BoxShape3D_km8yv")
 target_position = Vector3(0, 0, -0.6)
 debug_shape_custom_color = Color(1, 0, 0, 1)
@@ -609,12 +612,21 @@ mesh = SubResource("CapsuleMesh_0m1ta")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_bh7jh")
 
-[node name="GroundCheck" type="Area3D" parent="."]
-transform = Transform3D(8.74228e-08, 0, -1, 0, 1, 0, 1, 0, 8.74228e-08, 0, -5.96046e-08, 0)
+[node name="SlopeCheck" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+script = ExtResource("4_16gja")
+LayerMask = 1
+SlopeAngleThreshold = 45.0
+SlopeAngleThresholdLess = true
+
+[node name="ShapeCast3D" type="ShapeCast3D" parent="SlopeCheck"]
+shape = SubResource("BoxShape3D_iiuxv")
+target_position = Vector3(0, -0.5, 0)
+
+[node name="GroundCheckComponent" type="Area3D" parent="."]
 script = ExtResource("5_e2m20")
-LayerMask = 33
+LayerMask = 1
 DefaultGroundProperties = ExtResource("6_5d0dr")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="GroundCheck"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.199776, 0)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GroundCheckComponent"]
 shape = SubResource("BoxShape3D_iiuxv")
