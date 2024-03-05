@@ -25,24 +25,28 @@ public partial class Gun : Weapon
 
 	public override double HandleInput(string inputName)
 	{
-		switch (inputName)
+		return inputName switch
 		{
-			case "use_primary": return UsePrimary();
-			case "use_secondary": return UseSecondary();
-			case "reload": return Reload();
-			default: return 0.0;
-		}
+			"use_primary" => UsePrimary(),
+			"use_secondary" => UseSecondary(),
+			"reload" => Reload(),
+			_ => 0.0
+		};
 	}
 
 	public override double Equip()
 	{
+		base.Equip();
 		Anim.Queue(WeaponResource.ActivateAnim);
+		
 		return WeaponResource.ActivateAnimLength;
 	}
 
 	public override double Unequip()
 	{
 		Anim.Queue(WeaponResource.DeactivateAnim);
+		base.Unequip();
+		
 		return WeaponResource.DeactivateAnimLength;
 	}
 	

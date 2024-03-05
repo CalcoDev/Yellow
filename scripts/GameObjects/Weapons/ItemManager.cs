@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Godot.Collections;
 
 namespace Yellow.GameObjects.Weapons;
@@ -52,20 +53,18 @@ public partial class ItemManager : Node
 	{	
 		if(_actionCooldown > 0) return;
 		
-		foreach(var i in _managerInputs)
-			if (inputEvent.IsActionPressed(i))
-			{
-				GD.Print("Handling input " + i);
-				HandleInput(i);
-			}
+		foreach (var inputName in _managerInputs.Where(inputName => inputEvent.IsActionPressed(inputName)))
+		{
+			GD.Print("Handling input " + inputName);
+			HandleInput(inputName);
+		}
 		
 		if(_currentWeapon == null) return;
-		foreach(var i in _weaponInputs)
-			if(inputEvent.IsActionPressed(i))
-			{
-				GD.Print("Handling input " + i);
-				_actionCooldown = _currentWeapon.HandleInput(i);
-			}
+		foreach (var inputName in _weaponInputs.Where(inputName => inputEvent.IsActionPressed(inputName)))
+		{
+			GD.Print("Handling input " + inputName);
+			_actionCooldown = _currentWeapon.HandleInput(inputName);
+		}
 	}
 
 	private void HandleInput(string inputName)
