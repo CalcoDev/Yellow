@@ -1,3 +1,4 @@
+using System;
 using Godot;
 using Yellow.Components;
 using Yellow.Misc;
@@ -82,6 +83,10 @@ public partial class Game : Node
 		if (Input.IsActionJustPressed("unfocus")) {
 			MouseLocked = !MouseLocked;
 		}
+
+		if (Input.IsActionJustPressed("screenshot")) {
+			Screenshot(GetViewport());
+		}
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -99,5 +104,18 @@ public partial class Game : Node
 	public static void SetActiveCamera(CameraComponent cam)
 	{
 		ActiveCamera = cam;
+	}
+
+	private static void Screenshot(Viewport viewport)
+	{
+		DateTime now = DateTime.Now;
+		string name = $"Screenshot_{now:yyyy_MM_dd_HH_mm_ss_ffffff}.png";
+		
+		viewport.CanvasItemDefaultTextureFilter = Viewport.DefaultCanvasItemTextureFilter.Nearest;
+		Error err = viewport.GetTexture().GetImage().SavePng($"res://screenshots/{name}");
+
+		if (err != Error.Ok) {
+			GD.PushError($"ERROR: Could not save {name}! ({err})");
+		}
 	}
 }

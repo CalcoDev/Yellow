@@ -237,6 +237,7 @@ _p = ExtResource("3_x1l4f")
 _ui = NodePath("PlayerUI")
 
 [node name="WeaponUI" type="CanvasLayer" parent="."]
+visible = false
 script = ExtResource("9_qp8fq")
 
 [node name="MainContainer" type="VBoxContainer" parent="WeaponUI"]
@@ -265,6 +266,7 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="PlayerUI" type="CanvasLayer" parent="." node_paths=PackedStringArray("_staminaBars", "_w", "_a", "_s", "_d", "_shift", "_lctrl", "_space")]
+visible = false
 script = ExtResource("6_y88wm")
 _staminaBars = [NodePath("Grid/GridContainer/ProgressBar"), NodePath("Grid/GridContainer/ProgressBar2"), NodePath("Grid/GridContainer/ProgressBar3")]
 _w = NodePath("Keystrokes/W")

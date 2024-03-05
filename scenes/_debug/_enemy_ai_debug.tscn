@@ -39,13 +39,15 @@ sky_material = SubResource("ProceduralSkyMaterial_xms1l")
 [sub_resource type="Environment" id="Environment_lntm0"]
 background_mode = 2
 sky = SubResource("Sky_ym2uw")
+ambient_light_color = Color(0.0980392, 0.0588235, 0.113725, 1)
+ambient_light_sky_contribution = 0.02
+ambient_light_energy = 0.61
 volumetric_fog_density = 0.0
 volumetric_fog_emission = Color(0.619608, 0.568627, 0.368627, 1)
 volumetric_fog_sky_affect = 0.165
 adjustment_saturation = 1.02
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_1keek"]
-exposure_multiplier = 1.601
 dof_blur_far_distance = 100.0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_8aujk"]
@@ -700,8 +702,14 @@ camera_attributes = SubResource("CameraAttributesPractical_1keek")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.895841, -0.132147, -0.424271, 0.284018, -0.564027, 0.775376, -0.341764, -0.815114, -0.467746, 0, 22.7694, 0)
+visible = false
+
+[node name="DirectionalLight3D2" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.830483, -0.190104, 0.523602, 0, 0.939965, 0.341272, -0.557045, 0.283421, -0.780624, -123.696, -12.3885, 30.1177)
+visible = false
 
 [node name="Player" parent="." instance=ExtResource("11_fqyap")]
+transform = Transform3D(-0.730162, 0, -0.683274, 0, 1, 0, 0.683274, 0, -0.730162, -116.102, -18.785, 54.709)
 
 [node name="FlyingCube" type="RigidBody3D" parent="." node_paths=PackedStringArray("_health", "_nav", "_hurtbox")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -62.8785, -16.9363, 39.178)
@@ -1189,6 +1197,15 @@ mesh = SubResource("ArrayMesh_kssac")
 [node name="entity_6_brush_0_collision_shape" type="CollisionShape3D" parent="NavigationRegion3D/QodotMap/entity_6_mover"]
 shape = SubResource("ConvexPolygonShape3D_pb71k")
 
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -133.082, -14.7365, 37.9255)
+light_color = Color(1, 0.584314, 0, 1)
+light_energy = 3.321
+shadow_enabled = true
+shadow_opacity = 0.83
+shadow_blur = 10.0
+omni_range = 31.9
+
 [connection signal="OnTriggerEnter" from="NavigationRegion3D/QodotMap/entity_1_custom_trigger" to="NavigationRegion3D/QodotMap/entity_2_mover" method="UseEnter"]
 [connection signal="OnTriggerEnterParamless" from="NavigationRegion3D/QodotMap/entity_1_custom_trigger" to="NavigationRegion3D/QodotMap/entity_2_mover" method="use"]
 [connection signal="OnTriggerExit" from="NavigationRegion3D/QodotMap/entity_1_custom_trigger" to="NavigationRegion3D/QodotMap/entity_2_mover" method="UseExit"]
@@ -1200,3 +1217,5 @@ shape = SubResource("ConvexPolygonShape3D_pb71k")
 [connection signal="OnTriggerEnter" from="NavigationRegion3D/QodotMap/entity_5_custom_trigger" to="NavigationRegion3D/QodotMap/entity_6_mover" method="UseEnter"]
 [connection signal="OnTriggerEnterParamless" from="NavigationRegion3D/QodotMap/entity_5_custom_trigger" to="NavigationRegion3D/QodotMap/entity_6_mover" method="use"]
 [connection signal="OnTriggerExit" from="NavigationRegion3D/QodotMap/entity_5_custom_trigger" to="NavigationRegion3D/QodotMap/entity_6_mover" method="UseExit"]
+
+[editable path="Player"]

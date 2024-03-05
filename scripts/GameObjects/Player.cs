@@ -121,13 +121,15 @@ public partial class Player : RigidBody3D
 		AddToGroup("player");
 
 		_groundCheck.OnIsGrounded += () => {
-			if (IsThwomping || _heavyFall) {
-				SoundManager.Instance.Play("player_land_heavy");
-				_playerCamera.ShakeLength(10, 1, 0.2f, true);
-			} else {
-				SoundManager.Instance.Play("player_land");
+			if (!IsSliding) {
+				if (IsThwomping || _heavyFall) {
+					SoundManager.Instance.Play("player_land_heavy");
+					_playerCamera.ShakeLength(10, 1, 0.2f, true);
+				} else {
+					SoundManager.Instance.Play("player_land");
+				}
 			}
-
+			
 			if (IsThwomping) {
 				EndThwomp();
 			}
@@ -305,7 +307,7 @@ public partial class Player : RigidBody3D
 			}
 		}
 
-		if (IsSliding || (!_groundCheck.IsOnGround && LinearVelocity.Y >= 0f && IsWallSliding)) {
+		if ((IsSliding && _groundCheck.IsOnGround) || (!_groundCheck.IsOnGround && LinearVelocity.Y >= 0f && IsWallSliding)) {
 			SoundManager.Instance.Play("player_slide", true);
 		} else if (SoundManager.Instance.IsAudioPlaying("player_slide")) {
 			SoundManager.Instance.StopAllName("player_slide", true);
