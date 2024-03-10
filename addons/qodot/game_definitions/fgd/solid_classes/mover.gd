@@ -28,6 +28,8 @@ var IsOpen: bool = false
 var ReachedDestination: bool = false
 var IsMoving: bool = false
 
+var MoverVelocity: Vector3 = Vector3.ZERO
+
 func update_properties() -> void:
 	if 'translation' in properties:
 		offset_transform.origin = properties.translation
@@ -49,6 +51,7 @@ func update_properties() -> void:
 	if 'close_delay' in properties:
 		CloseDelay = properties['close_delay']
 
+var _prev_pos: Vector3 = Vector3.ZERO
 func _process(delta: float) -> void:
 	transform = transform.interpolate_with(target_transform, speed * delta)
 
@@ -67,12 +70,18 @@ func _process(delta: float) -> void:
 		ReachedDestination = true
 		OnEndMove.emit(not IsOpen)
 		_close_timer = CloseDelay
+	
+	# print("CURPOS: ", global_position, " PREVPOS: ", _prev_pos)
+	MoverVelocity = (global_position - _prev_pos) / delta
+	_prev_pos = global_position
 
 
 func _ready() -> void:
 	base_transform = transform
 	target_transform = base_transform
 	_close_timer = CloseDelay
+	add_to_group("moving_platform")
+	add_to_group("qodot_mover")
 
 func use() -> void:
 	if Togglable:

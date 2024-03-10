@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="SoundSO" load_steps=4 format=3 uid="uid://b3srsd4jpq4i5"]
+
+[ext_resource type="AudioStream" uid="uid://itjpirq5u6pn" path="res://assets/sounds/player/slide_end/slide_end1.wav" id="1_a2bfi"]
+[ext_resource type="AudioStream" uid="uid://b45ah6mhhnmvv" path="res://assets/sounds/player/slide_end/slide_end2.wav" id="2_l0vxg"]
+[ext_resource type="Script" path="res://scripts/Resources/Sounds/SoundSO.cs" id="3_vm6la"]
+
+[resource]
+script = ExtResource("3_vm6la")
+Name = "player_slide_end"
+Layer = 1
+PoolType = 1
+IsSpatial = false
+Looping = false
+Volume = 1.0
+Streams = Array[AudioStream]([ExtResource("1_a2bfi"), ExtResource("2_l0vxg")])

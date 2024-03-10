@@ -1,8 +1,11 @@
+using System;
 using Godot;
+using Yellow.Components;
 using Yellow.Misc;
 
 namespace Yellow.Managers;
 
+[GlobalClass]
 public partial class Game : Node
 {
 	public static Game Instance { get; private set; }
@@ -12,6 +15,10 @@ public partial class Game : Node
 	public static float FixedDeltaTime { get; private set; }
 	public static float Time { get; private set; }
 	public static float FixedTime { get; private set; }
+
+	// GAME
+	public static CameraComponent PlayerCamera { get; private set; }
+	public static CameraComponent ActiveCamera { get; private set; }
 
 	// FULLSCREEN
 	public static bool Fullscreen {
@@ -76,11 +83,39 @@ public partial class Game : Node
 		if (Input.IsActionJustPressed("unfocus")) {
 			MouseLocked = !MouseLocked;
 		}
+
+		if (Input.IsActionJustPressed("screenshot")) {
+			Screenshot(GetViewport());
+		}
 	}
 
 	public override void _PhysicsProcess(double delta)
 	{
 		FixedDeltaTime = (float) delta;
 		FixedTime += FixedDeltaTime;
+	}
+
+	// TODO(calco): Sth more
+	public static void SetPlayerCamera(CameraComponent cam)
+	{
+		PlayerCamera = cam;
+	}
+	
+	public static void SetActiveCamera(CameraComponent cam)
+	{
+		ActiveCamera = cam;
+	}
+
+	private static void Screenshot(Viewport viewport)
+	{
+		DateTime now = DateTime.Now;
+		string name = $"Screenshot_{now:yyyy_MM_dd_HH_mm_ss_ffffff}.png";
+		
+		viewport.CanvasItemDefaultTextureFilter = Viewport.DefaultCanvasItemTextureFilter.Nearest;
+		Error err = viewport.GetTexture().GetImage().SavePng($"res://screenshots/{name}");
+
+		if (err != Error.Ok) {
+			GD.PushError($"ERROR: Could not save {name}! ({err})");
+		}
 	}
 }

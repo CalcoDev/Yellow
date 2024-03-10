@@ -5,6 +5,13 @@ namespace Yellow.Resources;
 [GlobalClass]
 public partial class PlayerMovementSO : Resource
 {
+	[ExportGroup("Camera")]
+	[Export] public float CameraSideTiltAngle = 5f;
+	[Export] public float CameraLandOffset = 0.1f;
+	[Export] public float CameraDashFovMod = 10f;
+	[Export] public float CameraSlideFovMod = 10f;
+	[Export] public float CameraSlideDownMod = 1f;
+
     [ExportGroup("Movement")]
 	[Export] public float MaxStamina = 3f;
 

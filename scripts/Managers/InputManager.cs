@@ -6,6 +6,7 @@ namespace Yellow.Managers;
 
 using static PlayerInput;
 
+[GlobalClass]
 public partial class InputManager : Node
 {
 	[ExportGroup("Refernces")]

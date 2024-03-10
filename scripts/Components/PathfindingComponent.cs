@@ -62,6 +62,6 @@ public partial class PathfindingComponent : Node3D
     private void OnVelocityComputed(Vector3 safeVelocity)
     {
         CachedDir = safeVelocity.Normalized();
-        GD.Print("vel: ", safeVelocity);
+        // GD.Print("vel: ", safeVelocity);
     }
 }

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="SoundSO" load_steps=5 format=3 uid="uid://nghurtasw5rf"]
+
+[ext_resource type="Script" path="res://scripts/Resources/Sounds/SoundSO.cs" id="1_34ja8"]
+[ext_resource type="AudioStream" uid="uid://d1jkbdmq5gu18" path="res://assets/sounds/player/dash/dash2.wav" id="1_mhvre"]
+[ext_resource type="AudioStream" uid="uid://t3d8dpvsydk1" path="res://assets/sounds/player/dash/dash3.wav" id="2_wkl4t"]
+[ext_resource type="AudioStream" uid="uid://bs28w2hs635fm" path="res://assets/sounds/player/dash/dash.wav" id="3_l7yc2"]
+
+[resource]
+script = ExtResource("1_34ja8")
+Name = "player_dash"
+Layer = 1
+PoolType = 1
+IsSpatial = false
+Looping = false
+Volume = 1.0
+Streams = Array[AudioStream]([ExtResource("1_mhvre"), ExtResource("2_wkl4t"), ExtResource("3_l7yc2")])

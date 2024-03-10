@@ -16,6 +16,15 @@ config/features=PackedStringArray("4.2", "C#")
 run/max_fps=240
 config/icon="res://icon.svg"
 
+[audio]
+
+buses/default_bus_layout="res://resources/audio/default_bus_layout.tres"
+
+[autoload]
+
+GameAl="*res://scenes/managers/game_al.tscn"
+SoundManagerAl="*res://scenes/managers/sound_manager_al.tscn"
+
 [display]
 
 window/size/viewport_width=1920
@@ -141,6 +150,11 @@ reload={
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":82,"key_label":0,"unicode":114,"echo":false,"script":null)
 ]
 }
+screenshot={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194333,"key_label":0,"unicode":0,"echo":false,"script":null)
+]
+}
 
 [layer_names]
 
@@ -154,7 +168,7 @@ reload={
 
 3d/physics_engine="JoltPhysics3D"
 3d/default_gravity=30.0
-common/default_gravity=30.0
+common/default_gravity=45.0
 jolt_3d/collisions/areas_detect_static_bodies=true
 
 [rendering]
