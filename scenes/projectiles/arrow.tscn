@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://dc273f6omg784"]
+
+[ext_resource type="Script" path="res://scripts/GameObjects/Projectiles/Arrow.cs" id="1_8rihl"]
+[ext_resource type="Resource" uid="uid://drsgd2e8uyx36" path="res://resources/projectiles/Arrow.tres" id="2_g4upf"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_inq3w"]
+radius = 0.1
+height = 1.5
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_3oxao"]
+radius = 0.1
+height = 1.5
+
+[node name="Arrow" type="RigidBody3D"]
+script = ExtResource("1_8rihl")
+_data = ExtResource("2_g4upf")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+mesh = SubResource("CapsuleMesh_inq3w")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("CapsuleShape3D_3oxao")

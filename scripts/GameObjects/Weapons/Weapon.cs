@@ -7,6 +7,8 @@ namespace Yellow.GameObjects.Weapons;
 [GlobalClass]
 public partial class Weapon : Node3D
 {
+	[Export] private protected Node3D Attacker;
+	
 	public override void _Ready()
 	{
 		
@@ -21,10 +23,6 @@ public partial class Weapon : Node3D
 	{
 		return 0.0;
 	}
-
-	public virtual double UsePrimary() { ; return 0.0; }
-
-	public virtual double UseSecondary() { return 0.0; }
 
 	public virtual double Equip()
 	{

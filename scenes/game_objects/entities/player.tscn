@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://bsgwkv72xs4ab"]
+[gd_scene load_steps=26 format=3 uid="uid://bsgwkv72xs4ab"]
 
 [ext_resource type="Script" path="res://scripts/GameObjects/Player.cs" id="1_8gga7"]
 [ext_resource type="PhysicsMaterial" uid="uid://cknorhfrivu38" path="res://resources/physics_mat/no_friction_mat.tres" id="1_l3ghh"]
@@ -10,10 +10,11 @@
 [ext_resource type="Script" path="res://scripts/Managers/CameraManager.cs" id="8_ckwyo"]
 [ext_resource type="Texture2D" uid="uid://dt1sbjvvc1356" path="res://assets/crosshair.png" id="8_ixsmc"]
 [ext_resource type="Script" path="res://scripts/Managers/WeaponUIManager.cs" id="9_qp8fq"]
-[ext_resource type="Script" path="res://scripts/GameObjects/Weapons/ItemManager.cs" id="11_m8p1v"]
-[ext_resource type="PackedScene" uid="uid://lgjdjaixuwl2" path="res://scenes/weapons/hand.tscn" id="12_u4oo0"]
-[ext_resource type="PackedScene" uid="uid://bs3i75m6os13m" path="res://scenes/weapons/g_17.tscn" id="13_14jxk"]
-[ext_resource type="PackedScene" uid="uid://lg8bwndwg8sj" path="res://scenes/weapons/ak_47.tscn" id="14_bchrb"]
+[ext_resource type="Script" path="res://scripts/Managers/ItemManager.cs" id="11_m8p1v"]
+[ext_resource type="Script" path="res://scripts/Components/SwingAreaComponent.cs" id="12_4xbjt"]
+[ext_resource type="PackedScene" uid="uid://jre51n60ub5c" path="res://scenes/weapons/sword.tscn" id="13_ei8ls"]
+[ext_resource type="Resource" uid="uid://cvbt3adhpvm51" path="res://resources/weapon/Sword.tres" id="14_r64cc"]
+[ext_resource type="PackedScene" uid="uid://b0e72uxvsr7ek" path="res://scenes/weapons/bow.tscn" id="15_towin"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_uwg8c"]
 font_size = 32
@@ -41,6 +42,8 @@ size = Vector3(0.8, 1.8, 0.2)
 [sub_resource type="BoxShape3D" id="BoxShape3D_iiuxv"]
 size = Vector3(0.619141, 0.4, 0.452148)
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_cmymr"]
+
 [node name="Player" type="RigidBody3D" node_paths=PackedStringArray("_groundCheck", "_wallCheck") groups=["player"]]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 collision_layer = 1056
@@ -55,32 +58,32 @@ _wallCheck = NodePath("Head/ShapeCastComponent")
 Sensitivity = 44.0
 _p = ExtResource("3_x1l4f")
 
-[node name="WeaponUI" type="CanvasLayer" parent="."]
+[node name="Canvas" type="CanvasLayer" parent="."]
 script = ExtResource("9_qp8fq")
 
-[node name="MainContainer" type="VBoxContainer" parent="WeaponUI"]
+[node name="MainContainer" type="VBoxContainer" parent="Canvas"]
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="WeaponAmmo" type="HBoxContainer" parent="WeaponUI/MainContainer"]
+[node name="WeaponAmmo" type="HBoxContainer" parent="Canvas/MainContainer"]
 layout_mode = 2
 
-[node name="CurrentAmmo" type="Label" parent="WeaponUI/MainContainer/WeaponAmmo"]
+[node name="CurrentAmmo" type="Label" parent="Canvas/MainContainer/WeaponAmmo"]
 layout_mode = 2
 text = " 0"
 label_settings = SubResource("LabelSettings_uwg8c")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ReserveAmmo" type="Label" parent="WeaponUI/MainContainer/WeaponAmmo"]
+[node name="ReserveAmmo" type="Label" parent="Canvas/MainContainer/WeaponAmmo"]
 layout_mode = 2
 text = " / 90"
 label_settings = SubResource("LabelSettings_nt4hi")
 
-[node name="WeaponName" type="HBoxContainer" parent="WeaponUI/MainContainer"]
+[node name="WeaponName" type="HBoxContainer" parent="Canvas/MainContainer"]
 layout_mode = 2
 
-[node name="Name" type="Label" parent="WeaponUI/MainContainer/WeaponName"]
+[node name="Name" type="Label" parent="Canvas/MainContainer/WeaponName"]
 layout_mode = 2
 
 [node name="Head" type="Node3D" parent="."]
@@ -136,7 +139,24 @@ script = ExtResource("8_ckwyo")
 Follow = NodePath("../Head")
 FollowSpeed = 100.0
 
+[node name="HeldItemViewport" type="SubViewportContainer" parent="ViewportManager"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SubViewport" type="SubViewport" parent="ViewportManager/HeldItemViewport"]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="Camera" type="Camera3D" parent="ViewportManager/HeldItemViewport/SubViewport"]
+cull_mask = 2
+
 [node name="FirstPersonCamera" type="Camera3D" parent="ViewportManager"]
+cull_mask = 1048573
 current = true
 
 [node name="Crosshair" type="TextureRect" parent="ViewportManager/FirstPersonCamera"]
@@ -157,16 +177,22 @@ texture = ExtResource("8_ixsmc")
 target_position = Vector3(0, -1, -1000)
 collide_with_areas = true
 
+[node name="SwingAreaComponent" type="Area3D" parent="ViewportManager/FirstPersonCamera"]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, -1.5)
+script = ExtResource("12_4xbjt")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ViewportManager/FirstPersonCamera/SwingAreaComponent"]
+shape = SubResource("SphereShape3D_cmymr")
+
 [node name="ItemManager" type="Node3D" parent="ViewportManager/FirstPersonCamera"]
 script = ExtResource("11_m8p1v")
 
-[node name="Hand" parent="ViewportManager/FirstPersonCamera/ItemManager" instance=ExtResource("12_u4oo0")]
-visible = false
+[node name="Sword" parent="ViewportManager/FirstPersonCamera/ItemManager" node_paths=PackedStringArray("_swingArea", "Attacker") instance=ExtResource("13_ei8ls")]
+transform = Transform3D(0.0582853, 0.132871, -0.0380553, 0.137002, -0.0609971, -0.00314136, -0.0182577, -0.033537, -0.145058, 1.34, -0.35, -1.5)
+_data = ExtResource("14_r64cc")
+_swingArea = NodePath("../../SwingAreaComponent")
+Attacker = NodePath("../../../..")
 
-[node name="G17" parent="ViewportManager/FirstPersonCamera/ItemManager" node_paths=PackedStringArray("HitscanRay") instance=ExtResource("13_14jxk")]
-visible = false
-HitscanRay = NodePath("../../HitscanFromHead")
-
-[node name="AK47" parent="ViewportManager/FirstPersonCamera/ItemManager" node_paths=PackedStringArray("HitscanRay") instance=ExtResource("14_bchrb")]
-visible = false
-HitscanRay = NodePath("../../HitscanFromHead")
+[node name="Bow" parent="ViewportManager/FirstPersonCamera/ItemManager" node_paths=PackedStringArray("Attacker") instance=ExtResource("15_towin")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.523, -1.005, -1.814)
+Attacker = NodePath("../../../..")

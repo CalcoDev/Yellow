@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="BowResource" load_steps=2 format=3 uid="uid://btv06787adi5x"]
+
+[ext_resource type="Script" path="res://scripts/Resources/Weapons/BowResource.cs" id="1_nfp66"]
+
+[resource]
+script = ExtResource("1_nfp66")
+Damage = 100.0
+ShotSpeed = 10000.0
+ShootCooldown = 1.0

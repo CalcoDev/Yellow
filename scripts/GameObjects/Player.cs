@@ -26,7 +26,13 @@ public partial class Player : RigidBody3D
 	[ExportSubgroup("UI")]
 	[Export] private PlayerUIManager _ui;
 
-	[Node("Head")] private Node3D _head;
+	[Node("Head")] public Node3D Head { get; private set; }
+
+	[Node("ViewportManager/HeldItemViewport/SubViewport/Camera")]
+	public Camera3D WeaponCamera { get; private set; }
+
+	[Node("ViewportManager/FirstPersonCamera")]
+	public Camera3D FirstPersonCamera { get; private set; }
 	
 	// States
 	public bool CanSlideWall => _wallCheck.IsColliding && _wallCheck.IsOnSlope;
@@ -138,7 +144,7 @@ public partial class Player : RigidBody3D
 			var x = -motion.Relative.X * sens;
 			var y = motion.Relative.Y * sens;
 			
-			_head.RotateY(x);
+			Head.RotateY(x);
 			CameraManager.Instance.DoRotation(x, y);
 		}
 	}
@@ -147,12 +153,13 @@ public partial class Player : RigidBody3D
 	private bool _prevDidMoveWallSlide = false;
 	public override void _Process(double delta)
 	{
+		WeaponCamera.GlobalTransform = FirstPersonCamera.GlobalTransform;
+		
 		// NOTE(drts): controller
 		float lookHoriz = Input.GetAxis("look_left", "look_right")/Sensitivity;
 		float lookVert = Input.GetAxis("look_up", "look_down")/Sensitivity;
-		_head.RotateY(-lookHoriz);
+		Head.RotateY(-lookHoriz);
 		CameraManager.Instance.DoRotation(-lookHoriz, lookVert);
-
 
 		_stamina = Mathf.Clamp(_stamina + Game.DeltaTime, 0f, _p.MaxStamina);
 
@@ -238,8 +245,8 @@ public partial class Player : RigidBody3D
 			_thwompForce += Game.DeltaTime * _p.ThwompForceTimeMult;
 		}
 
-		var right = _head.GlobalTransform.Basis.X * -_input.Movement.X;
-		var forward = _head.GlobalTransform.Basis.Z * _input.Movement.Y;
+		var right = Head.GlobalTransform.Basis.X * -_input.Movement.X;
+		var forward = Head.GlobalTransform.Basis.Z * _input.Movement.Y;
 		_moveDir = (forward + right).Normalized();
 
 		_ui.DisplayStamina(_stamina);
@@ -333,7 +340,7 @@ public partial class Player : RigidBody3D
 			// Try to 0 out movement and only move in target direction
 			var vel0 = state.LinearVelocity.WithY(0);
 			if (_moveDir.LengthSquared() > 0.01 && vel0.Normalized().DotLess(_moveDir, 0.99f, false)) {
-				var v = Mathf.Abs(_head.Transform.Basis.Z.Normalized().Dot(_moveDir2.Normalized()));;
+				var v = Mathf.Abs(Head.Transform.Basis.Z.Normalized().Dot(_moveDir2.Normalized()));;
 				var t = Mathf.Max(_p.RunSpeed * Game.FixedDeltaTime, vel0.Length()) * _moveDir;
 				var f = t - vel0;
 				var mult = (IsJumping && IsDashJump ? 2f : 1f) * (1f + 0.25f * v) * _p.AirAccelMult;
@@ -371,7 +378,7 @@ public partial class Player : RigidBody3D
 		IsDashing = true;
 		IsJumping = false;
 		_ifDashing = true;
-		_dashDir = _moveDir.LengthSquared() > 0.01f ? _moveDir : _head.Forward();
+		_dashDir = _moveDir.LengthSquared() > 0.01f ? _moveDir : Head.Forward();
 		_dashTimer = _p.DashDuration;
 	}
 
@@ -398,13 +405,13 @@ public partial class Player : RigidBody3D
 	private void StartSlide()
 	{
 		IsSliding = true;
-		_slideDir = _moveDir.LengthSquared() > 0.01f ? _moveDir : _head.Forward();
+		_slideDir = _moveDir.LengthSquared() > 0.01f ? _moveDir : Head.Forward();
 		_slideSpeed = Mathf.Max(LinearVelocity.Length(), _p.SlideBaseSpeed);
 		_slideSpeed = Mathf.Max(_slideSpeed, _maxSlideSpeedBuffer);
 		_maxSlideSpeedBufferTimer = 0f;
 
 		// TODO(calco): Temporary, just showcasing slide
-		_head.Position += Vector3.Down;
+		Head.Position += Vector3.Down;
 	}
 
 	private void EndSlide()
@@ -412,7 +419,7 @@ public partial class Player : RigidBody3D
 		_maxSlideSpeedBufferTimer = 0f;
 
 		// TODO(calco): Temporary, just showcasing slide
-		_head.Position += Vector3.Up;
+		Head.Position += Vector3.Up;
 		var d = CameraManager.Instance.RotationDegrees;
 		d.X = 0;
 		CameraManager.Instance.RotationDegrees = d;

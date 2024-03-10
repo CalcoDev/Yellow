@@ -1,0 +1,20 @@
+[gd_scene load_steps=5 format=3 uid="uid://b0e72uxvsr7ek"]
+
+[ext_resource type="Script" path="res://scripts/GameObjects/Weapons/Bow.cs" id="1_g6bhs"]
+[ext_resource type="Resource" uid="uid://btv06787adi5x" path="res://resources/weapon/Bow.tres" id="2_scuoj"]
+[ext_resource type="PackedScene" uid="uid://dc273f6omg784" path="res://scenes/projectiles/arrow.tscn" id="3_kwp7m"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_rap07"]
+size = Vector3(0.455, 0.285, 1.665)
+
+[node name="Bow" type="Node3D"]
+script = ExtResource("1_g6bhs")
+_data = ExtResource("2_scuoj")
+_arrow = ExtResource("3_kwp7m")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+layers = 2
+mesh = SubResource("BoxMesh_rap07")
+
+[node name="Marker3D" type="Marker3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -0.912807)

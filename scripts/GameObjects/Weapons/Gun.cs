@@ -27,8 +27,8 @@ public partial class Gun : Weapon
 	{
 		return inputName switch
 		{
-			"use_primary" => UsePrimary(),
-			"use_secondary" => UseSecondary(),
+			"use_primary" => Shoot(),
+			"use_secondary" => Scope(),
 			"reload" => Reload(),
 			_ => 0.0
 		};
@@ -48,16 +48,6 @@ public partial class Gun : Weapon
 		base.Unequip();
 		
 		return WeaponResource.DeactivateAnimLength;
-	}
-	
-	public override double UsePrimary()
-	{
-		return Shoot();
-	}
-
-	public override double UseSecondary()
-	{
-		return Scope();
 	}
 
 	public double Shoot()

@@ -4,11 +4,24 @@ using Yellow.Extensions;
 
 namespace Yellow.Components;
 
+public struct HitData
+{
+    public float Damage;
+    public bool IgnoreIFrames;
+
+    public HitData(float damage, bool ignoreIFrames)
+    {
+        Damage = damage;
+        IgnoreIFrames = ignoreIFrames;
+    }
+}
+
 [GlobalClass]
 public partial class HurtboxComponent : Area3D
 {
     [Export] public HealthComponent HealthComponent;
     [Export] public FactionComponent FactionComponent;
+    [Export] public KnockBackComponent KnockBackComponent;
 
     [Export]
     public bool TakeContinuousDamage
@@ -57,40 +70,31 @@ public partial class HurtboxComponent : Area3D
             }
         }
     }
-
-    private void TryToHit(HitboxComponent hitbox)
+    
+    public void TryToHit(HitData hitData, KnockBackData kbData)
     {
-        // Want to do if:
-        // Ignore invincibility OR
-        // Not ignoring invincibility AND invincibility timer is finished OR
-        // Not ignoring invincibility AND invincibility time is 0
-
-        bool a = hitbox.IgnoreInvincibility;
-        bool b = !hitbox.IgnoreInvincibility && _invincibilityTimer <= 0f;
-        bool c = !hitbox.IgnoreInvincibility && InvincibilityTime <= 0f;
-
-        if (!a && !b && !c)
-            return;
-
+        if(_invincibilityTimer > 0 && !hitData.IgnoreIFrames) return;
+        
+        HealthComponent?.TakeDamage(hitData.Damage);
+        KnockBackComponent?.ApplyKnockBack(kbData);
+        
+        _invincibilityTimer = InvincibilityTime;
+    }
+    
+    public void TryToHit(HitboxComponent hitbox)
+    {
         bool sameFaction = FactionComponent.FactionType == hitbox.FactionComponent.FactionType;
         if (FactionComponent == null || sameFaction)
             return;
-
+        
+        bool a = hitbox.IgnoreInvincibility;
+        bool b = !hitbox.IgnoreInvincibility && _invincibilityTimer <= 0f;
+        bool c = !hitbox.IgnoreInvincibility && InvincibilityTime <= 0f;
+        if (!(a || b || c)) return;
+        
         EmitSignal(SignalName.OnHit, hitbox);
-        hitbox.EmitSignal(HitboxComponent.SignalName.OnHit, this, hitbox);
+        hitbox?.EmitSignal(HitboxComponent.SignalName.OnHit, this, hitbox);
         HealthComponent?.TakeDamage(hitbox.Damage);
-
-        // var p = new FloatingText.FloatingTextParams()
-        // {
-        //     Text = hitbox.Damage.ToString(),
-        //     Position = GlobalPosition,
-        //     Offset = Vector2.Up * 32f,
-        //     Duration = .3f,
-        //     HoverDuration = 0.05f,
-        //     ShrinkDuration = 0.25f
-        // };
-        // GameDirector.Instance.SpawnFloatingText(p);
-
         _invincibilityTimer = InvincibilityTime;
     }
 

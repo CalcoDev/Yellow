@@ -1,0 +1,51 @@
+[gd_scene load_steps=10 format=3 uid="uid://dt10brylt3oba"]
+
+[ext_resource type="Script" path="res://scripts/Components/HealthComponent.cs" id="1_g41xx"]
+[ext_resource type="Script" path="res://scripts/GameObjects/Enemies/BoxRigidBody.cs" id="1_j6r1d"]
+[ext_resource type="Script" path="res://scripts/Components/FactionComponent.cs" id="2_ey5or"]
+[ext_resource type="Script" path="res://scripts/Components/HurtboxComponent.cs" id="3_pkfax"]
+[ext_resource type="Script" path="res://scripts/Components/KnockBackComponent.cs" id="4_7fpb4"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_55pop"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e2u6w"]
+albedo_color = Color(0.670588, 0.247059, 0.678431, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_vgcug"]
+material = SubResource("StandardMaterial3D_e2u6w")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ygh4s"]
+
+[node name="Box" type="RigidBody3D"]
+script = ExtResource("1_j6r1d")
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.04199, 0)
+billboard = 2
+text = "KR: ???"
+font_size = 72
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_55pop")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_vgcug")
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("1_g41xx")
+
+[node name="FactionComponent" type="Node" parent="."]
+script = ExtResource("2_ey5or")
+
+[node name="KnockBackComponent" type="Node" parent="." node_paths=PackedStringArray("_theEntity")]
+script = ExtResource("4_7fpb4")
+_theEntity = NodePath("..")
+
+[node name="HurtboxComponent" type="Area3D" parent="." node_paths=PackedStringArray("HealthComponent", "FactionComponent", "KnockBackComponent")]
+script = ExtResource("3_pkfax")
+HealthComponent = NodePath("../HealthComponent")
+FactionComponent = NodePath("../FactionComponent")
+KnockBackComponent = NodePath("../KnockBackComponent")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HurtboxComponent"]
+shape = SubResource("BoxShape3D_ygh4s")

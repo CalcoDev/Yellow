@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://cuxnvmrljlvj0"]
+
+[ext_resource type="PackedScene" uid="uid://c6jo2pn6hqutm" path="res://assets/bronze_age_short_sword.glb" id="1_poedc"]
+
+[node name="Model" instance=ExtResource("1_poedc")]
+
+[node name="Bronze Age Sword_0" parent="Sketchfab_model/Root/Bronze Age Sword" index="0"]
+layers = 2
+
+[node name="Bronze Age Sword_1" parent="Sketchfab_model/Root/Bronze Age Sword" index="1"]
+layers = 2
+
+[node name="Bronze Age Sword_2" parent="Sketchfab_model/Root/Bronze Age Sword" index="2"]
+layers = 2

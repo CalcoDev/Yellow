@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Yellow"
-run/main_scene="res://scenes/main_guns.tscn"
+run/main_scene="res://scenes/kb_test_map.tscn"
 config/features=PackedStringArray("4.2", "C#")
 run/max_fps=240
 config/icon="res://icon.svg"

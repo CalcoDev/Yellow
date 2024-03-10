@@ -1,0 +1,13 @@
+[gd_scene load_steps=4 format=3 uid="uid://jre51n60ub5c"]
+
+[ext_resource type="Script" path="res://scripts/GameObjects/Weapons/Sword.cs" id="1_ysy0h"]
+[ext_resource type="Resource" uid="uid://cvbt3adhpvm51" path="res://resources/weapon/Sword.tres" id="2_q0w04"]
+[ext_resource type="PackedScene" uid="uid://cuxnvmrljlvj0" path="res://scenes/weapons/sword_model.tscn" id="3_egm62"]
+
+[node name="Sword" type="Node3D"]
+script = ExtResource("1_ysy0h")
+Data = ExtResource("2_q0w04")
+
+[node name="Model" parent="." instance=ExtResource("3_egm62")]
+
+[node name="Animation" type="AnimationPlayer" parent="."]
