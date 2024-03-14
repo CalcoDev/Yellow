@@ -15,10 +15,12 @@ public partial class Bow : Weapon
 	private Camera3D _camera;
 	private float _cameraFovDefault;
 	private int _chargeLevel = 0;
+	private AnimationPlayer _animationPlayer;
 	
 	public override void _Ready()
 	{
         _camera = Attacker.GetNode("Head/Camera/Camera") as Camera3D;
+        _animationPlayer = GetNode("lowpoly_bow/AnimationPlayer") as AnimationPlayer;
         _cameraFovDefault = _camera.Fov;
 	}
 
@@ -39,9 +41,18 @@ public partial class Bow : Weapon
 
 	private double ChargeShot()
 	{
+		if (_chargeLevel == 0)
+		{
+			_animationPlayer.Play("Armature_002Action");
+		}
+			
+			
 		_chargeLevel = Math.Min(_data.ChargeMax, _chargeLevel + 1);
+		
 		if (_chargeLevel < _data.ChargeMax)
 			_camera.Fov -= 2;
+		else if(_chargeLevel == _data.ChargeMax)
+			_animationPlayer.Pause();
 		
 		return 0.1;
 	}
@@ -59,6 +70,8 @@ public partial class Bow : Weapon
 
 		_chargeLevel = 0;
 		_camera.Fov = _cameraFovDefault;
+		_animationPlayer.Play();
+		_animationPlayer.Seek(1.3, true);
 		
 		return _data.ShootCooldown;
 	}
