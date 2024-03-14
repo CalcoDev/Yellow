@@ -9,19 +9,16 @@ public struct KnockBackData
 	public Node3D Source;
 	public Vector3 KnockBackAxisMultipliers;
 	public float KnockBackFactor;
-	public bool CheckAirborne;
 
 	public KnockBackData(
 		Node3D source, 
 		Vector3 knockBackAxisMultipliers, 
-		float knockBackFactor,
-		bool checkAirborne = false
+		float knockBackFactor
 	)
 	{
 		Source = source;
 		KnockBackAxisMultipliers = knockBackAxisMultipliers;
 		KnockBackFactor = knockBackFactor;
-		CheckAirborne = checkAirborne;
 	}
 }
 
@@ -29,7 +26,7 @@ public struct KnockBackData
 public partial class KnockBackComponent : Node
 {
 	[ExportGroup("References")]
-	[Export] private RigidBody3D _theEntity;
+	[Export] public RigidBody3D Body;
 	
 	[ExportGroup("KnockBack Modifiers")]
 	[Export] private float _kbResFloor = 0.25f;
@@ -50,7 +47,7 @@ public partial class KnockBackComponent : Node
 
 	public override void _PhysicsProcess(double delta)
 	{
-		_theEntity?.ApplyForce(_appliedKnockBackForce);
+		Body?.ApplyForce(_appliedKnockBackForce);
 		_appliedKnockBackForce *= 0.01f;
 	}
 
@@ -59,7 +56,7 @@ public partial class KnockBackComponent : Node
 		KnockBackResistance = Math.Min(1.0f, KnockBackResistance + 0.1f * data.KnockBackFactor);
 
 		_appliedKnockBackForce =
-			(_theEntity.GlobalPosition - data.Source.GlobalPosition).Normalized()
+			(Body.GlobalPosition - data.Source.GlobalPosition).Normalized()
 			* data.KnockBackAxisMultipliers
 			* _constantMultiplier
 			* KnockBackResistance;

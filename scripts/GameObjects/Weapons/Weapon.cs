@@ -7,7 +7,7 @@ namespace Yellow.GameObjects.Weapons;
 [GlobalClass]
 public partial class Weapon : Node3D
 {
-	[Export] private protected Node3D Attacker;
+	[Export] private protected Player Attacker;
 	
 	public override void _Ready()
 	{

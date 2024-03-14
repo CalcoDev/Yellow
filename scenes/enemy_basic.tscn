@@ -1,0 +1,46 @@
+[gd_scene load_steps=9 format=3 uid="uid://2ihehdoku0tg"]
+
+[ext_resource type="Script" path="res://scripts/GameObjects/Enemies/Enemy.cs" id="1_r03qo"]
+[ext_resource type="Script" path="res://scripts/Components/HealthComponent.cs" id="2_yqmwk"]
+[ext_resource type="Script" path="res://scripts/Components/FactionComponent.cs" id="3_0dhx7"]
+[ext_resource type="Script" path="res://scripts/Components/KnockBackComponent.cs" id="4_kfmn1"]
+[ext_resource type="Script" path="res://scripts/Components/HurtboxComponent.cs" id="5_xhv0j"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_ebshp"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_4cj68"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_b46y6"]
+
+[node name="Enemy" type="RigidBody3D" node_paths=PackedStringArray("Health", "Faction", "KnockBack", "HurtBox")]
+lock_rotation = true
+script = ExtResource("1_r03qo")
+Health = NodePath("HealthComponent")
+Faction = NodePath("FactionComponent")
+KnockBack = NodePath("KnockBackComponent")
+HurtBox = NodePath("HurtboxComponent")
+
+[node name="Model" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_ebshp")
+
+[node name="Collider" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_4cj68")
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("2_yqmwk")
+
+[node name="FactionComponent" type="Node" parent="."]
+script = ExtResource("3_0dhx7")
+
+[node name="KnockBackComponent" type="Node" parent="." node_paths=PackedStringArray("Body")]
+script = ExtResource("4_kfmn1")
+Body = NodePath("..")
+
+[node name="HurtboxComponent" type="Area3D" parent="." node_paths=PackedStringArray("HealthComponent", "FactionComponent", "KnockBackComponent")]
+script = ExtResource("5_xhv0j")
+HealthComponent = NodePath("../HealthComponent")
+FactionComponent = NodePath("../FactionComponent")
+KnockBackComponent = NodePath("../KnockBackComponent")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HurtboxComponent"]
+shape = SubResource("CapsuleShape3D_b46y6")

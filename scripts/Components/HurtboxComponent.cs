@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Godot;
 using Yellow.Extensions;
 
@@ -22,28 +23,21 @@ public partial class HurtboxComponent : Area3D
     [Export] public HealthComponent HealthComponent;
     [Export] public FactionComponent FactionComponent;
     [Export] public KnockBackComponent KnockBackComponent;
-
+    [Export] public float InvincibilityTime { get; set; } = 0f;
     [Export]
     public bool TakeContinuousDamage
     {
-        get { return _takeContinuousDamage; }
+        get => _takeContinuousDamage;
         set
         {
             _takeContinuousDamage = value;
-
-            if (_takeContinuousDamage)
-                _invincibilityTimer = InvincibilityTime;
-            else
-                _invincibilityTimer = 0f;
+            _invincibilityTimer = _takeContinuousDamage ? InvincibilityTime : 0f;
         }
     }
-    [Export] public float InvincibilityTime { get; set; } = 0f;
-
-    private float _invincibilityTimer;
-
     [Signal]
     public delegate void OnHitEventHandler(HitboxComponent other);
 
+    private float _invincibilityTimer;
     private readonly List<HitboxComponent> _hitboxes = new();
     private bool _takeContinuousDamage = false;
 
@@ -51,9 +45,8 @@ public partial class HurtboxComponent : Area3D
     {
         _invincibilityTimer = 0f;
 
-        if (TakeContinuousDamage) {
+        if (TakeContinuousDamage) 
             _invincibilityTimer = InvincibilityTime;
-        }
 
         Connect(Area3D.SignalName.AreaEntered, new Callable(this, MethodName.OnAreaEntered));
         Connect(Area3D.SignalName.AreaExited, new Callable(this, MethodName.OnAreaExited));
@@ -61,14 +54,8 @@ public partial class HurtboxComponent : Area3D
 
     private void CheckHitboxes()
     {
-        // TODO(calco): This is probably not working. Just in case.
-        foreach (HitboxComponent hitbox in _hitboxes)
-        {
-            // TODO(calco); is this or or and
-            if (TakeContinuousDamage && hitbox.ContinuousDamage) {
-                TryToHit(hitbox);
-            }
-        }
+        foreach (var hitbox in _hitboxes.Where(hitbox => TakeContinuousDamage && hitbox.ContinuousDamage))
+            TryToHit(hitbox);
     }
     
     public void TryToHit(HitData hitData, KnockBackData kbData)
@@ -83,13 +70,13 @@ public partial class HurtboxComponent : Area3D
     
     public void TryToHit(HitboxComponent hitbox)
     {
-        bool sameFaction = FactionComponent.FactionType == hitbox.FactionComponent.FactionType;
+        var sameFaction = FactionComponent.FactionType == hitbox.FactionComponent.FactionType;
         if (FactionComponent == null || sameFaction)
             return;
         
-        bool a = hitbox.IgnoreInvincibility;
-        bool b = !hitbox.IgnoreInvincibility && _invincibilityTimer <= 0f;
-        bool c = !hitbox.IgnoreInvincibility && InvincibilityTime <= 0f;
+        var a = hitbox.IgnoreInvincibility;
+        var b = !hitbox.IgnoreInvincibility && _invincibilityTimer <= 0f;
+        var c = !hitbox.IgnoreInvincibility && InvincibilityTime <= 0f;
         if (!(a || b || c)) return;
         
         EmitSignal(SignalName.OnHit, hitbox);
@@ -107,21 +94,17 @@ public partial class HurtboxComponent : Area3D
 
     private void OnAreaEntered(Node body)
     {
-        HitboxComponent hitbox = body.GetFirstNodeOfType<HitboxComponent>();
+        //var hitbox = (body is HitboxComponent component ? component : body.GetFirstNodeOfType<HitboxComponent>());
+        //if (hitbox == null || _hitboxes.Contains(hitbox)) return;
 
-        if (hitbox == null || _hitboxes.Contains(hitbox))
-            return;
-
-        _hitboxes.Add(hitbox);
-        TryToHit(hitbox);
+        //_hitboxes.Add(hitbox);
+        //TryToHit(hitbox);
     }
 
     private void OnAreaExited(Node body)
     {
-        HitboxComponent hitbox = body.GetFirstNodeOfType<HitboxComponent>();
-
-        if (hitbox == null || !_hitboxes.Contains(hitbox))
-            return;
+        var hitbox = (body is HitboxComponent component ? component : body.GetFirstNodeOfType<HitboxComponent>());
+        if (hitbox == null || _hitboxes.Contains(hitbox)) return;
 
         _hitboxes.Remove(hitbox);
     }

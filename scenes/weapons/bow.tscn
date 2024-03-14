@@ -15,6 +15,3 @@ _arrow = ExtResource("3_kwp7m")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 layers = 2
 mesh = SubResource("BoxMesh_rap07")
-
-[node name="Marker3D" type="Marker3D" parent="."]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, -0.912807)

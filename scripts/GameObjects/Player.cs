@@ -41,7 +41,9 @@ public partial class Player : RigidBody3D
 	[ExportSubgroup("UI")]
 	[Export] private PlayerUIManager _ui;
 
-	[Node("Head")] private Node3D _head;
+	[Node("Head")] public Node3D Head { get; private set; }
+
+	private Camera3D _weaponCamera;
 	
 	// States
 	public bool CanSlideWall => _wallCheck.IsColliding && _wallCheck.IsOnSlope;
@@ -147,6 +149,8 @@ public partial class Player : RigidBody3D
 			tween.Chain().TweenProperty(_playerCamera, "HardOffset", Vector3.Zero, td * 1.5f);
 			tween.Play();
 		};
+		
+		_weaponCamera = GetNode("WeaponUI/SubViewportContainer/SubViewport/WeaponCamera") as Camera3D;
 	}
 
 	public override void _Input(InputEvent e)
@@ -167,6 +171,8 @@ public partial class Player : RigidBody3D
 	private bool _prevDidMoveWallSlide = false;
 	public override void _Process(double delta)
 	{
+		_weaponCamera.GlobalTransform = _playerCamera.Cam.GlobalTransform;
+		
 		// NOTE(drts): controller
 		// TODO(calco): Should do a check for if controller active or not
 		float lookHoriz = Input.GetAxis("look_left", "look_right")/Sensitivity;
@@ -174,8 +180,8 @@ public partial class Player : RigidBody3D
 		HandleCameraRotation(-lookHoriz, lookVert);
 
 		// NOTE(calco): invert because I think of it as LHS not RHS
-		var right = _head.RightXZ() * -_input.Movement.X;
-		var forward = _head.ForwardXZ() * _input.Movement.Y;
+		var right = Head.RightXZ() * -_input.Movement.X;
+		var forward = Head.ForwardXZ() * _input.Movement.Y;
 		_moveDir = (forward + right).Normalized();
 
 		// Tilt camera
@@ -417,7 +423,7 @@ public partial class Player : RigidBody3D
 			// Try to 0 out movement and only move in target direction
 			var vel0 = state.LinearVelocity.WithY(0);
 			if (_moveDir.LengthSquared() > 0.01 && vel0.Normalized().DotLess(_moveDir, 0.99f, false)) {
-				var v = Mathf.Abs(_head.Transform.Basis.Z.Normalized().Dot(_moveDir2.Normalized()));;
+				var v = Mathf.Abs(Head.Transform.Basis.Z.Normalized().Dot(_moveDir2.Normalized()));;
 				var t = Mathf.Max(_p.RunSpeed * Game.FixedDeltaTime, vel0.Length()) * _moveDir;
 				var f = t - vel0;
 				var mult = (IsJumping && IsDashJump ? 2f : 1f) * (1f + 0.25f * v) * _p.AirAccelMult;
@@ -467,15 +473,15 @@ public partial class Player : RigidBody3D
 		IsDashing = true;
 		IsJumping = false;
 		_ifDashing = true;
-		_dashDir = _moveDir.LengthSquared() > 0.01f ? _moveDir : _head.ForwardXZ();
+		_dashDir = _moveDir.LengthSquared() > 0.01f ? _moveDir : Head.ForwardXZ();
 		_dashTimer = _p.DashDuration;
 
 		_playerCamera.Cam.Fov += _p.CameraDashFovMod;
 
 		var dir = GetHeadOffsetBasedOnInputDir(_input.Movement);
-		_vfxDash.GlobalPosition = _head.GlobalPosition - dir * 2f;
-		_vfxDash.LookAt(_head.GlobalPosition, Vector3.Up);
-		_vfxDash.GlobalPosition = _head.GlobalPosition;
+		_vfxDash.GlobalPosition = Head.GlobalPosition - dir * 2f;
+		_vfxDash.LookAt(Head.GlobalPosition, Vector3.Up);
+		_vfxDash.GlobalPosition = Head.GlobalPosition;
 		_vfxDash.Rotate(-dir.Cross(Vector3.Up).Normalized(), Mathf.Pi / 2f);
 		_vfxDash.Emitting = true;
 		_vfxDash.FreezeNextFrame = true;
@@ -486,10 +492,10 @@ public partial class Player : RigidBody3D
 
 	private Vector3 GetHeadOffsetBasedOnInputDir(Vector2 dir)
 	{
-		var x = -_head.RightXZ() * Mathf.Sign(dir.X);
-		var z = _head.ForwardXZ() * Mathf.Sign(dir.Y);
+		var x = -Head.RightXZ() * Mathf.Sign(dir.X);
+		var z = Head.ForwardXZ() * Mathf.Sign(dir.Y);
 		var f = (x + z).Normalized();
-		return f == Vector3.Zero ? _head.ForwardXZ() : f;
+		return f == Vector3.Zero ? Head.ForwardXZ() : f;
 	}
 
 	private void StopDash()
@@ -522,21 +528,21 @@ public partial class Player : RigidBody3D
 	private void StartSlide()
 	{
 		IsSliding = true;
-		_slideDir = _moveDir.LengthSquared() > 0.01f ? _moveDir : _head.ForwardXZ();
+		_slideDir = _moveDir.LengthSquared() > 0.01f ? _moveDir : Head.ForwardXZ();
 		// TODO(calco): With Y 0???
 		_slideSpeed = Mathf.Max(LinearVelocity.WithY(0).Length(), _p.SlideBaseSpeed);
 		_slideSpeed = Mathf.Max(_slideSpeed, _maxSlideSpeedBuffer);
 		_maxSlideSpeedBufferTimer = 0f;
 
 		// TODO(calco): Temporary, just showcasing slide
-		_head.Position += Vector3.Down * _p.CameraSlideDownMod;
+		Head.Position += Vector3.Down * _p.CameraSlideDownMod;
 		
 		_playerCamera.Cam.Fov += _p.CameraSlideFovMod;
 
 		var dir = GetHeadOffsetBasedOnInputDir(_input.Movement);
-		_vfxSlide.GlobalPosition = _head.GlobalPosition - dir * 2f;
-		_vfxSlide.LookAt(_head.GlobalPosition, Vector3.Up);
-		_vfxSlide.GlobalPosition = _head.GlobalPosition + dir * 0.65f + Vector3.Down * 0.45f;
+		_vfxSlide.GlobalPosition = Head.GlobalPosition - dir * 2f;
+		_vfxSlide.LookAt(Head.GlobalPosition, Vector3.Up);
+		_vfxSlide.GlobalPosition = Head.GlobalPosition + dir * 0.65f + Vector3.Down * 0.45f;
 		_vfxSlide.Rotate(-dir.Cross(Vector3.Up).Normalized(), Mathf.Pi / 2f);
 		var vel = 5f;
 		_vfxSlide.ProcessMaterial.Set("initial_velocity_min", vel);
@@ -544,13 +550,13 @@ public partial class Player : RigidBody3D
 
 		_vfxSlide.Emitting = true;
 
-		_vfxSlideSmoke.GlobalPosition = _head.GlobalPosition - dir * 0.75f + Vector3.Down * 0.55f;
+		_vfxSlideSmoke.GlobalPosition = Head.GlobalPosition - dir * 0.75f + Vector3.Down * 0.55f;
 		_vfxSlideSmoke.Emitting = true;
 		_vfxSlideSmoke.FreezeNextFrame = true;
 
-		_vfxSlideLines.GlobalPosition = _head.GlobalPosition - dir * 2f;
-		_vfxSlideLines.LookAt(_head.GlobalPosition, Vector3.Up);
-		_vfxSlideLines.GlobalPosition = _head.GlobalPosition;
+		_vfxSlideLines.GlobalPosition = Head.GlobalPosition - dir * 2f;
+		_vfxSlideLines.LookAt(Head.GlobalPosition, Vector3.Up);
+		_vfxSlideLines.GlobalPosition = Head.GlobalPosition;
 		_vfxSlideLines.Rotate(-dir.Cross(Vector3.Up).Normalized(), Mathf.Pi / 2f);
 		_vfxSlideLines.Emitting = true;
 		_vfxSlideLines.FreezeNextFrame = true;
@@ -561,7 +567,7 @@ public partial class Player : RigidBody3D
 		_maxSlideSpeedBufferTimer = 0f;
 
 		// TODO(calco): Temporary, just showcasing slide
-		_head.Position += Vector3.Up * _p.CameraSlideDownMod;
+		Head.Position += Vector3.Up * _p.CameraSlideDownMod;
 		
 		var d = _playerCamera.RotationDegrees;
 		d.Z = 0;
@@ -628,6 +634,6 @@ public partial class Player : RigidBody3D
 	private void HandleCameraRotation(float x, float y)
 	{
 		_playerCamera.MouseRotation(x, y);
-		_head.Rotation = _playerCamera.Rotation;
+		Head.Rotation = _playerCamera.Rotation;
 	}
 }
