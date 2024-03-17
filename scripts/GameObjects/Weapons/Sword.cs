@@ -89,6 +89,7 @@ public partial class Sword : Weapon
 				kbData
 			);
 
+		
 		SoundManager.Instance.Play("SuccessfulHit");
 		return true;
 	}
