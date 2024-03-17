@@ -6,10 +6,9 @@
 script = ExtResource("1_t14w3")
 Damage = 50.0
 KnockBackFactor = 3.0
-HorizontalSwingLeft = "Sword/HorizontalSwingLeft"
-HorizontalSwingRight = "Sword/HorizontalSwingRight"
-VerticalSwingAnim = ""
+HorizontalSwingAnim = "Sword/Horizontal"
+VerticalSwingAnim = "Sword/Vertical"
 ReturnAnim = ""
 HorizontalSwingDuration = 0.3
-VerticalSwingDuration = 0.3
+VerticalSwingDuration = 0.5
 ReturnDuration = 0.5

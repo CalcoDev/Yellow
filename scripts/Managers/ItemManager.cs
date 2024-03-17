@@ -11,7 +11,7 @@ namespace Yellow.Managers;
 [GlobalClass]
 public partial class ItemManager : Node3D
 {
-	private List<Weapon> _allWeapons = new();
+	private readonly List<Weapon> _allWeapons = new();
 	private Weapon _currentWeapon;
 	private int _weaponIndex = 0;
 
@@ -25,10 +25,11 @@ public partial class ItemManager : Node3D
 		var children = GetChildren();
 		
 		foreach(var child in children)
-			if(child is Weapon weapon)
+			if (child is Weapon weapon)
+			{
 				_allWeapons.Add(weapon);
-		
-		GD.Print("We have " + _allWeapons.Count + " weapons");
+				weapon.OnActionWithCooldown += cooldown => { _actionCooldown += cooldown; };
+			}
 
 		_weaponInputs = new List<string>
 		{
@@ -49,15 +50,14 @@ public partial class ItemManager : Node3D
 	public override void _Process(double delta)
 	{
 		_actionCooldown = Math.Max(0, _actionCooldown - delta);
-		
-		if(_actionCooldown > 0) return;
+		if (_actionCooldown > 0) return;
 		
 		foreach (var inputName in _managerInputs.Where(inputName => Input.IsActionPressed(inputName) || Input.IsActionJustPressed(inputName)))
 			HandleInput(inputName);
 		
 		if(_currentWeapon == null) return;
 		foreach (var inputName in _weaponInputs.Where(inputName => Input.IsActionPressed(inputName)))
-			_actionCooldown = _currentWeapon.HandleInput(inputName);
+			_currentWeapon.HandleInput(inputName);
 	}
 
 	private void HandleInput(string inputName)
@@ -91,9 +91,8 @@ public partial class ItemManager : Node3D
 
 	private void SwitchWeapon()
 	{
-		_actionCooldown += _currentWeapon.Unequip();
+		_currentWeapon.Unequip();
 		_currentWeapon = _allWeapons[_weaponIndex];
-		_actionCooldown += _currentWeapon.Equip();
-		GD.Print("Scrolled to slot " + _weaponIndex + ", to weapon " + _currentWeapon.Name);
+		_currentWeapon.Equip();
 	}
 }

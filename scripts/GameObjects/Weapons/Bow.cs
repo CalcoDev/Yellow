@@ -11,6 +11,9 @@ public partial class Bow : Weapon
 {
 	[Export] private BowResource _data;
 	[Export] private PackedScene _arrow;
+
+	[Signal]
+	public delegate void OnShootEventHandler(double cooldown);
 	
 	private Camera3D _camera;
 	private float _cameraFovDefault;
@@ -21,7 +24,7 @@ public partial class Bow : Weapon
 	{
         _camera = Attacker.GetNode("Head/Camera/Camera") as Camera3D;
         _animationPlayer = GetNode("lowpoly_bow/AnimationPlayer") as AnimationPlayer;
-        _cameraFovDefault = _camera.Fov;
+        _cameraFovDefault = _camera!.Fov;
 	}
 
 	public override void _Process(double delta)
@@ -30,22 +33,18 @@ public partial class Bow : Weapon
 			Shoot();
 	}
 
-	public override double HandleInput(string inputName)
+	public override void HandleInput(string inputName)
 	{
-		return inputName switch
+		switch (inputName)
 		{
-			"use_primary" => ChargeShot(),
-			_ => 0.0
-		};
+			case "use_primary": ChargeShot(); break;
+		}
 	}
 
-	private double ChargeShot()
+	private void ChargeShot()
 	{
 		if (_chargeLevel == 0)
-		{
 			_animationPlayer.Play("Armature_002Action");
-		}
-			
 			
 		_chargeLevel = Math.Min(_data.ChargeMax, _chargeLevel + 1);
 		
@@ -53,13 +52,13 @@ public partial class Bow : Weapon
 			_camera.Fov -= 2;
 		else if(_chargeLevel == _data.ChargeMax)
 			_animationPlayer.Pause();
-		
-		return 0.1;
+
+		EmitSignal(Weapon.SignalName.OnActionWithCooldown, 0.1);
 	}
 	
-	private double Shoot()
+	private void Shoot()
 	{
-		if (_arrow.Instantiate() is not Arrow arrowInstance) return 0.0;
+		if (_arrow.Instantiate() is not Arrow arrowInstance) return;
 		
 		arrowInstance.Position = Attacker.Head.GlobalPosition + Attacker.Head.Forward().Normalized();
 		arrowInstance.Trajectory = Attacker.Head.Forward() * _data.ShotSpeed * _chargeLevel;
@@ -68,11 +67,13 @@ public partial class Bow : Weapon
 		
 		GetTree().Root.AddChild(arrowInstance);
 
+		EmitSignal(Weapon.SignalName.OnActionWithCooldown,
+			Math.Max(0.4, _data.ShootCooldown * ((double)_chargeLevel / _data.ChargeMax)));
+		EmitSignal(SignalName.OnShoot);
+		
 		_chargeLevel = 0;
 		_camera.Fov = _cameraFovDefault;
 		_animationPlayer.Play();
 		_animationPlayer.Seek(1.3, true);
-		
-		return _data.ShootCooldown;
 	}
 }

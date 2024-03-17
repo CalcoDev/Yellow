@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-namespace Yellow.Resources;
+namespace Yellow.Resources.Weapons;
 
 [GlobalClass]
 public partial class SwordResource : Resource
@@ -9,8 +9,7 @@ public partial class SwordResource : Resource
 	[Export] public float Damage;
 	[Export] public float KnockBackFactor = 1.0f;
 
-	[Export] public string HorizontalSwingLeft;
-	[Export] public string HorizontalSwingRight;
+	[Export] public string HorizontalSwingAnim;
 	[Export] public string VerticalSwingAnim;
 	[Export] public string ReturnAnim;
 

@@ -1,9 +1,8 @@
 using System;
-using System.Collections.Generic;
 using Godot;
 using Yellow.Components;
-using Yellow.Misc;
-using Yellow.Resources;
+using Yellow.Managers;
+using Yellow.Resources.Weapons;
 
 namespace Yellow.GameObjects.Weapons;
 
@@ -14,6 +13,11 @@ public partial class Sword : Weapon
 	[Export] private SwingAreaComponent _swingArea;
 	[Export] private AnimationPlayer _animation;
 	[Export] private CameraComponent _playerCamera;
+
+	[Signal]
+	public delegate void OnHorizontalEventHandler(double cooldown);
+	[Signal]
+	public delegate void OnVerticalEventHandler(double cooldown);
 	
 	private int _comboCounter = 0;
 	private double _comboTimer = 0.0;
@@ -26,24 +30,18 @@ public partial class Sword : Weapon
 	public override void _Process(double delta)
 	{
 		_comboTimer = Math.Max(0, _comboTimer - delta);
-		//if (_comboTimer == 0 && _comboCounter > 0)
-		//{
-		//	_animation.Queue(_data.ReturnAnim);
-		//	_comboCounter = 0;
-		//}
 	}
 
-	public override double HandleInput(string inputName)
+	public override void HandleInput(string inputName)
 	{
-		return inputName switch
+		switch (inputName)
 		{
-			"use_primary" => HorizontalSwing(),
-			"use_secondary" => VerticalSwing(),
-			_ => 0.0
-		};
+			case "use_primary": HorizontalSwing(); break;
+			case "use_secondary": VerticalSwing(); break;
+		}
 	}
 
-	private double HorizontalSwing()
+	private void HorizontalSwing()
 	{
 		var hitSomething = TryToHit(
 			new HitData(_data.Damage, false),
@@ -55,21 +53,24 @@ public partial class Sword : Weapon
 			_playerCamera.ShakeLength(10f, 3f, 0.2f, true);
 			_comboTimer = _data.VerticalSwingDuration;
 		}
-			
-		_animation.Queue(_comboCounter % 2 == 0 ? _data.HorizontalSwingLeft : _data.HorizontalSwingRight);
-
-		return _data.HorizontalSwingDuration;
+		
+		EmitSignal(Weapon.SignalName.OnActionWithCooldown, _data.HorizontalSwingDuration);
+		EmitSignal(SignalName.OnHorizontal);
+		_animation.Play(_data.HorizontalSwingAnim);
+		SoundManager.Instance.Play("HorizontalSwing");
 	}
 
-	private double VerticalSwing()
+	private void VerticalSwing()
 	{
 		TryToHit(
 			new HitData(_data.Damage, false),
 			new KnockBackData(Attacker, new Vector3(0.6f, 8.5f, 0.6f), _data.KnockBackFactor)
 		);
 		
-		//_animation.Queue(Data.VerticalSwingAnim);
-		return _data.VerticalSwingDuration;
+		EmitSignal(Weapon.SignalName.OnActionWithCooldown, _data.VerticalSwingDuration);
+		EmitSignal(SignalName.OnVertical);
+		_animation.Play(_data.VerticalSwingAnim);
+		SoundManager.Instance.Play("VerticalSwing");
 	}
 
 	private bool TryToHit(HitData hitData, KnockBackData kbData)
@@ -87,6 +88,14 @@ public partial class Sword : Weapon
 				hitData, 
 				kbData
 			);
+
+		SoundManager.Instance.Play("SuccessfulHit");
 		return true;
+	}
+
+	public override void Equip()
+	{
+		base.Equip();
+		SoundManager.Instance.Play("SwordEquip");
 	}
 }

@@ -1,4 +1,4 @@
-[gd_scene load_steps=58 format=3 uid="uid://bsgwkv72xs4ab"]
+[gd_scene load_steps=60 format=3 uid="uid://bsgwkv72xs4ab"]
 
 [ext_resource type="Script" path="res://scripts/GameObjects/Player.cs" id="1_8gga7"]
 [ext_resource type="PhysicsMaterial" uid="uid://cknorhfrivu38" path="res://resources/physics_mat/no_friction_mat.tres" id="1_l3ghh"]
@@ -26,6 +26,9 @@ font_size = 32
 [sub_resource type="LabelSettings" id="LabelSettings_nt4hi"]
 font_size = 32
 font_color = Color(0.741176, 0.741176, 0.741176, 1)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_308st"]
+height = 3.0
 
 [sub_resource type="Animation" id="Animation_34fj5"]
 length = 0.001
@@ -57,6 +60,34 @@ tracks/1/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_anphj"]
 _data = {
 "RESET": SubResource("Animation_34fj5")
+}
+
+[sub_resource type="Animation" id="Animation_n4bvj"]
+length = 0.3
+step = 0.02
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sword:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.14, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(-0.118682, -2.93041, 1.74533), Vector3(0.626573, -2.93041, 1.74533), Vector3(-0.118682, -2.93041, 1.74533)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sword:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.14, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(1.375, -0.385, -1.595), Vector3(1.11, -0.77, -2.045), Vector3(1.375, -0.385, -1.595)]
 }
 
 [sub_resource type="Animation" id="Animation_hc6kd"]
@@ -142,11 +173,40 @@ tracks/1/keys = {
 "values": [Vector3(-0.118682, -2.93041, 1.74533)]
 }
 
+[sub_resource type="Animation" id="Animation_uh50u"]
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sword:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(1.375, -0.385, -1.595), Vector3(1.375, -0.725, -1.595), Vector3(1.245, -0.18, -1.715), Vector3(1.375, -0.385, -1.595)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sword:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(-0.118682, -2.93041, 1.74533), Vector3(0.839503, -2.93041, 1.74533), Vector3(-0.331613, -2.93041, 1.74533), Vector3(-0.118682, -2.93041, 1.74533)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_k7alx"]
 _data = {
+"Horizontal": SubResource("Animation_n4bvj"),
 "HorizontalSwingLeft": SubResource("Animation_hc6kd"),
 "HorizontalSwingRight": SubResource("Animation_owgfm"),
-"ReturnLeft": SubResource("Animation_jqvhs")
+"ReturnLeft": SubResource("Animation_jqvhs"),
+"Vertical": SubResource("Animation_uh50u")
 }
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3kh8x"]
@@ -336,9 +396,6 @@ sub_emitter_frequency = 10.0
 [sub_resource type="BoxShape3D" id="BoxShape3D_iiuxv"]
 size = Vector3(0.619141, 0.4, 0.452148)
 
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_lsrv8"]
-radius = 1.5
-
 [node name="Player" type="RigidBody3D" node_paths=PackedStringArray("_groundCheck", "_slopeCheck", "_wallCheck", "_playerCamera", "_vfxSpeedLines", "_vfxDash", "_vfxSlide", "_vfxSlideSmoke", "_vfxSlideLines", "_ui") groups=["player"]]
 collision_layer = 1056
 physics_material_override = ExtResource("1_l3ghh")
@@ -406,6 +463,14 @@ render_target_update_mode = 4
 [node name="WeaponCamera" type="Camera3D" parent="WeaponUI/SubViewportContainer/SubViewport"]
 cull_mask = 2
 
+[node name="SwingAreaComponent" type="Area3D" parent="WeaponUI/SubViewportContainer/SubViewport/WeaponCamera"]
+transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 1, -1)
+script = ExtResource("11_nmljt")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WeaponUI/SubViewportContainer/SubViewport/WeaponCamera/SwingAreaComponent"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, -1, 1)
+shape = SubResource("CapsuleShape3D_308st")
+
 [node name="ItemManager" type="Node3D" parent="WeaponUI/SubViewportContainer/SubViewport/WeaponCamera"]
 script = ExtResource("11_m8p1v")
 
@@ -418,7 +483,7 @@ libraries = {
 [node name="Sword" parent="WeaponUI/SubViewportContainer/SubViewport/WeaponCamera/ItemManager" node_paths=PackedStringArray("_swingArea", "_animation", "_playerCamera", "Attacker") instance=ExtResource("12_oa6ih")]
 transform = Transform3D(0.0388467, 0.191724, -0.0416284, 0.195576, -0.0344855, 0.0236807, 0.0155229, -0.0453072, -0.194181, 1.375, -0.385, -1.595)
 _data = ExtResource("13_qjw5q")
-_swingArea = NodePath("../../../../../../SwingAreaComponent")
+_swingArea = NodePath("../../SwingAreaComponent")
 _animation = NodePath("../Animation")
 _playerCamera = NodePath("../../../../../../Head/Camera")
 Attacker = NodePath("../../../../../..")
@@ -779,10 +844,3 @@ DefaultGroundProperties = ExtResource("6_5d0dr")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="GroundCheckComponent"]
 shape = SubResource("BoxShape3D_iiuxv")
-
-[node name="SwingAreaComponent" type="Area3D" parent="."]
-transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 1, -1)
-script = ExtResource("11_nmljt")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="SwingAreaComponent"]
-shape = SubResource("CylinderShape3D_lsrv8")

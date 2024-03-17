@@ -8,4 +8,7 @@
   <ItemGroup>
     <Folder Include="scenes\game_objects\entities\" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="scripts\GameObjects\Weapons\Gun.cs" />
+  </ItemGroup>
 </Project>

@@ -712,6 +712,9 @@ visible = false
 [node name="Player" parent="." instance=ExtResource("11_fqyap")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -116.102, -18.785, 54.709)
 
+[node name="Sword" parent="Player/WeaponUI/SubViewportContainer/SubViewport/WeaponCamera/ItemManager" index="1"]
+transform = Transform3D(0.0388467, 0.191724, -0.0416284, 0.195576, -0.0344855, 0.0236807, 0.0155229, -0.0453072, -0.194181, 1.375, -0.385, -1.595)
+
 [node name="FlyingCube" type="RigidBody3D" parent="." node_paths=PackedStringArray("_health", "_nav", "_hurtbox")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -62.8785, -16.9363, 39.178)
 collision_layer = 32
@@ -1210,7 +1213,11 @@ shadow_blur = 10.0
 omni_range = 31.9
 
 [node name="Enemy" parent="." instance=ExtResource("32_0mabl")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -60.8378, -14.0206, 32.8025)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -125.193, -16.4396, 47.4725)
+
+[node name="HealthComponent" parent="Enemy" index="2"]
+MaxHealth = 10000.0
+Health = 10000.0
 
 [connection signal="OnTriggerEnter" from="NavigationRegion3D/QodotMap/entity_1_custom_trigger" to="NavigationRegion3D/QodotMap/entity_2_mover" method="UseEnter"]
 [connection signal="OnTriggerEnterParamless" from="NavigationRegion3D/QodotMap/entity_1_custom_trigger" to="NavigationRegion3D/QodotMap/entity_2_mover" method="use"]
@@ -1225,3 +1232,4 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -60.8378, -14.0206, 32.8025)
 [connection signal="OnTriggerExit" from="NavigationRegion3D/QodotMap/entity_5_custom_trigger" to="NavigationRegion3D/QodotMap/entity_6_mover" method="UseExit"]
 
 [editable path="Player"]
+[editable path="Enemy"]

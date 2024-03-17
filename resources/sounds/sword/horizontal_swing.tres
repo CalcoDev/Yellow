@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="SoundSO" load_steps=5 format=3 uid="uid://cpxkfl0nsdrir"]
+
+[ext_resource type="AudioStream" uid="uid://dw4h24kd83fv" path="res://assets/sounds/sword/SwordWeakSwing.mp3" id="1_c3n3y"]
+[ext_resource type="AudioStream" uid="uid://c0oonwvew4h5u" path="res://assets/sounds/sword/swing-whoosh-weapon-1-189819.mp3" id="2_fv5od"]
+[ext_resource type="Script" path="res://scripts/Resources/Sounds/SoundSO.cs" id="2_gek1q"]
+[ext_resource type="AudioStream" uid="uid://bnn2wd25mpaod" path="res://assets/sounds/sword/sword-sound-2-36274.mp3" id="2_xpwgg"]
+
+[resource]
+script = ExtResource("2_gek1q")
+Name = "HorizontalSwing"
+Layer = 1
+PoolType = 1
+IsSpatial = false
+Looping = false
+Volume = 2.0
+Streams = Array[AudioStream]([ExtResource("1_c3n3y"), ExtResource("2_xpwgg"), ExtResource("2_fv5od")])

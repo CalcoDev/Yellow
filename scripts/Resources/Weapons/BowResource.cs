@@ -10,5 +10,5 @@ public partial class BowResource : Resource
     [Export] public float DamageMax;
     [Export] public int ChargeMax;
     [Export] public float ShotSpeed;
-    [Export] public float ShootCooldown;
+    [Export] public double ShootCooldown;
 }

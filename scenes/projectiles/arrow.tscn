@@ -5,8 +5,9 @@
 [ext_resource type="Script" path="res://scripts/Components/FactionComponent.cs" id="2_cjjix"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_3oxao"]
-radius = 0.1
-height = 1.5
+margin = 0.0
+radius = 0.0005
+height = 0.001
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bo8t1"]
 resource_name = "dirty arrow"
@@ -47,6 +48,7 @@ blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_uq46s")
 
 [node name="Arrow" type="RigidBody3D"]
+collision_layer = 2
 script = ExtResource("1_8rihl")
 
 [node name="FactionComponent" type="Node" parent="."]
