@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="SoundSO" load_steps=3 format=3 uid="uid://buoyftrpjxdkl"]
+
+[ext_resource type="Script" path="res://scripts/Resources/Sounds/SoundSO.cs" id="1_bw7pe"]
+[ext_resource type="AudioStream" uid="uid://by5c517p0flrn" path="res://assets/sounds/bow/Hitsound.mp3" id="1_r80u5"]
+
+[resource]
+script = ExtResource("1_bw7pe")
+Name = "HitFullPower"
+Layer = 1
+PoolType = 1
+IsSpatial = false
+Looping = false
+Volume = 1.0
+Streams = Array[AudioStream]([ExtResource("1_r80u5")])

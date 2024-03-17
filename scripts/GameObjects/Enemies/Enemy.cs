@@ -27,7 +27,7 @@ public partial class Enemy : RigidBody3D
 
 	protected virtual void OnHit(HitboxComponent hitBox)
 	{
-		GD.Print("The Enemy was hit for " + hitBox.Damage + " Damage.");
+		
 	}
 
 	protected virtual void OnDied()

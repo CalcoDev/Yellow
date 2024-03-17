@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="SoundSO" load_steps=3 format=3 uid="uid://di0jr7nao1yrw"]
+
+[ext_resource type="Script" path="res://scripts/Resources/Sounds/SoundSO.cs" id="1_3ci22"]
+[ext_resource type="AudioStream" uid="uid://c2c1vwvmik0ne" path="res://assets/sounds/bow/ShootBowWeak.mp3" id="1_5qni5"]
+
+[resource]
+script = ExtResource("1_3ci22")
+Name = "ShootWeak"
+Layer = 1
+PoolType = 1
+IsSpatial = false
+Looping = false
+Volume = 2.0
+Streams = Array[AudioStream]([ExtResource("1_5qni5")])

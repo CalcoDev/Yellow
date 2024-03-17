@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="SoundSO" load_steps=3 format=3 uid="uid://bg2u6dofvq0dc"]
+
+[ext_resource type="Script" path="res://scripts/Resources/Sounds/SoundSO.cs" id="1_2ygr3"]
+[ext_resource type="AudioStream" uid="uid://bu121mgpe1jse" path="res://assets/sounds/bow/BowPull.mp3" id="1_6n2of"]
+
+[resource]
+script = ExtResource("1_2ygr3")
+Name = "PullBow"
+Layer = 1
+PoolType = 1
+IsSpatial = false
+Looping = false
+Volume = 2.0
+Streams = Array[AudioStream]([ExtResource("1_6n2of")])

@@ -6,8 +6,7 @@
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_3oxao"]
 margin = 0.0
-radius = 0.0005
-height = 0.001
+radius = 0.05
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bo8t1"]
 resource_name = "dirty arrow"
