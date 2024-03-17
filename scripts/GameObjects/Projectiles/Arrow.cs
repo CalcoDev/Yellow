@@ -47,7 +47,7 @@ public partial class Arrow : RigidBody3D
 		
 		_hitbox.Damage = Damage;
 		hurtbox.TryToHit(_hitbox);
-		hurtbox.KnockBackComponent.ApplyKnockBack(
+		hurtbox.KnockBackComponent?.ApplyKnockBack(
 			new KnockBackData(
 				Player.Instance, 
 				new Vector3(1.0f + 0.1f * ChargePower, 4.0f, 1.0f + 0.1f * ChargePower),
