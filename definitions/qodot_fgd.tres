@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="QodotFGDFile" load_steps=15 format=3 uid="uid://c36hv0o6g0udo"]
+[gd_resource type="Resource" script_class="QodotFGDFile" load_steps=17 format=3 uid="uid://c36hv0o6g0udo"]
 
 [ext_resource type="Resource" uid="uid://dxp37dladbquv" path="res://addons/qodot/game_definitions/fgd/solid_classes/worldspawn_solid_class.tres" id="1_f0xld"]
 [ext_resource type="Resource" uid="uid://cw4s1hnxqetee" path="res://addons/qodot/game_definitions/fgd/solid_classes/func_group_solid_class.tres" id="2_mejx4"]
@@ -13,7 +13,9 @@
 [ext_resource type="Resource" uid="uid://de6w02sa4ckl5" path="res://addons/qodot/game_definitions/fgd/solid_classes/rotate_solid_class.tres" id="11_4b2cb"]
 [ext_resource type="Resource" uid="uid://bu2f3lupsjhfp" path="res://addons/qodot/game_definitions/fgd/solid_classes/wall_solid_class.tres" id="12_8083h"]
 [ext_resource type="Resource" uid="uid://c14fmrs6p1nmd" path="res://definitions/yellow_qodot_trigger_entity.tres" id="13_3f0d4"]
+[ext_resource type="Resource" uid="uid://c6j7gcwa5cvii" path="res://definitions/yellow_qodot_spawn.tres" id="14_78bxh"]
 [ext_resource type="Script" path="res://addons/qodot/src/resources/game-definitions/fgd/qodot_fgd_file.gd" id="14_lhql7"]
+[ext_resource type="Resource" uid="uid://ctquxbl0dkjwj" path="res://definitions/yellow_qodot_level_end.tres" id="15_eo587"]
 
 [resource]
 script = ExtResource("14_lhql7")
@@ -21,4 +23,4 @@ export_file = false
 target_folder = ""
 fgd_name = "Qodot"
 base_fgd_files = Array[Resource]([])
-entity_definitions = Array[Resource]([ExtResource("1_f0xld"), ExtResource("2_mejx4"), ExtResource("3_5hlaj"), ExtResource("4_0xesb"), ExtResource("5_74l4t"), ExtResource("6_36238"), ExtResource("7_dvlqc"), ExtResource("8_wrkvb"), ExtResource("9_lquja"), ExtResource("10_unx6t"), ExtResource("11_4b2cb"), ExtResource("12_8083h"), ExtResource("13_3f0d4")])
+entity_definitions = Array[Resource]([ExtResource("1_f0xld"), ExtResource("2_mejx4"), ExtResource("3_5hlaj"), ExtResource("4_0xesb"), ExtResource("5_74l4t"), ExtResource("6_36238"), ExtResource("7_dvlqc"), ExtResource("8_wrkvb"), ExtResource("9_lquja"), ExtResource("10_unx6t"), ExtResource("11_4b2cb"), ExtResource("12_8083h"), ExtResource("13_3f0d4"), ExtResource("14_78bxh"), ExtResource("15_eo587")])
