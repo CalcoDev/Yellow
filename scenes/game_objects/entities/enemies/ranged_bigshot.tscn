@@ -1,0 +1,27 @@
+[gd_scene load_steps=6 format=3 uid="uid://cxfr1d5x1ojhl"]
+
+[ext_resource type="PackedScene" uid="uid://bmpiknsykjrpv" path="res://scenes/game_objects/entities/enemies/ranged.tscn" id="1_myu08"]
+[ext_resource type="PackedScene" uid="uid://cof427jxtwbxf" path="res://scenes/projectiles/le_boom.tscn" id="2_ugrmr"]
+[ext_resource type="Texture2D" uid="uid://nwogv717dg5c" path="res://assets/particles/orange_smoke3.png" id="3_6w6hf"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qgyg5"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("3_6w6hf")
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_fwejo"]
+material = SubResource("StandardMaterial3D_qgyg5")
+
+[node name="Ranged" instance=ExtResource("1_myu08")]
+MaxHeight = 12.0
+ShotRange = 35.0
+_projectile = ExtResource("2_ugrmr")
+ShotTime = 3.5
+
+[node name="VFXSlideSmoke" parent="_localPos" index="1"]
+draw_pass_1 = SubResource("QuadMesh_fwejo")

@@ -1,3 +1,4 @@
+using System;
 using Godot;
 using Yellow.Components;
 
@@ -22,8 +23,8 @@ public partial class Enemy : RigidBody3D
 		HurtBox.OnHit += OnHit;
 		Health.OnDied += OnDied;
 	}
-	
-	public override void _Process(double delta)
+
+    public override void _Process(double delta)
 	{
 		
 	}

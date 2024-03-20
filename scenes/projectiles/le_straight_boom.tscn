@@ -1,0 +1,103 @@
+[gd_scene load_steps=15 format=3 uid="uid://37of3kujfj7v"]
+
+[ext_resource type="Script" path="res://scripts/GameObjects/Projectiles/LeStraightBoom.cs" id="1_q5aw7"]
+[ext_resource type="Texture2D" uid="uid://cxtah6ibhd2sq" path="res://assets/particles/yellow2_smoke2.png" id="3_hoqym"]
+[ext_resource type="Script" path="res://scripts/Components/HitboxComponent.cs" id="3_im5us"]
+[ext_resource type="Script" path="res://scripts/Components/FactionComponent.cs" id="4_h8dkm"]
+
+[sub_resource type="Gradient" id="Gradient_o2c83"]
+colors = PackedColorArray(1, 0.914063, 0, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_sr0t6"]
+gradient = SubResource("Gradient_o2c83")
+
+[sub_resource type="Curve" id="Curve_tkfx1"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_t4igy"]
+curve_y = SubResource("Curve_tkfx1")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_yv2k1"]
+emission_shape_scale = Vector3(0.1, 0.1, 0.1)
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+angle_max = 180.0
+direction = Vector3(0, 0, 0)
+spread = 180.0
+flatness = 0.548
+initial_velocity_min = 1.0
+initial_velocity_max = 2.0
+angular_velocity_min = -180.0
+angular_velocity_max = 180.0
+directional_velocity_min = 0.0
+directional_velocity_max = 0.0
+directional_velocity_curve = SubResource("CurveXYZTexture_t4igy")
+gravity = Vector3(0, 0, 0)
+scale_min = 0.0
+scale_max = 0.0
+color = Color(1, 0.890196, 0, 0.188235)
+color_ramp = SubResource("GradientTexture1D_sr0t6")
+turbulence_influence_max = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cel45"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("3_hoqym")
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_tja0v"]
+material = SubResource("StandardMaterial3D_cel45")
+size = Vector2(0.75, 0.75)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_bsg31"]
+radius = 0.382657
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ral5k"]
+size = Vector3(0.443359, 0.480469, 0.652344)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_nhxix"]
+size = Vector3(0.990234, 0.851563, 0.833984)
+
+[node name="LeStraightBoom" type="RigidBody3D" node_paths=PackedStringArray("_area", "_hit")]
+collision_layer = 2080
+collision_mask = 1025
+gravity_scale = 0.0
+script = ExtResource("1_q5aw7")
+_area = NodePath("Area3D")
+_hit = NodePath("HitboxComponent")
+
+[node name="VFXSlideSmoke" type="GPUParticles3D" parent="."]
+amount = 200
+lifetime = 0.2
+fixed_fps = 60
+process_material = SubResource("ParticleProcessMaterial_yv2k1")
+draw_pass_1 = SubResource("QuadMesh_tja0v")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_bsg31")
+
+[node name="Area3D" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 1025
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00047756, 0.0264301, 0)
+shape = SubResource("BoxShape3D_ral5k")
+
+[node name="HitboxComponent" type="Area3D" parent="." node_paths=PackedStringArray("FactionComponent")]
+collision_layer = 1048576
+collision_mask = 262144
+script = ExtResource("3_im5us")
+Damage = 10.0
+FactionComponent = NodePath("../FactionComponent")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HitboxComponent"]
+shape = SubResource("BoxShape3D_nhxix")
+
+[node name="FactionComponent" type="Node" parent="."]
+script = ExtResource("4_h8dkm")

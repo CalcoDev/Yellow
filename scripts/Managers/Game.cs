@@ -77,7 +77,7 @@ public partial class Game : Node
 		set {
 			_paused = value;
 			if (_paused) {
-				GD.Print("GAME IS PUASED");
+				// GD.Print("GAME IS PUASED");
 				Instance.GetTree().Paused = true;
 				MouseLocked = false;
 				Instance._pauseMenu.SetActive(true);

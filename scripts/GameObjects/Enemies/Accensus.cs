@@ -1,6 +1,7 @@
 using Godot;
 using Yellow.Managers;
 using Yellow.Extensions;
+using Yellow.Components;
 
 namespace Yellow.GameObjects.Enemies;
 
@@ -8,6 +9,7 @@ public partial class Accensus : Enemy
 {
     [ExportGroup("Accensus Settings")]
     [Export] private float MoveSpeed = 12f;
+    [Export] private HitboxComponent _hitbox;
     
     [ExportSubgroup("Lunge")]
     [Export] private float LungeRange = 5f;
@@ -27,6 +29,11 @@ public partial class Accensus : Enemy
     public override void _Ready()
     {
         Anim.Play("idle");
+
+        _hitbox.CollisionLayer = 0;
+        _hitbox.CollisionMask = 0;
+
+        base._Ready();
     }
 
     public override void _Process(double delta)
@@ -77,18 +84,22 @@ public partial class Accensus : Enemy
     private async void StartLunge()
     {
         _stimer = -0.2f;
-        GD.Print("START LUNGE CHARGE");
+        // GD.Print("START LUNGE CHARGE");
         LinearVelocity = Vector3.Zero;
         _isLungeAnim = true;
 
         _lungeDir = (Player.Instance.GlobalPosition - GlobalPosition).WithY(0).Normalized();
 
+        _hitbox.CollisionLayer = 1048576;
+        _hitbox.CollisionMask = 262144;
+
+
         Anim.Stop();
         Anim.Play("lunge_charge");
         await ToSignal(Anim, AnimationPlayer.SignalName.AnimationFinished);
-        GD.Print("END LUNGE CHARGE");
+        // GD.Print("END LUNGE CHARGE");
 
-        GD.Print("START LUNGE");
+        // GD.Print("START LUNGE");
 
         IsLunging = true;
         Anim.Stop();
@@ -117,6 +128,9 @@ public partial class Accensus : Enemy
         
         // _doFrickThis = true;
         // _frickThis = GetNode<Node3D>("_localPos").GlobalTransform;
+        
+        _hitbox.CollisionLayer = 0;
+        _hitbox.CollisionMask = 0;
 
         GD.Print("END LUNGE");
         IsLunging = false;

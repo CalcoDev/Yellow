@@ -1,8 +1,7 @@
-[gd_scene load_steps=27 format=3 uid="uid://bmpiknsykjrpv"]
+[gd_scene load_steps=26 format=3 uid="uid://bmpiknsykjrpv"]
 
 [ext_resource type="PhysicsMaterial" uid="uid://cknorhfrivu38" path="res://resources/physics_mat/no_friction_mat.tres" id="1_h5bo5"]
 [ext_resource type="Script" path="res://scripts/GameObjects/Enemies/Ranged.cs" id="2_rb4td"]
-[ext_resource type="PackedScene" uid="uid://cof427jxtwbxf" path="res://scenes/projectiles/le_boom.tscn" id="3_stuc6"]
 [ext_resource type="Script" path="res://scripts/Components/HealthComponent.cs" id="4_t8ukj"]
 [ext_resource type="Script" path="res://scripts/Components/FactionComponent.cs" id="5_v0bss"]
 [ext_resource type="Script" path="res://scripts/Components/KnockBackComponent.cs" id="6_v6tkj"]
@@ -205,7 +204,6 @@ collision_mask = 1025
 physics_material_override = ExtResource("1_h5bo5")
 lock_rotation = true
 script = ExtResource("2_rb4td")
-_projectile = ExtResource("3_stuc6")
 Health = NodePath("HealthComponent")
 Faction = NodePath("FactionComponent")
 KnockBack = NodePath("KnockBackComponent")

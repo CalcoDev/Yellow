@@ -45,6 +45,7 @@ public partial class HealthComponent : Node
             _health = 0;
             EmitSignal(SignalName.OnDied);
         }
+        GD.Print("DOES THIS EVER GET CALLED: ", _health);
 
         EmitSignal(SignalName.OnHealthChanged, oldHealth, _health, MaxHealth);
     }

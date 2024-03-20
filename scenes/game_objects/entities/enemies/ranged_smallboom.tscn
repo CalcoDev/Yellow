@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://b66ywc2nc70t0"]
+
+[ext_resource type="PackedScene" uid="uid://bmpiknsykjrpv" path="res://scenes/game_objects/entities/enemies/ranged.tscn" id="1_j114n"]
+[ext_resource type="PackedScene" uid="uid://37of3kujfj7v" path="res://scenes/projectiles/le_straight_boom.tscn" id="2_hq4ht"]
+
+[node name="Ranged" instance=ExtResource("1_j114n")]
+MaxHeight = 20.0
+MoveSpeed = 14.0
+ShotRange = 25.0
+_projectile = ExtResource("2_hq4ht")
+ShotTime = 1.5

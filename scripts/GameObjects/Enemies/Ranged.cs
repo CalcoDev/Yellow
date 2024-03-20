@@ -8,6 +8,7 @@ namespace Yellow.GameObjects.Enemies;
 public partial class Ranged : Enemy
 {
     [ExportGroup("Ranged Settings")]
+    [Export] private float MaxHeight = 10f;
     [Export] private float MoveSpeed = 12f;
 
     [Export] private float ShotRange = 50f;
@@ -19,6 +20,7 @@ public partial class Ranged : Enemy
     public override void _Ready()
     {
         _shotTimer += (float)GD.RandRange(0.0, 0.5);
+        base._Ready();
     }
 
     public override void _Process(double delta)
@@ -37,21 +39,21 @@ public partial class Ranged : Enemy
         Pathfinding.FollowPath();
 
         _shotTimer -= Game.DeltaTime;
-        // if (dist < ShotRange && _shotTimer < 0f) {
-        //     Shoot();
-        // }
+        if (dist < ShotRange && _shotTimer < 0f) {
+            Shoot();
+        }
     }
 
     public override void _PhysicsProcess(double d)
     {
-        // var y = LinearVelocity.Y;
-        // LinearVelocity = Pathfinding.CachedDir * MoveSpeed;
-        if (LinearVelocity.WithY(0).Length() <= MoveSpeed) {
-            ApplyForce(Pathfinding.CachedDir * MoveSpeed);
-        } else {
-            ApplyForce(Pathfinding.CachedDir * -MoveSpeed);
-        }
-        // LinearVelocity = LinearVelocity.WithY(y);
+        var y = LinearVelocity.Y;
+        LinearVelocity = Pathfinding.CachedDir * MoveSpeed;
+        // if (LinearVelocity.WithY(0).Length() <= MoveSpeed) {
+        //     ApplyForce(Pathfinding.CachedDir * MoveSpeed);
+        // } else {
+        //     ApplyForce(Pathfinding.CachedDir * -MoveSpeed);
+        // }
+        LinearVelocity = LinearVelocity.WithY(y);
     }
 
     private void Shoot()
@@ -74,7 +76,7 @@ public partial class Ranged : Enemy
 
     private void HandleStuff(FirableProjectile proj)
     {
-        proj.GlobalPosition = GlobalPosition + Vector3.Up * 2f;
-        proj.Shoot(Player.Instance.GlobalPosition, proj.GlobalPosition, 10f);
+        proj.GlobalPosition = GlobalPosition + Vector3.Up * 1.5f;
+        proj.Shoot(Player.Instance.GlobalPosition, proj.GlobalPosition, MaxHeight);
     }
 }

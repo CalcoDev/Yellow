@@ -169,6 +169,10 @@ pause={
 3d_physics/layer_11="Player"
 3d_physics/layer_12="Enemy"
 3d_physics/layer_15="Triggers"
+3d_physics/layer_18="EnemyHurtbox"
+3d_physics/layer_19="PlayerHurtbox"
+3d_physics/layer_20="PlayerHitbox"
+3d_physics/layer_21="EnemyHitbox"
 
 [physics]
 

@@ -1,4 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://c4l8jvr03xffm"]
+[gd_scene load_steps=11 format=3 uid="uid://c4l8jvr03xffm"]
+
+[ext_resource type="Script" path="res://scripts/Components/FactionComponent.cs" id="1_xwg23"]
+[ext_resource type="Script" path="res://scripts/Components/HitboxComponent.cs" id="2_6pw4b"]
 
 [sub_resource type="Gradient" id="Gradient_mvudj"]
 colors = PackedColorArray(1, 0.914063, 0, 1, 0, 0, 0, 0)
@@ -44,6 +47,9 @@ particles_anim_loop = false
 material = SubResource("StandardMaterial3D_l1d33")
 size = Vector2(5, 1)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_jgp45"]
+size = Vector3(5.93555, 4.51172, 5.04492)
+
 [node name="LeBoomBoomVFX" type="GPUParticles3D"]
 emitting = false
 amount = 200
@@ -54,3 +60,17 @@ randomness = 1.0
 fixed_fps = 60
 process_material = SubResource("ParticleProcessMaterial_g2fmy")
 draw_pass_1 = SubResource("QuadMesh_cckq8")
+
+[node name="FactionComponent" type="Node" parent="."]
+script = ExtResource("1_xwg23")
+
+[node name="HitboxComponent" type="Area3D" parent="." node_paths=PackedStringArray("FactionComponent")]
+collision_layer = 1048576
+collision_mask = 262144
+script = ExtResource("2_6pw4b")
+Damage = 25.0
+IgnoreInvincibility = true
+FactionComponent = NodePath("../FactionComponent")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HitboxComponent"]
+shape = SubResource("BoxShape3D_jgp45")

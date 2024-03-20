@@ -4,8 +4,8 @@
 
 [resource]
 script = ExtResource("1_nfp66")
-DamageMin = 10.0
-DamageMax = 120.0
+DamageMin = 5.0
+DamageMax = 15.0
 ChargeMax = 10
 ShotSpeed = 300.0
 ShootCooldown = 1.0

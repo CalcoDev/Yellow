@@ -1,4 +1,4 @@
-[gd_scene load_steps=65 format=3 uid="uid://bsgwkv72xs4ab"]
+[gd_scene load_steps=68 format=3 uid="uid://bsgwkv72xs4ab"]
 
 [ext_resource type="Script" path="res://scripts/GameObjects/Player.cs" id="1_8gga7"]
 [ext_resource type="PhysicsMaterial" uid="uid://cknorhfrivu38" path="res://resources/physics_mat/no_friction_mat.tres" id="1_l3ghh"]
@@ -20,6 +20,8 @@
 [ext_resource type="PackedScene" uid="uid://b0e72uxvsr7ek" path="res://scenes/weapons/bow.tscn" id="14_iyqm1"]
 [ext_resource type="Script" path="res://scripts/Nodes/DistanceParticles.cs" id="14_tj5qp"]
 [ext_resource type="Texture2D" uid="uid://d1021i7to3x5u" path="res://assets/particles/smoke.png" id="15_6qo3n"]
+[ext_resource type="Script" path="res://scripts/Components/HurtboxComponent.cs" id="21_akdmp"]
+[ext_resource type="Script" path="res://scripts/Components/FactionComponent.cs" id="21_c4xik"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5xeex"]
 bg_color = Color(0.411765, 0.0313726, 0.0313726, 1)
@@ -409,6 +411,9 @@ sub_emitter_frequency = 10.0
 [sub_resource type="BoxShape3D" id="BoxShape3D_iiuxv"]
 size = Vector3(0.619141, 0.4, 0.452148)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_c3lqs"]
+size = Vector3(0.774414, 1.64063, 0.788086)
+
 [node name="Player" type="RigidBody3D" node_paths=PackedStringArray("_groundCheck", "_slopeCheck", "_wallCheck", "_playerCamera", "_health", "_vfxSpeedLines", "_vfxDash", "_vfxSlide", "_vfxSlideSmoke", "_vfxSlideLines", "_weaponCamera") groups=["player"]]
 collision_layer = 1056
 physics_material_override = ExtResource("1_l3ghh")
@@ -596,6 +601,8 @@ cull_mask = 2
 
 [node name="SwingAreaComponent" type="Area3D" parent="WeaponUI/SubViewportContainer/SubViewport/WeaponCamera"]
 transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 1, -1)
+collision_layer = 524288
+collision_mask = 131072
 script = ExtResource("11_nmljt")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="WeaponUI/SubViewportContainer/SubViewport/WeaponCamera/SwingAreaComponent"]
@@ -780,3 +787,19 @@ DefaultGroundProperties = ExtResource("6_5d0dr")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="GroundCheckComponent"]
 shape = SubResource("BoxShape3D_iiuxv")
+
+[node name="FactionComponent" type="Node" parent="."]
+script = ExtResource("21_c4xik")
+FactionType = 0
+
+[node name="HurtboxComponent" type="Area3D" parent="." node_paths=PackedStringArray("HealthComponent", "FactionComponent")]
+collision_layer = 262144
+collision_mask = 1048576
+script = ExtResource("21_akdmp")
+HealthComponent = NodePath("../HealthComponent")
+FactionComponent = NodePath("../FactionComponent")
+InvincibilityTime = 0.05
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HurtboxComponent"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.992062, 0)
+shape = SubResource("BoxShape3D_c3lqs")

@@ -13,12 +13,11 @@ public partial class LeBoom : FirableProjectile
     public override void _Ready()
     {
         _area.BodyEntered += OnBodyEntered;
-        ApplyImpulse(Vector3.Up * 10f);
     }
 
     private void OnBodyEntered(Node body)
     {
-        GD.Print("aaa");
+        // GD.Print("aaa");
         var e = _epxlosion.Instantiate<Node3D>();
         var parent = (Node)this;
         while (true) {
@@ -32,7 +31,7 @@ public partial class LeBoom : FirableProjectile
         CallDeferred(MethodName.Stuff, e, GlobalPosition);
         QueueFree();
 
-        var c = (1f - (Mathf.Clamp((Player.Instance.GlobalPosition - GlobalPosition).Length(), 0.05f, 25f) / 10f)) * 20f;
+        var c = (1f - (Mathf.Clamp((Player.Instance.GlobalPosition - GlobalPosition).Length(), 0.05f, 25f) / 25f)) * 10f;
         Game.ActiveCamera.ShakeLength(c, 1, 0.2f, true);
         SoundManager.Instance.Play("explosion", position: GlobalPosition);
     }
@@ -57,6 +56,6 @@ public partial class LeBoom : FirableProjectile
         // Apply the impulse
         Vector3 impulse = Mass * initialVelocity;
         ApplyImpulse(impulse);
-        GD.Print(impulse);
+        // GD.Print(impulse);
     }
 }

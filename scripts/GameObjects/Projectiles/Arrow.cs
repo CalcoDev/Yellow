@@ -24,6 +24,7 @@ public partial class Arrow : RigidBody3D
 	
 	public override void _Process(double delta)
 	{
+		_hitbox.Damage = Damage;
 		if(Trajectory.LengthSquared() <= 0.01f)
 			QueueFree();
 	}
@@ -36,26 +37,26 @@ public partial class Arrow : RigidBody3D
 
 	private void OnAreaEntered(Node body)
 	{
-		if(_exhausted) return;
+		// if(_exhausted) return;
 		
-		var hurtbox = (body is HurtboxComponent component ? component : body.GetFirstNodeOfType<HurtboxComponent>());
-		if(hurtbox == null) return;
+		// var hurtbox = (body is HurtboxComponent component ? component : body.GetFirstNodeOfType<HurtboxComponent>());
+		// if(hurtbox == null) return;
 
-		GD.Print(ChargePower);
-		if(ChargePower == 10)
-			SoundManager.Instance.Play("HitFullPower");
+		// GD.Print(ChargePower);
+		// if(ChargePower == 10)
+		// 	SoundManager.Instance.Play("HitFullPower");
 		
-		_hitbox.Damage = Damage;
-		hurtbox.TryToHit(_hitbox);
-		hurtbox.KnockBackComponent?.ApplyKnockBack(
-			new KnockBackData(
-				Player.Instance, 
-				new Vector3(1.0f + 0.1f * ChargePower, 4.0f, 1.0f + 0.1f * ChargePower),
-				3.0f
-			)
-		);
+		// _hitbox.Damage = Damage;
+		// hurtbox.TryToHit(_hitbox);
+		// hurtbox.KnockBackComponent?.ApplyKnockBack(
+		// 	new KnockBackData(
+		// 		Player.Instance, 
+		// 		new Vector3(1.0f + 0.1f * ChargePower, 4.0f, 1.0f + 0.1f * ChargePower),
+		// 		3.0f
+		// 	)
+		// );
 		
-		_exhausted = true;
+		// _exhausted = true;
 		QueueFree();
 	}
 }

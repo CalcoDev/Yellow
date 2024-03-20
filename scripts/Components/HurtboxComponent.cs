@@ -2,6 +2,7 @@
 using System.Linq;
 using Godot;
 using Yellow.Extensions;
+using Yellow.Managers;
 
 namespace Yellow.Components;
 
@@ -63,9 +64,11 @@ public partial class HurtboxComponent : Area3D
         if(_invincibilityTimer > 0 && !hitData.IgnoreIFrames) return;
         
         HealthComponent?.TakeDamage(hitData.Damage);
+        GD.Print("Damged: ", HealthComponent, " with ", hitData.Damage);
         KnockBackComponent?.ApplyKnockBack(kbData);
         
         _invincibilityTimer = InvincibilityTime;
+        EmitSignal(SignalName.OnHit, null);
     }
     
     public void TryToHit(HitboxComponent hitbox)
@@ -85,6 +88,11 @@ public partial class HurtboxComponent : Area3D
         _invincibilityTimer = InvincibilityTime;
     }
 
+    public override void _Process(double delta)
+    {
+        _invincibilityTimer -= Game.DeltaTime;
+    }
+
     private void OnInvincibilityTimerTimeout()
     {
         _invincibilityTimer = 0f;
@@ -94,11 +102,11 @@ public partial class HurtboxComponent : Area3D
 
     private void OnAreaEntered(Node body)
     {
-        //var hitbox = (body is HitboxComponent component ? component : body.GetFirstNodeOfType<HitboxComponent>());
-        //if (hitbox == null || _hitboxes.Contains(hitbox)) return;
+        var hitbox = (body is HitboxComponent component ? component : body.GetFirstNodeOfType<HitboxComponent>());
+        if (hitbox == null || _hitboxes.Contains(hitbox)) return;
 
-        //_hitboxes.Add(hitbox);
-        //TryToHit(hitbox);
+        _hitboxes.Add(hitbox);
+        TryToHit(hitbox);
     }
 
     private void OnAreaExited(Node body)

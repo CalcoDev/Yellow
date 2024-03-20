@@ -6,7 +6,7 @@
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_3oxao"]
 margin = 0.0
-radius = 0.05
+radius = 0.116434
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bo8t1"]
 resource_name = "dirty arrow"
@@ -47,7 +47,7 @@ blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_uq46s")
 
 [node name="Arrow" type="RigidBody3D"]
-collision_layer = 2
+collision_layer = 1024
 script = ExtResource("1_8rihl")
 
 [node name="FactionComponent" type="Node" parent="."]
@@ -55,6 +55,8 @@ script = ExtResource("2_cjjix")
 FactionType = 0
 
 [node name="HitboxComponent" type="Area3D" parent="." node_paths=PackedStringArray("FactionComponent")]
+collision_layer = 524288
+collision_mask = 131072
 script = ExtResource("2_5omw3")
 Damage = 100.0
 FactionComponent = NodePath("../FactionComponent")
