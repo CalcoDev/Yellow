@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="SwordResource" load_steps=2 format=3 uid="uid://cvbt3adhpvm51"]
+
+[ext_resource type="Script" path="res://scripts/Resources/Weapons/SwordResource.cs" id="1_t14w3"]
+
+[resource]
+script = ExtResource("1_t14w3")
+Damage = 50.0
+KnockBackFactor = 3.0
+HorizontalSwingAnim = "Sword/Horizontal"
+VerticalSwingAnim = "Sword/Vertical"
+ReturnAnim = ""
+HorizontalSwingDuration = 0.3
+VerticalSwingDuration = 0.5
+ReturnDuration = 0.5

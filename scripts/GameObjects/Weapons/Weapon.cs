@@ -7,6 +7,11 @@ namespace Yellow.GameObjects.Weapons;
 [GlobalClass]
 public partial class Weapon : Node3D
 {
+	[Export] private protected Player Attacker;
+
+	[Signal]
+	public delegate void OnActionWithCooldownEventHandler(double cooldown);
+	
 	public override void _Ready()
 	{
 		
@@ -17,24 +22,19 @@ public partial class Weapon : Node3D
 		
 	}
 
-	public virtual double HandleInput(string inputName)
+	public virtual void HandleInput(string inputName)
 	{
-		return 0.0;
+		
 	}
 
-	public virtual double UsePrimary() { ; return 0.0; }
-
-	public virtual double UseSecondary() { return 0.0; }
-
-	public virtual double Equip()
+	public virtual void Equip()
 	{
 		Visible = true;
-		return 0.0; 
+		EmitSignal(SignalName.OnActionWithCooldown, 0.5);
 	}
 
-	public virtual double Unequip()
+	public virtual void Unequip()
 	{
 		Visible = false;
-		return 0.0; 
 	}
 }

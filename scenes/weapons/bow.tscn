@@ -1,0 +1,14 @@
+[gd_scene load_steps=5 format=3 uid="uid://b0e72uxvsr7ek"]
+
+[ext_resource type="Script" path="res://scripts/GameObjects/Weapons/Bow.cs" id="1_g6bhs"]
+[ext_resource type="Resource" uid="uid://btv06787adi5x" path="res://resources/weapon/Bow.tres" id="2_scuoj"]
+[ext_resource type="PackedScene" uid="uid://dc273f6omg784" path="res://scenes/projectiles/arrow.tscn" id="3_kwp7m"]
+[ext_resource type="PackedScene" uid="uid://6n2o8c2txp2s" path="res://assets/lowpoly_bow.tscn" id="4_8n1mt"]
+
+[node name="Bow" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+script = ExtResource("1_g6bhs")
+_data = ExtResource("2_scuoj")
+_arrow = ExtResource("3_kwp7m")
+
+[node name="lowpoly_bow" parent="." instance=ExtResource("4_8n1mt")]

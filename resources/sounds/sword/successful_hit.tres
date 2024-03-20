@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="SoundSO" load_steps=4 format=3 uid="uid://c6dw57yfvdxpm"]
+
+[ext_resource type="Script" path="res://scripts/Resources/Sounds/SoundSO.cs" id="1_nycoj"]
+[ext_resource type="AudioStream" uid="uid://bj8rl0vdwlhh0" path="res://assets/sounds/sword/SwordLandedHit.mp3" id="1_yccad"]
+[ext_resource type="AudioStream" uid="uid://c0xwprk417q8m" path="res://assets/sounds/sword/sword-clash-1-6917.mp3" id="2_n5boq"]
+
+[resource]
+script = ExtResource("1_nycoj")
+Name = "SuccessfulHit"
+Layer = 1
+PoolType = 1
+IsSpatial = false
+Looping = false
+Volume = 2.0
+Streams = Array[AudioStream]([ExtResource("2_n5boq"), ExtResource("1_yccad")])

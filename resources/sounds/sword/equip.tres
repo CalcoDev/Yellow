@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="SoundSO" load_steps=3 format=3 uid="uid://cr1n14c3es7gm"]
+
+[ext_resource type="Script" path="res://scripts/Resources/Sounds/SoundSO.cs" id="1_nj1jx"]
+[ext_resource type="AudioStream" uid="uid://082dk1d38iuh" path="res://assets/sounds/sword/SwordEquip.mp3" id="1_uf2uj"]
+
+[resource]
+script = ExtResource("1_nj1jx")
+Name = "SwordEquip"
+Layer = 1
+PoolType = 1
+IsSpatial = false
+Looping = false
+Volume = 2.0
+Streams = Array[AudioStream]([ExtResource("1_uf2uj")])

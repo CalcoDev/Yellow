@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="SoundSO" load_steps=3 format=3 uid="uid://ngw2w7r0yqbl"]
+
+[ext_resource type="Script" path="res://scripts/Resources/Sounds/SoundSO.cs" id="1_3o2gw"]
+[ext_resource type="AudioStream" uid="uid://dairr33wo3cy6" path="res://assets/sounds/bow/crossbow-firing-95020.mp3" id="1_h4dop"]
+
+[resource]
+script = ExtResource("1_3o2gw")
+Name = "ShootFullPower"
+Layer = 1
+PoolType = 1
+IsSpatial = false
+Looping = false
+Volume = 2.0
+Streams = Array[AudioStream]([ExtResource("1_h4dop")])
