@@ -151,6 +151,7 @@ public partial class Player : RigidBody3D
 				if (IsThwomping || _heavyFall) {
 					SoundManager.Instance.Play("player_land_heavy");
 					_playerCamera.ShakeLength(10, 1, 0.2f, true);
+					Game.Hitstop(0.05f);
 				} else {
 					SoundManager.Instance.Play("player_land");
 				}

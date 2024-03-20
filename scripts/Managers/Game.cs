@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using Godot;
 using Yellow.Components;
 using Yellow.Extensions;
@@ -19,6 +20,7 @@ public partial class Game : Node
 	public static float FixedDeltaTime { get; private set; }
 	public static float Time { get; private set; }
 	public static float FixedTime { get; private set; }
+	public static float TimeScale { get; private set; }
 
 	// GAME
 	public static CameraComponent PlayerCamera { get; private set; }
@@ -99,6 +101,7 @@ public partial class Game : Node
 
 	public override void _Process(double delta)
 	{
+		TimeScale = (float) Engine.TimeScale;
 		DeltaTime = (float) delta;
 		Time += DeltaTime;
 
@@ -156,5 +159,13 @@ public partial class Game : Node
 		if (err != Error.Ok) {
 			GD.PushError($"ERROR: Could not save {name}! ({err})");
 		}
+	}
+
+	public static void Hitstop(float duration, float timeScale = 0.001f)
+	{
+		Engine.TimeScale = timeScale;
+		Instance.GetTree().CreateTimer(duration, true, false, true).Timeout += () => {
+			Engine.TimeScale = 1f;
+		};
 	}
 }
