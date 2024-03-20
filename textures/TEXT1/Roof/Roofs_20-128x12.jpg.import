@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dbwx0exu001s6"
-path="res://.godot/imported/Roofs_20-128x12.jpg-237911850ec51b8320ab2d86c20c4dfc.ctex"
+path="res://.godot/imported/Roofs_20-128x12.jpg-2e44a07bd2ea50e74ac948533369abb6.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://textures/TEXT1/roof/quaked/Roofs_20-128x12.jpg"
-dest_files=["res://.godot/imported/Roofs_20-128x12.jpg-237911850ec51b8320ab2d86c20c4dfc.ctex"]
+source_file="res://textures/TEXT1/Roof/Roofs_20-128x12.jpg"
+dest_files=["res://.godot/imported/Roofs_20-128x12.jpg-2e44a07bd2ea50e74ac948533369abb6.ctex"]
 
 [params]
 

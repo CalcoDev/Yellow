@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://db1evg5icmin2"
-path="res://.godot/imported/Brick_10-128x12.jpg-ee477e2515b674cd586c90c7e149a399.ctex"
+path="res://.godot/imported/Brick_10-128x12.jpg-53c28bb47771ac2b8b7f0fab45096e98.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://textures/TEXT1/bricks2/quaked/Brick_10-128x12.jpg"
-dest_files=["res://.godot/imported/Brick_10-128x12.jpg-ee477e2515b674cd586c90c7e149a399.ctex"]
+source_file="res://textures/TEXT1/Bricks_2/Brick_10-128x12.jpg"
+dest_files=["res://.godot/imported/Brick_10-128x12.jpg-53c28bb47771ac2b8b7f0fab45096e98.ctex"]
 
 [params]
 

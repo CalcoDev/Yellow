@@ -1,0 +1,14 @@
+[remap]
+
+importer="qodot.map"
+type="Resource"
+uid="uid://oqmak13y2f06"
+path="res://.godot/imported/temple_redo.map-2c98b51125f7b63a6292aa4e6682712f.tres"
+
+[deps]
+
+source_file="res://maps_ACTUAL/temple_redo.map"
+dest_files=["res://.godot/imported/temple_redo.map-2c98b51125f7b63a6292aa4e6682712f.tres"]
+
+[params]
+

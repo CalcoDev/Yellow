@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bbg67y1hlexj0"
-path="res://.godot/imported/Stone_23-128x12.jpg-5f305141eb715b665e87e72930be6012.ctex"
+path="res://.godot/imported/Stone_23-128x12.jpg-03b43606177c15ba34abd3c7d30c671d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://textures/TEXT1/stone1/quaked/Stone_23-128x12.jpg"
-dest_files=["res://.godot/imported/Stone_23-128x12.jpg-5f305141eb715b665e87e72930be6012.ctex"]
+source_file="res://textures/TEXT1/Stone_1/Stone_23-128x12.jpg"
+dest_files=["res://.godot/imported/Stone_23-128x12.jpg-03b43606177c15ba34abd3c7d30c671d.ctex"]
 
 [params]
 

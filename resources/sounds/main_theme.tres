@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="SoundSO" load_steps=3 format=3 uid="uid://cp5jokpemp8tt"]
+
+[ext_resource type="AudioStream" uid="uid://dwtucwri18df5" path="res://assets/sounds/song.mp3" id="1_j53kx"]
+[ext_resource type="Script" path="res://scripts/Resources/Sounds/SoundSO.cs" id="6_7evjw"]
+
+[resource]
+script = ExtResource("6_7evjw")
+Name = "main_theme"
+Layer = 0
+PoolType = 1
+IsSpatial = false
+Looping = true
+Volume = 0.0
+Streams = Array[AudioStream]([ExtResource("1_j53kx")])

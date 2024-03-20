@@ -69,7 +69,8 @@ _optionsBack = NodePath("options/opt back")
 _main = NodePath("main")
 _opt = NodePath("options")
 
-[node name="ColorRect" type="ColorRect" parent="CanvasLayer/Control/SubViewportContainer/SubViewport/ui"]
+[node name="color" type="ColorRect" parent="CanvasLayer/Control/SubViewportContainer/SubViewport/ui"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(1920, 1080)
 layout_mode = 1
 anchors_preset = 15
@@ -145,7 +146,7 @@ size_flags_horizontal = 4
 theme_override_styles/grabber_area = SubResource("StyleBoxFlat_woqq4")
 max_value = 1.0
 step = 0.01
-value = 0.56
+value = 1.0
 
 [node name="sfx slider" type="HSlider" parent="CanvasLayer/Control/SubViewportContainer/SubViewport/ui/options"]
 custom_minimum_size = Vector2(321.16, 45.52)
@@ -157,9 +158,9 @@ offset_bottom = 680.52
 grow_horizontal = 2
 size_flags_horizontal = 4
 theme_override_styles/grabber_area = SubResource("StyleBoxFlat_woqq4")
-max_value = 1.0
+max_value = 0.5
 step = 0.01
-value = 0.56
+value = 0.5
 
 [node name="opt back" type="Button" parent="CanvasLayer/Control/SubViewportContainer/SubViewport/ui/options"]
 layout_mode = 1

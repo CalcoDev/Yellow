@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://ci3jl8876sxpm"
-path="res://.godot/imported/Elements_03-128.jpg-6bb2b10677c8a43b39c6b3d056c16df2.ctex"
+path="res://.godot/imported/Elements_03-128.jpg-ac14e6d1d71d36932f380b1386138419.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://textures/TEXT1/elements/quaked/Elements_03-128.jpg"
-dest_files=["res://.godot/imported/Elements_03-128.jpg-6bb2b10677c8a43b39c6b3d056c16df2.ctex"]
+source_file="res://textures/TEXT1/Elements/Elements_03-128.jpg"
+dest_files=["res://.godot/imported/Elements_03-128.jpg-ac14e6d1d71d36932f380b1386138419.ctex"]
 
 [params]
 

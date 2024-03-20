@@ -7,8 +7,8 @@ namespace Yellow.UI;
 [GlobalClass]
 public partial class GeneralMenu : Control
 {
-    [Export] private bool _isMain;
-    [Export] private PackedScene _gameplayScene;
+    [Export] public bool _isMain;
+    [Export] public PackedScene _gameplayScene;
 
     [Export] private Button _resume;
     [Export] private Button _options;
@@ -36,10 +36,12 @@ public partial class GeneralMenu : Control
     public override void _Ready()
     {
         _musicSlider.ValueChanged += (value) => {
+            // value -= 0.12f;
             AudioServer.SetBusVolumeDb(AudioServer.GetBusIndex(SoundManager.MusicAudioBus), Mathf.LinearToDb((float)value));
         };
         
         _sfxSlider.ValueChanged += (value) => {
+            // value -= 0.18f;
             AudioServer.SetBusVolumeDb(AudioServer.GetBusIndex(SoundManager.SFXAudioBus), Mathf.LinearToDb((float)value));
         };
 

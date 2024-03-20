@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://g34n7gw2yerk"
-path="res://.godot/imported/Dirt_19-128x128.jpg-0fef0b6a5cc53b0729bda2059e8b36f2.ctex"
+path="res://.godot/imported/Dirt_19-128x128.jpg-2c5fc738e5f70557d976356949579428.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://textures/TEXT1/dirt2/quaked/Dirt_19-128x128.jpg"
-dest_files=["res://.godot/imported/Dirt_19-128x128.jpg-0fef0b6a5cc53b0729bda2059e8b36f2.ctex"]
+source_file="res://textures/TEXT1/Dirt/Dirt_19-128x128.jpg"
+dest_files=["res://.godot/imported/Dirt_19-128x128.jpg-2c5fc738e5f70557d976356949579428.ctex"]
 
 [params]
 

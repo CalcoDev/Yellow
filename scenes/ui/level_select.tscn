@@ -1,0 +1,240 @@
+[gd_scene load_steps=12 format=3 uid="uid://3lladtn6l7xs"]
+
+[ext_resource type="Shader" path="res://resources/shaders/main_menu.gdshader" id="1_6dc1c"]
+[ext_resource type="Script" path="res://scripts/UI/GeneralMenu.cs" id="2_w80cp"]
+[ext_resource type="PackedScene" uid="uid://dfqw6ddryed0b" path="res://scenes/_debug/_enemy_debug.tscn" id="3_1b2ig"]
+[ext_resource type="FontFile" uid="uid://2vwhmwr45uhs" path="res://assets/fonts/times.ttf" id="4_j24wd"]
+[ext_resource type="Script" path="res://scripts/UI/YButton.cs" id="5_vimtv"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_pi2eq"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_kx0pn"]
+generate_mipmaps = false
+noise = SubResource("FastNoiseLite_pi2eq")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_xm15q"]
+seed = 2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_amt74"]
+noise = SubResource("FastNoiseLite_xm15q")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cq638"]
+shader = ExtResource("1_6dc1c")
+shader_parameter/u_time = 0.1
+shader_parameter/u_scale = 0.01
+shader_parameter/u_noise_x = SubResource("NoiseTexture2D_kx0pn")
+shader_parameter/u_noise_y = SubResource("NoiseTexture2D_amt74")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bjkrs"]
+bg_color = Color(1, 0.901961, 0, 1)
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="Control"]
+material = SubResource("ShaderMaterial_cq638")
+layout_mode = 1
+offset_right = 1920.0
+offset_bottom = 1080.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="SubViewport" type="SubViewport" parent="Control/SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="ui" type="Control" parent="CanvasLayer" node_paths=PackedStringArray("_resume", "_options", "_quit", "_musicSlider", "_sfxSlider", "_optionsBack", "_main", "_opt")]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("2_w80cp")
+_isMain = true
+_gameplayScene = ExtResource("3_1b2ig")
+_resume = NodePath("")
+_options = NodePath("")
+_quit = NodePath("")
+_musicSlider = NodePath("")
+_sfxSlider = NodePath("")
+_optionsBack = NodePath("")
+_main = NodePath("")
+_opt = NodePath("")
+
+[node name="options" type="Control" parent="CanvasLayer/ui"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="CanvasLayer/ui/options"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 741.0
+offset_top = 240.0
+offset_right = 1139.0
+offset_bottom = 403.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(1, 0.901961, 0, 1)
+theme_override_fonts/font = ExtResource("4_j24wd")
+theme_override_font_sizes/font_size = 128
+text = "settings"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Label" parent="CanvasLayer/ui/options"]
+layout_mode = 2
+offset_left = 702.0
+offset_top = 531.0
+offset_right = 784.0
+offset_bottom = 585.0
+grow_vertical = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(1, 0.901961, 0, 1)
+theme_override_fonts/font = ExtResource("4_j24wd")
+theme_override_font_sizes/font_size = 48
+text = "music
+"
+
+[node name="Button2" type="Label" parent="CanvasLayer/ui/options"]
+layout_mode = 2
+offset_left = 702.0
+offset_top = 635.0
+offset_right = 843.0
+offset_bottom = 689.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(1, 0.901961, 0, 1)
+theme_override_fonts/font = ExtResource("4_j24wd")
+theme_override_font_sizes/font_size = 48
+text = "sfx"
+
+[node name="music slider" type="HSlider" parent="CanvasLayer/ui/options"]
+custom_minimum_size = Vector2(321.16, 45.52)
+layout_mode = 2
+offset_left = 935.0
+offset_top = 531.0
+offset_right = 1256.16
+offset_bottom = 576.52
+grow_horizontal = 2
+size_flags_horizontal = 4
+theme_override_styles/grabber_area = SubResource("StyleBoxFlat_bjkrs")
+max_value = 1.0
+step = 0.01
+value = 0.56
+
+[node name="sfx slider" type="HSlider" parent="CanvasLayer/ui/options"]
+custom_minimum_size = Vector2(321.16, 45.52)
+layout_mode = 2
+offset_left = 935.0
+offset_top = 635.0
+offset_right = 1256.16
+offset_bottom = 680.52
+grow_horizontal = 2
+size_flags_horizontal = 4
+theme_override_styles/grabber_area = SubResource("StyleBoxFlat_bjkrs")
+max_value = 1.0
+step = 0.01
+value = 0.56
+
+[node name="opt back" type="Button" parent="CanvasLayer/ui/options"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 821.0
+offset_top = 774.0
+offset_right = 1071.0
+offset_bottom = 859.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(1, 0.901961, 0, 1)
+theme_override_fonts/font = ExtResource("4_j24wd")
+theme_override_font_sizes/font_size = 48
+text = "back"
+flat = true
+script = ExtResource("5_vimtv")
+
+[node name="main" type="Control" parent="CanvasLayer/ui"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="CanvasLayer/ui/main"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 741.0
+offset_top = 240.0
+offset_right = 1139.0
+offset_bottom = 403.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(1, 0.901961, 0, 1)
+theme_override_fonts/font = ExtResource("4_j24wd")
+theme_override_font_sizes/font_size = 128
+text = "yellow - levels"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="play" type="Button" parent="CanvasLayer/ui/main"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 335.0
+offset_top = 826.0
+offset_right = 585.0
+offset_bottom = 911.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(1, 0.901961, 0, 1)
+theme_override_fonts/font = ExtResource("4_j24wd")
+theme_override_font_sizes/font_size = 48
+text = "play"
+flat = true
+script = ExtResource("5_vimtv")
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/ui/main"]
+custom_minimum_size = Vector2(300, 350)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 314.0
+offset_top = 439.0
+offset_right = 614.0
+offset_bottom = 789.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/ui/main/MarginContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/ui/main/MarginContainer/VBoxContainer"]
+layout_mode = 2

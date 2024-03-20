@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bc6r4iqwhe71j"
-path="res://.godot/imported/Grass_18-128x12.jpg-ff03425aeba60675c6d9f3ed5b863b42.ctex"
+path="res://.godot/imported/Grass_18-128x12.jpg-13e73e55a0f7e2f8658154fd9cfd0f37.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://textures/TEXT1/dirt1/quaked/Grass_18-128x12.jpg"
-dest_files=["res://.godot/imported/Grass_18-128x12.jpg-ff03425aeba60675c6d9f3ed5b863b42.ctex"]
+source_file="res://textures/TEXT1/Grass/Grass_18-128x12.jpg"
+dest_files=["res://.godot/imported/Grass_18-128x12.jpg-13e73e55a0f7e2f8658154fd9cfd0f37.ctex"]
 
 [params]
 

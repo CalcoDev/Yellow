@@ -13,7 +13,7 @@ public partial class Game : Node
 {
 	public static Game Instance { get; private set; }
 
-	[Export] private GeneralMenu _pauseMenu;
+	[Export] public GeneralMenu _pauseMenu;
 	
 	// TIME
 	public static float DeltaTime { get; private set; }

@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bmh5l0l5ivli2"
-path="res://.godot/imported/Cloth_09-128x12.jpg-d890a7c22572e038258eb3714f2cd64c.ctex"
+path="res://.godot/imported/Cloth_09-128x12.jpg-7b3dcdeffd2eca19f29d5a59fef5577a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://textures/TEXT1/cloth/quaked/Cloth_09-128x12.jpg"
-dest_files=["res://.godot/imported/Cloth_09-128x12.jpg-d890a7c22572e038258eb3714f2cd64c.ctex"]
+source_file="res://textures/TEXT1/Cloth/Cloth_09-128x12.jpg"
+dest_files=["res://.godot/imported/Cloth_09-128x12.jpg-7b3dcdeffd2eca19f29d5a59fef5577a.ctex"]
 
 [params]
 
