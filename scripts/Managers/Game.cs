@@ -1,7 +1,10 @@
 using System;
+using System.Net;
 using Godot;
 using Yellow.Components;
+using Yellow.Extensions;
 using Yellow.Misc;
+using Yellow.UI;
 
 namespace Yellow.Managers;
 
@@ -9,12 +12,15 @@ namespace Yellow.Managers;
 public partial class Game : Node
 {
 	public static Game Instance { get; private set; }
+
+	[Export] private GeneralMenu _pauseMenu;
 	
 	// TIME
 	public static float DeltaTime { get; private set; }
 	public static float FixedDeltaTime { get; private set; }
 	public static float Time { get; private set; }
 	public static float FixedTime { get; private set; }
+	public static float TimeScale { get; private set; }
 
 	// GAME
 	public static CameraComponent PlayerCamera { get; private set; }
@@ -60,15 +66,42 @@ public partial class Game : Node
 
 		// Make this node execute first, always.
 		ProcessPriority = (int)NodeProcessOrder.Game;
+		ProcessMode = ProcessModeEnum.Always;
 	}
+
+	public static bool IsUIScene { get; set; } = false;
+
+	public static bool Paused
+	{
+		get => _paused;
+		set {
+			_paused = value;
+			if (_paused) {
+				GD.Print("GAME IS PUASED");
+				Instance.GetTree().Paused = true;
+				MouseLocked = false;
+				Instance._pauseMenu.SetActive(true);
+				Instance._pauseMenu.Visible = true;
+			} else {
+				Instance.GetTree().Paused = false;
+				MouseLocked = true;
+				Instance._pauseMenu.SetActive(false);
+				Instance._pauseMenu.Visible = false;
+			}
+		}
+	}
+	private static bool _paused;
 
 	public override void _Ready()
 	{
-		MouseLocked = true;
+		if (IsUIScene == false) {
+			Paused = false;
+		}
 	}
 
 	public override void _Process(double delta)
 	{
+		TimeScale = (float) Engine.TimeScale;
 		DeltaTime = (float) delta;
 		Time += DeltaTime;
 
@@ -76,6 +109,15 @@ public partial class Game : Node
 			GetTree().Quit();
 		}
 
+		if (Input.IsActionJustPressed("pause")) {
+			if (IsUIScene) {
+				return;
+			}
+
+			_pauseMenu.ToggleViz();
+			Paused = !Paused;
+		}
+		
 		if (Input.IsActionJustPressed("fullscreen")) {
 			Fullscreen = !Fullscreen;
 		}
@@ -117,5 +159,13 @@ public partial class Game : Node
 		if (err != Error.Ok) {
 			GD.PushError($"ERROR: Could not save {name}! ({err})");
 		}
+	}
+
+	public static void Hitstop(float duration, float timeScale = 0.001f)
+	{
+		Engine.TimeScale = timeScale;
+		Instance.GetTree().CreateTimer(duration, true, false, true).Timeout += () => {
+			Engine.TimeScale = 1f;
+		};
 	}
 }

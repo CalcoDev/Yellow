@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="SoundSO" load_steps=3 format=3 uid="uid://dobcr2aqlfiue"]
+
+[ext_resource type="AudioStream" uid="uid://bhms0g58eqlxe" path="res://assets/sounds/ui/btn_clicked.wav" id="1_rpxf2"]
+[ext_resource type="Script" path="res://scripts/Resources/Sounds/SoundSO.cs" id="2_bxi6r"]
+
+[resource]
+script = ExtResource("2_bxi6r")
+Name = "button_click"
+Layer = 1
+PoolType = 1
+IsSpatial = false
+Looping = false
+Volume = 1.0
+Streams = Array[AudioStream]([ExtResource("1_rpxf2")])

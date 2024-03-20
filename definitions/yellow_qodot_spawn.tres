@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="QodotFGDPointClass" load_steps=3 format=3 uid="uid://c6j7gcwa5cvii"]
+
+[ext_resource type="Script" path="res://addons/qodot/src/resources/game-definitions/fgd/qodot_fgd_point_class.gd" id="1_p31vq"]
+[ext_resource type="Script" path="res://scripts/Qodot/QodotSpawn.cs" id="2_8rroc"]
+
+[resource]
+script = ExtResource("1_p31vq")
+script_class = ExtResource("2_8rroc")
+apply_rotation_on_map_build = true
+classname = "yawn_spawn"
+description = "spawns on load"
+qodot_internal = false
+base_classes = Array[Resource]([])
+class_properties = {
+"scene": ""
+}
+class_property_descriptions = {}
+meta_properties = {
+"color": Color(0.8, 0.8, 0.8, 1),
+"size": AABB(-8, -8, -8, 8, 8, 8)
+}
+node_class = "Node3D"
+transient_node = false

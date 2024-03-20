@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="SoundSO" load_steps=3 format=3 uid="uid://bgx04fbwj2icr"]
+
+[ext_resource type="AudioStream" uid="uid://c4bxo4wdw0lim" path="res://assets/sounds/ui/btn_hovered.wav" id="1_o44m7"]
+[ext_resource type="Script" path="res://scripts/Resources/Sounds/SoundSO.cs" id="2_vlkbd"]
+
+[resource]
+script = ExtResource("2_vlkbd")
+Name = "button_hover"
+Layer = 1
+PoolType = 1
+IsSpatial = false
+Looping = false
+Volume = 1.0
+Streams = Array[AudioStream]([ExtResource("1_o44m7")])

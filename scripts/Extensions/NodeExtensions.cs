@@ -3,17 +3,52 @@
 // [GodotUtilities](https://github.com/firebelley/GodotUtilities)
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
+using Yellow.Managers;
+using Yellow.Misc.Logic;
 
 namespace Yellow.Extensions;
 
 public static class NodeExtension
 {
+    private static readonly Dictionary<Node, HashSet<Coroutine>> _coroutines = new();
+
     public static bool IsActive(this Node node) => node.IsProcessing();
     public static void SetActive(this Node node, bool active) {
         node.SetProcess(active);
+    }
+
+    public static Coroutine StartCoroutine(this Node node, IEnumerator enumerator)
+    {
+        if (!_coroutines.ContainsKey(node)) {
+            _coroutines.Add(node, new HashSet<Coroutine>());
+        }
+        
+        var c = new Coroutine(enumerator);
+        _coroutines[node].Add(c);
+        return c;
+    }
+
+    public static void StopCoroutine(this Node node, Coroutine coroutine)
+    {
+        if (!_coroutines.ContainsKey(node) || !_coroutines[node].Contains(coroutine)) {
+            return;
+        }
+        _coroutines[node].Remove(coroutine);
+    }
+
+    public static void UpdateCoroutines(this Node node)
+    {
+        if (!_coroutines.ContainsKey(node)) {
+            return;
+        }
+
+        foreach (var c in _coroutines[node]) {
+            c.Update(Game.DeltaTime);
+        }
     }
 
     /// <summary>

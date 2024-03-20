@@ -1,0 +1,14 @@
+[remap]
+
+importer="qodot.map"
+type="Resource"
+uid="uid://bfue833xltpl8"
+path="res://.godot/imported/enemy_debug.map-a5dbbbf768fd2b5943f3ba6e38acdb93.tres"
+
+[deps]
+
+source_file="res://maps/enemy_debug.map"
+dest_files=["res://.godot/imported/enemy_debug.map-a5dbbbf768fd2b5943f3ba6e38acdb93.tres"]
+
+[params]
+

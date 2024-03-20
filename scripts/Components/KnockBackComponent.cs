@@ -27,6 +27,7 @@ public partial class KnockBackComponent : Node
 {
 	[ExportGroup("References")]
 	[Export] public RigidBody3D Body;
+	[Export] private bool _getParent;
 	
 	[ExportGroup("KnockBack Modifiers")]
 	[Export] private float _kbResFloor = 0.25f;
@@ -38,6 +39,12 @@ public partial class KnockBackComponent : Node
 	public override void _Ready()
 	{
 		KnockBackResistance = _kbResFloor;
+
+		if (_getParent) {
+			if (GetParent() is RigidBody3D rb) {
+				Body = rb;
+			}
+		}
 	}
 	
 	public override void _Process(double delta)

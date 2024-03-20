@@ -1,19 +1,22 @@
 using Godot;
-using System;
 using Yellow.Components;
 
 namespace Yellow.GameObjects.Enemies;
 
-[GlobalClass]
 public partial class Enemy : RigidBody3D
 {
-	[ExportGroup("Components")] 
-	[Export] protected HealthComponent Health;
-	[Export] protected FactionComponent Faction;
-	[Export] protected KnockBackComponent KnockBack;
-	[Export] protected HurtboxComponent HurtBox;
-	[Export] protected PathfindingComponent Pathfinding;
-    
+    [ExportGroup("Enemy Settings")]
+    [ExportSubgroup("References")]
+    [Export] protected HealthComponent Health;
+    [Export] protected FactionComponent Faction;
+    [Export] protected KnockBackComponent KnockBack;
+    [Export] protected PathfindingComponent Pathfinding;
+    [Export] protected HurtboxComponent HurtBox;
+    [Export] protected AnimationPlayer Anim;
+
+    [ExportSubgroup("General")]
+    public bool ShouldDoStuff { get; set; }= true;
+
 	public override void _Ready()
 	{
 		HurtBox.OnHit += OnHit;
@@ -27,7 +30,7 @@ public partial class Enemy : RigidBody3D
 
 	protected virtual void OnHit(HitboxComponent hitBox)
 	{
-		
+		GD.Print("GOT HIT");
 	}
 
 	protected virtual void OnDied()

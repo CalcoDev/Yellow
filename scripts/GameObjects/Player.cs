@@ -1,3 +1,4 @@
+using System;
 using Godot;
 using Yellow.Components;
 using Yellow.Extensions;
@@ -22,6 +23,8 @@ public partial class Player : RigidBody3D
 	[Export] private ShapeCastComponent _wallCheck;
 	[Export] private CameraComponent _playerCamera;
 
+	[Export] private HealthComponent _health;
+
 	[ExportGroup("SFX")]
 	[Export] private float SFXWalkStepDist = 1f;
 	
@@ -38,13 +41,14 @@ public partial class Player : RigidBody3D
 	[Export] private float Sensitivity;
 	[Export] private PlayerMovementSO _p;
 
-	[ExportSubgroup("UI")]
-	[Export] private PlayerUIManager _ui;
-
 	[Node("Head")] public Node3D Head { get; private set; }
 
-	private Camera3D _weaponCamera;
+	[Export] private Camera3D _weaponCamera;
 	
+	private Label _healthText;
+	private ProgressBar _healthBar;
+	private ProgressBar[] _staminaBars = new ProgressBar[3];
+
 	// States
 	public bool CanSlideWall => _wallCheck.IsColliding && _wallCheck.IsOnSlope;
 	public bool IsWallSliding { get; private set; } = false;
@@ -117,16 +121,42 @@ public partial class Player : RigidBody3D
         Instance = null;
     }
 
+	public void DisplayStamina(float stamina)
+	{
+		for (int i = 0; i < 3; ++i) {
+			float s = Mathf.Clamp(stamina - i, 0, 1f);
+			_staminaBars[i].Value = s;
+		}
+	}
+
     public override void _Ready()
 	{
+
 		ProcessPriority = (int)NodeProcessOrder.Player;
 		AddToGroup("player");
+
+		_healthText = GetNode<Label>("%HealthText");
+		_healthBar = GetNode<ProgressBar>("%Health");
+		_staminaBars[0] = GetNode<ProgressBar>("%Slide1");
+		_staminaBars[1] = GetNode<ProgressBar>("%Slide2");
+		_staminaBars[2] = GetNode<ProgressBar>("%Slide3");
+		
+		_health.OnHealthChanged += OnHealthChanged;
+		_healthBar.Value = _health.GetHealthPercentage();
+		_healthText.Text = Mathf.FloorToInt(_health.GetHealthPercentage() * 100f).ToString();
+
+		foreach (var bar in _staminaBars) {
+			bar.MinValue = 0f;
+			bar.MaxValue = 1f;
+			bar.Value = 0;
+		}
 
 		_groundCheck.OnIsGrounded += () => {
 			if (!IsSliding) {
 				if (IsThwomping || _heavyFall) {
 					SoundManager.Instance.Play("player_land_heavy");
 					_playerCamera.ShakeLength(10, 1, 0.2f, true);
+					Game.Hitstop(0.05f);
 				} else {
 					SoundManager.Instance.Play("player_land");
 				}
@@ -149,11 +179,15 @@ public partial class Player : RigidBody3D
 			tween.Chain().TweenProperty(_playerCamera, "HardOffset", Vector3.Zero, td * 1.5f);
 			tween.Play();
 		};
-		
-		_weaponCamera = GetNode("WeaponUI/SubViewportContainer/SubViewport/WeaponCamera") as Camera3D;
 	}
 
-	public override void _Input(InputEvent e)
+    private void OnHealthChanged(float previous, float current, float maximum)
+    {
+		_healthBar.Value = _health.GetHealthPercentage();
+		_healthText.Text = Mathf.FloorToInt(_health.GetHealthPercentage() * 100f).ToString();
+    }
+
+    public override void _Input(InputEvent e)
 	{
 		if (!Game.MouseLocked) {
 			return;
@@ -278,8 +312,6 @@ public partial class Player : RigidBody3D
 			_thwompForce += Game.DeltaTime * _p.ThwompForceTimeMult;
 		}
 
-		_ui.DisplayStamina(_stamina);
-
 		// NOTE(calco): Visual Effects
 		// TODO(calco): Maybe don't zero out y velocity?
 		var speed = LinearVelocity.WithY(0).Length();
@@ -320,6 +352,8 @@ public partial class Player : RigidBody3D
 		}
 
 		_prevPos = GlobalPosition;
+
+		DisplayStamina(_stamina);
 	}
 
 	private Vector3 _diffDir;
@@ -560,10 +594,14 @@ public partial class Player : RigidBody3D
 		_vfxSlideLines.Rotate(-dir.Cross(Vector3.Up).Normalized(), Mathf.Pi / 2f);
 		_vfxSlideLines.Emitting = true;
 		_vfxSlideLines.FreezeNextFrame = true;
+
+		((CapsuleShape3D)this.GetFirstNodeOfType<CollisionShape3D>().Shape).Height = 1f;
 	}
 
 	private void EndSlide()
 	{
+		((CapsuleShape3D)this.GetFirstNodeOfType<CollisionShape3D>().Shape).Height = 2f;
+
 		_maxSlideSpeedBufferTimer = 0f;
 
 		// TODO(calco): Temporary, just showcasing slide

@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="SoundSO" load_steps=7 format=3 uid="uid://ckir7f57lya67"]
+
+[ext_resource type="AudioStream" uid="uid://ds6jgilteno70" path="res://assets/sounds/explosions/explosion.wav" id="1_42x5h"]
+[ext_resource type="Script" path="res://scripts/Resources/Sounds/SoundSO.cs" id="1_o6ja1"]
+[ext_resource type="AudioStream" uid="uid://bbb13rorsnrx3" path="res://assets/sounds/explosions/explosion1.wav" id="2_yw7xx"]
+[ext_resource type="AudioStream" uid="uid://cpc5y12jywqi7" path="res://assets/sounds/explosions/explosion2.wav" id="3_xn7jx"]
+[ext_resource type="AudioStream" uid="uid://1v8lulgjvwnf" path="res://assets/sounds/explosions/explosion3.wav" id="4_b7t8p"]
+[ext_resource type="AudioStream" uid="uid://74h6jvqpxo3k" path="res://assets/sounds/explosions/explosion4.wav" id="5_u675g"]
+
+[resource]
+script = ExtResource("1_o6ja1")
+Name = "explosion"
+Layer = 1
+PoolType = 1
+IsSpatial = true
+Looping = false
+Volume = 1.0
+Streams = Array[AudioStream]([ExtResource("1_42x5h"), ExtResource("2_yw7xx"), ExtResource("3_xn7jx"), ExtResource("4_b7t8p"), ExtResource("5_u675g")])
