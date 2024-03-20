@@ -30,7 +30,7 @@ public partial class Enemy : RigidBody3D
 
 	protected virtual void OnHit(HitboxComponent hitBox)
 	{
-		
+		GD.Print("GOT HIT");
 	}
 
 	protected virtual void OnDied()

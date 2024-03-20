@@ -12,13 +12,13 @@
 [ext_resource type="Texture2D" uid="uid://bofrt6byqqgvp" path="res://textures/grid/orange/texture_08.png" id="9_fhnrt"]
 [ext_resource type="Script" path="res://addons/qodot/game_definitions/fgd/solid_classes/button.gd" id="10_ffd2f"]
 [ext_resource type="Texture2D" uid="uid://daeu08rvjuug3" path="res://textures/grid/orange/texture_02.png" id="10_jd4rv"]
-[ext_resource type="PackedScene" uid="uid://bsgwkv72xs4ab" path="res://scenes/game_objects/entities/player.tscn" id="11_fqyap"]
 [ext_resource type="Texture2D" uid="uid://7hbbcbolp75m" path="res://textures/calcopod_environment/yellow_prime.png" id="17_dxwda"]
 [ext_resource type="Texture2D" uid="uid://dehq6j08mnsw2" path="res://textures/calcopod_environment/yellow_prime_2.png" id="18_bhhth"]
 [ext_resource type="Texture2D" uid="uid://b2eb4jgw74php" path="res://textures/calcopod_environment/grass_02.png" id="19_tswwy"]
 [ext_resource type="Texture2D" uid="uid://b4ao5e4fombfk" path="res://textures/calcopod_environment/ground_tiles_small.png" id="20_suk1q"]
 [ext_resource type="Texture2D" uid="uid://dum23tihnntol" path="res://textures/calcopod_environment/ground_tilessmallestver.png" id="23_ml7ct"]
 [ext_resource type="Texture2D" uid="uid://c6s76hm0t188v" path="res://textures/calcopod_environment/ground_tilessmallhor.png" id="24_1743i"]
+[ext_resource type="PackedScene" uid="uid://bsgwkv72xs4ab" path="res://scenes/game_objects/entities/player.tscn" id="24_cyuep"]
 [ext_resource type="Texture2D" uid="uid://dt47wc06wxomt" path="res://textures/calcopod_environment/grass_01_b.png" id="26_ola56"]
 [ext_resource type="Texture2D" uid="uid://c24fqjfwcjoub" path="res://textures/calcopod_environment/grass_02_b.png" id="27_d7umo"]
 [ext_resource type="Texture2D" uid="uid://ci523676t1acg" path="res://textures/calcopod_environment/ground_tiles_smallest.png" id="28_dsy06"]
@@ -678,9 +678,6 @@ _update = true
 environment = SubResource("Environment_lntm0")
 camera_attributes = SubResource("CameraAttributesPractical_1keek")
 
-[node name="Player" parent="." instance=ExtResource("11_fqyap")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -116.102, -18.785, 54.709)
-
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
 navigation_mesh = SubResource("NavigationMesh_fv4oj")
 
@@ -1123,6 +1120,9 @@ mesh = SubResource("ArrayMesh_kssac")
 
 [node name="entity_6_brush_0_collision_shape" type="CollisionShape3D" parent="NavigationRegion3D/QodotMap/entity_6_mover"]
 shape = SubResource("ConvexPolygonShape3D_pb71k")
+
+[node name="Player" parent="." instance=ExtResource("24_cyuep")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -61.8276, -14.5571, 41.6581)
 
 [connection signal="OnTriggerEnter" from="NavigationRegion3D/QodotMap/entity_1_custom_trigger" to="NavigationRegion3D/QodotMap/entity_2_mover" method="UseEnter"]
 [connection signal="OnTriggerEnterParamless" from="NavigationRegion3D/QodotMap/entity_1_custom_trigger" to="NavigationRegion3D/QodotMap/entity_2_mover" method="use"]

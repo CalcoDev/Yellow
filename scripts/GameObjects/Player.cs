@@ -41,13 +41,11 @@ public partial class Player : RigidBody3D
 	[Export] private float Sensitivity;
 	[Export] private PlayerMovementSO _p;
 
-	[ExportSubgroup("UI")]
-	[Export] private PlayerUIManager _ui;
-
 	[Node("Head")] public Node3D Head { get; private set; }
 
-	private Camera3D _weaponCamera;
+	[Export] private Camera3D _weaponCamera;
 	
+	private Label _healthText;
 	private ProgressBar _healthBar;
 	private ProgressBar[] _staminaBars = new ProgressBar[3];
 
@@ -137,6 +135,7 @@ public partial class Player : RigidBody3D
 		ProcessPriority = (int)NodeProcessOrder.Player;
 		AddToGroup("player");
 
+		_healthText = GetNode<Label>("%HealthText");
 		_healthBar = GetNode<ProgressBar>("%Health");
 		_staminaBars[0] = GetNode<ProgressBar>("%Slide1");
 		_staminaBars[1] = GetNode<ProgressBar>("%Slide2");
@@ -144,6 +143,7 @@ public partial class Player : RigidBody3D
 		
 		_health.OnHealthChanged += OnHealthChanged;
 		_healthBar.Value = _health.GetHealthPercentage();
+		_healthText.Text = Mathf.FloorToInt(_health.GetHealthPercentage() * 100f).ToString();
 
 		foreach (var bar in _staminaBars) {
 			bar.MinValue = 0f;
@@ -179,13 +179,12 @@ public partial class Player : RigidBody3D
 			tween.Chain().TweenProperty(_playerCamera, "HardOffset", Vector3.Zero, td * 1.5f);
 			tween.Play();
 		};
-		
-		_weaponCamera = GetNode("WeaponUI/SubViewportContainer/SubViewport/WeaponCamera") as Camera3D;
 	}
 
     private void OnHealthChanged(float previous, float current, float maximum)
     {
 		_healthBar.Value = _health.GetHealthPercentage();
+		_healthText.Text = Mathf.FloorToInt(_health.GetHealthPercentage() * 100f).ToString();
     }
 
     public override void _Input(InputEvent e)

@@ -1,14 +1,14 @@
-[gd_scene load_steps=52 format=3 uid="uid://bsgwkv72xs4ab"]
+[gd_scene load_steps=65 format=3 uid="uid://bsgwkv72xs4ab"]
 
 [ext_resource type="Script" path="res://scripts/GameObjects/Player.cs" id="1_8gga7"]
 [ext_resource type="PhysicsMaterial" uid="uid://cknorhfrivu38" path="res://resources/physics_mat/no_friction_mat.tres" id="1_l3ghh"]
 [ext_resource type="Resource" uid="uid://yf2osyn4pvt3" path="res://resources/input/player_input.tres" id="2_ihh5m"]
 [ext_resource type="Resource" uid="uid://uccyjnd3efm" path="res://resources/player_movement/player_movement_default.tres" id="3_x1l4f"]
 [ext_resource type="Script" path="res://scripts/Components/ShapeCastComponent.cs" id="4_16gja"]
+[ext_resource type="FontFile" uid="uid://2vwhmwr45uhs" path="res://assets/fonts/times.ttf" id="5_agxnj"]
 [ext_resource type="Script" path="res://scripts/Components/GroundCheckComponent.cs" id="5_e2m20"]
-[ext_resource type="FontFile" uid="uid://2vwhmwr45uhs" path="res://assets/fonts/times.ttf" id="5_tpvhg"]
+[ext_resource type="Script" path="res://scripts/Components/HealthComponent.cs" id="5_ycikr"]
 [ext_resource type="Resource" uid="uid://okxparq80j4b" path="res://resources/ground_properties/default_ground_props.tres" id="6_5d0dr"]
-[ext_resource type="Script" path="res://scripts/Components/HealthComponent.cs" id="6_7rqeb"]
 [ext_resource type="Script" path="res://scripts/Components/CameraComponent.cs" id="6_fvhrc"]
 [ext_resource type="Texture2D" uid="uid://dptow3a648wji" path="res://assets/vfx/dash_particle.png" id="8_cymeo"]
 [ext_resource type="Texture2D" uid="uid://dt1sbjvvc1356" path="res://assets/crosshair.png" id="8_ixsmc"]
@@ -21,29 +21,24 @@
 [ext_resource type="Script" path="res://scripts/Nodes/DistanceParticles.cs" id="14_tj5qp"]
 [ext_resource type="Texture2D" uid="uid://d1021i7to3x5u" path="res://assets/particles/smoke.png" id="15_6qo3n"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qgmsl"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5xeex"]
 bg_color = Color(0.411765, 0.0313726, 0.0313726, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7ye2k"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tn4d5"]
 bg_color = Color(1, 0, 0, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_80swx"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vwfi3"]
 bg_color = Color(0.415686, 0.372549, 0, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k7psc"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_62y8a"]
 bg_color = Color(1, 0.901961, 0, 1)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_1ogde"]
-size = Vector3(0.2, 1.8, 0.8)
+[sub_resource type="LabelSettings" id="LabelSettings_uwg8c"]
+font_size = 32
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_1ojxg"]
-size = Vector3(0.2, 1.8, 0.8)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_r6oh0"]
-size = Vector3(0.8, 1.8, 0.2)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_km8yv"]
-size = Vector3(0.8, 1.8, 0.2)
+[sub_resource type="LabelSettings" id="LabelSettings_nt4hi"]
+font_size = 32
+font_color = Color(0.741176, 0.741176, 0.741176, 1)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_308st"]
 height = 3.0
@@ -256,6 +251,18 @@ bottom_radius = 0.2
 height = 4.0
 radial_segments = 4
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_1ogde"]
+size = Vector3(0.2, 1.8, 0.8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1ojxg"]
+size = Vector3(0.2, 1.8, 0.8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_r6oh0"]
+size = Vector3(0.8, 1.8, 0.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_km8yv"]
+size = Vector3(0.8, 1.8, 0.2)
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hwyjx"]
 transparency = 1
 shading_mode = 0
@@ -321,14 +328,14 @@ radial_segments = 4
 [sub_resource type="Gradient" id="Gradient_gcyl2"]
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 0)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_nkm4a"]
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_1nrng"]
 gradient = SubResource("Gradient_gcyl2")
 
 [sub_resource type="Curve" id="Curve_gynvg"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_0tbce"]
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_bo74m"]
 curve_y = SubResource("Curve_gynvg")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_xxai0"]
@@ -343,14 +350,14 @@ angular_velocity_min = -180.0
 angular_velocity_max = 180.0
 directional_velocity_min = 1.0
 directional_velocity_max = 3.0
-directional_velocity_curve = SubResource("CurveXYZTexture_0tbce")
+directional_velocity_curve = SubResource("CurveXYZTexture_bo74m")
 gravity = Vector3(0, 0, 0)
 color = Color(1, 1, 1, 0.196078)
-color_ramp = SubResource("GradientTexture1D_nkm4a")
+color_ramp = SubResource("GradientTexture1D_1nrng")
 turbulence_enabled = true
 turbulence_influence_max = 0.5
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lvxw4"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_780jp"]
 transparency = 1
 shading_mode = 0
 vertex_color_use_as_albedo = true
@@ -361,7 +368,7 @@ particles_anim_v_frames = 1
 particles_anim_loop = false
 
 [sub_resource type="QuadMesh" id="QuadMesh_ioijr"]
-material = SubResource("StandardMaterial3D_lvxw4")
+material = SubResource("StandardMaterial3D_780jp")
 size = Vector2(2, 2)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7hurq"]
@@ -402,8 +409,7 @@ sub_emitter_frequency = 10.0
 [sub_resource type="BoxShape3D" id="BoxShape3D_iiuxv"]
 size = Vector3(0.619141, 0.4, 0.452148)
 
-[node name="Player" type="RigidBody3D" node_paths=PackedStringArray("_groundCheck", "_slopeCheck", "_wallCheck", "_playerCamera", "_health", "_vfxSpeedLines", "_vfxDash", "_vfxSlide", "_vfxSlideSmoke", "_vfxSlideLines") groups=["player"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -68.4016, -17.5905, 38.799)
+[node name="Player" type="RigidBody3D" node_paths=PackedStringArray("_groundCheck", "_slopeCheck", "_wallCheck", "_playerCamera", "_health", "_vfxSpeedLines", "_vfxDash", "_vfxSlide", "_vfxSlideSmoke", "_vfxSlideLines", "_weaponCamera") groups=["player"]]
 collision_layer = 1056
 physics_material_override = ExtResource("1_l3ghh")
 can_sleep = false
@@ -413,10 +419,9 @@ script = ExtResource("1_8gga7")
 _input = ExtResource("2_ihh5m")
 _groundCheck = NodePath("GroundCheckComponent")
 _slopeCheck = NodePath("SlopeCheck")
-_wallCheck = NodePath("WallCheck")
+_wallCheck = NodePath("Head/WallCheck")
 _playerCamera = NodePath("Head/Camera")
 _health = NodePath("HealthComponent")
-SFXWalkStepDist = 2.0
 _vfxSpeedLines = NodePath("Head/Camera/Camera/VFXSpeedLines")
 _vfxDash = NodePath("VFX/VFXDash")
 _vfxSlide = NodePath("VFX/VFXSlide")
@@ -424,6 +429,124 @@ _vfxSlideSmoke = NodePath("VFX/VFXSlideSmoke")
 _vfxSlideLines = NodePath("VFX/VFXSlideLines")
 Sensitivity = 44.0
 _p = ExtResource("3_x1l4f")
+_weaponCamera = NodePath("WeaponUI/SubViewportContainer/SubViewport/WeaponCamera")
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("5_ycikr")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 2
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -383.5
+offset_top = -192.0
+offset_right = 383.5
+offset_bottom = -28.0
+grow_horizontal = 2
+grow_vertical = 0
+color = Color(0, 0, 0, 0.498039)
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/ColorRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/ColorRect/MarginContainer"]
+layout_mode = 2
+
+[node name="Health" type="ProgressBar" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/background = SubResource("StyleBoxFlat_5xeex")
+theme_override_styles/fill = SubResource("StyleBoxFlat_tn4d5")
+max_value = 1.0
+value = 0.74
+show_percentage = false
+
+[node name="HealthText" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/Health"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 17.5
+offset_top = -14.0
+offset_right = 124.5
+offset_bottom = 14.0
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 5
+theme_override_constants/shadow_offset_y = 5
+theme_override_constants/outline_size = 5
+theme_override_constants/shadow_outline_size = 5
+theme_override_fonts/font = ExtResource("5_agxnj")
+theme_override_font_sizes/font_size = 32
+text = "LXXXVIII"
+vertical_alignment = 1
+
+[node name="Control" type="Control" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(15, 15)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Slide1" type="ProgressBar" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_vwfi3")
+theme_override_styles/fill = SubResource("StyleBoxFlat_62y8a")
+max_value = 1.0
+value = 1.0
+show_percentage = false
+
+[node name="Control" type="Control" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(15, 0)
+layout_mode = 2
+
+[node name="Slide2" type="ProgressBar" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_vwfi3")
+theme_override_styles/fill = SubResource("StyleBoxFlat_62y8a")
+max_value = 1.0
+value = 1.0
+show_percentage = false
+
+[node name="Control2" type="Control" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(15, 0)
+layout_mode = 2
+
+[node name="Slide3" type="ProgressBar" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_vwfi3")
+theme_override_styles/fill = SubResource("StyleBoxFlat_62y8a")
+max_value = 1.0
+value = 0.46
+show_percentage = false
 
 [node name="WeaponUI" type="CanvasLayer" parent="."]
 script = ExtResource("9_qp8fq")
@@ -501,148 +624,8 @@ transform = Transform3D(-0.173648, 0.984808, -4.30473e-08, 0, -4.37114e-08, -1, 
 visible = false
 Attacker = NodePath("../../../../../..")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-
-[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -383.5
-offset_top = -192.0
-offset_right = 383.5
-offset_bottom = -28.0
-grow_horizontal = 2
-grow_vertical = 0
-color = Color(0, 0, 0, 0.498039)
-
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/ColorRect"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 20
-
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/ColorRect/MarginContainer"]
-layout_mode = 2
-
-[node name="Health" type="ProgressBar" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_styles/background = SubResource("StyleBoxFlat_qgmsl")
-theme_override_styles/fill = SubResource("StyleBoxFlat_7ye2k")
-max_value = 1.0
-value = 0.74
-show_percentage = false
-
-[node name="Label" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/Health"]
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 17.5
-offset_top = -14.0
-offset_right = 124.5
-offset_bottom = 14.0
-grow_vertical = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 5
-theme_override_constants/shadow_offset_y = 5
-theme_override_constants/outline_size = 5
-theme_override_constants/shadow_outline_size = 5
-theme_override_fonts/font = ExtResource("5_tpvhg")
-theme_override_font_sizes/font_size = 32
-text = "LXXXVIII"
-vertical_alignment = 1
-
-[node name="Control" type="Control" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(15, 15)
-layout_mode = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="Slide1" type="ProgressBar" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/HBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 1
-theme_override_styles/background = SubResource("StyleBoxFlat_80swx")
-theme_override_styles/fill = SubResource("StyleBoxFlat_k7psc")
-max_value = 1.0
-value = 1.0
-show_percentage = false
-
-[node name="Control" type="Control" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(15, 0)
-layout_mode = 2
-
-[node name="Slide2" type="ProgressBar" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/HBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 1
-theme_override_styles/background = SubResource("StyleBoxFlat_80swx")
-theme_override_styles/fill = SubResource("StyleBoxFlat_k7psc")
-max_value = 1.0
-value = 1.0
-show_percentage = false
-
-[node name="Control2" type="Control" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(15, 0)
-layout_mode = 2
-
-[node name="Slide3" type="ProgressBar" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/HBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 1
-theme_override_styles/background = SubResource("StyleBoxFlat_80swx")
-theme_override_styles/fill = SubResource("StyleBoxFlat_k7psc")
-max_value = 1.0
-value = 0.46
-show_percentage = false
-
-[node name="HealthComponent" type="Node" parent="."]
-script = ExtResource("6_7rqeb")
-
-[node name="WallCheck" type="Node3D" parent="."]
-transform = Transform3D(8.74228e-08, 0, -1, 0, 1, 0, 1, 0, 8.74228e-08, 0, 1, 0)
-script = ExtResource("4_16gja")
-LayerMask = 1
-
-[node name="Front" type="ShapeCast3D" parent="WallCheck"]
-shape = SubResource("BoxShape3D_1ogde")
-target_position = Vector3(0.6, 0, 0)
-debug_shape_custom_color = Color(1, 0, 0, 1)
-
-[node name="Back" type="ShapeCast3D" parent="WallCheck"]
-shape = SubResource("BoxShape3D_1ojxg")
-target_position = Vector3(-0.6, 0, 0)
-debug_shape_custom_color = Color(1, 0, 0, 1)
-
-[node name="Right" type="ShapeCast3D" parent="WallCheck"]
-shape = SubResource("BoxShape3D_r6oh0")
-target_position = Vector3(0, 0, 0.6)
-debug_shape_custom_color = Color(1, 0, 0, 1)
-
-[node name="Right2" type="ShapeCast3D" parent="WallCheck"]
-shape = SubResource("BoxShape3D_km8yv")
-target_position = Vector3(0, 0, -0.6)
-debug_shape_custom_color = Color(1, 0, 0, 1)
-
 [node name="Head" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.56874, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 
 [node name="Camera" type="Node3D" parent="Head" node_paths=PackedStringArray("_cam")]
 script = ExtResource("6_fvhrc")
@@ -689,7 +672,30 @@ transform = Transform3D(1, 0, -2.38419e-07, 0, 1, 0, 2.38419e-07, 0, 1, 0, -2, 0
 target_position = Vector3(0, -1, -1000)
 collide_with_areas = true
 
+[node name="WallCheck" type="Node3D" parent="Head"]
+transform = Transform3D(8.74228e-08, 0, -1, 0, 1, 0, 1, 0, 8.74228e-08, 0, -1, 0)
+script = ExtResource("4_16gja")
+LayerMask = 1
 
+[node name="Front" type="ShapeCast3D" parent="Head/WallCheck"]
+shape = SubResource("BoxShape3D_1ogde")
+target_position = Vector3(0.6, 0, 0)
+debug_shape_custom_color = Color(1, 0, 0, 1)
+
+[node name="Back" type="ShapeCast3D" parent="Head/WallCheck"]
+shape = SubResource("BoxShape3D_1ojxg")
+target_position = Vector3(-0.6, 0, 0)
+debug_shape_custom_color = Color(1, 0, 0, 1)
+
+[node name="Right" type="ShapeCast3D" parent="Head/WallCheck"]
+shape = SubResource("BoxShape3D_r6oh0")
+target_position = Vector3(0, 0, 0.6)
+debug_shape_custom_color = Color(1, 0, 0, 1)
+
+[node name="Right2" type="ShapeCast3D" parent="Head/WallCheck"]
+shape = SubResource("BoxShape3D_km8yv")
+target_position = Vector3(0, 0, -0.6)
+debug_shape_custom_color = Color(1, 0, 0, 1)
 
 [node name="VFX" type="Node3D" parent="."]
 

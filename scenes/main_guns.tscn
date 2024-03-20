@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/Managers/Game.cs" id="1_me4x0"]
 [ext_resource type="Script" path="res://scripts/Managers/InputManager.cs" id="2_itqj0"]
-[ext_resource type="Resource" uid="uid://yf2osyn4pvt3" path="res://resources/player_input.tres" id="3_dr8yf"]
+[ext_resource type="Resource" uid="uid://yf2osyn4pvt3" path="res://resources/input/player_input.tres" id="3_dr8yf"]
 [ext_resource type="Script" path="res://addons/qodot/src/nodes/qodot_map.gd" id="4_vh5n1"]
 [ext_resource type="Resource" uid="uid://c36hv0o6g0udo" path="res://definitions/qodot_fgd.tres" id="5_7ibwn"]
 [ext_resource type="Texture2D" uid="uid://cxoqhsrxebcve" path="res://textures/grid/dark/texture_08.png" id="6_2c8rw"]

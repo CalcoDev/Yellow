@@ -26,10 +26,7 @@ public partial class Accensus : Enemy
 
     public override void _Ready()
     {
-        _anim.Play("idle");
-        // _anim.AnimationFinished += (StringName name) => {
-        //     GD.Print("FNIIHSIEDL ", name);
-        // };
+        Anim.Play("idle");
     }
 
     public override void _Process(double delta)
@@ -39,15 +36,15 @@ public partial class Accensus : Enemy
         }
 
         if (!ShouldDoStuff) {
-            _anim.Play("idle");
+            Anim.Play("idle");
             return;
         }
 
         var d = (Player.Instance.GlobalPosition - GlobalPosition).Normalized();
 
-        _anim.Play("chase");
-        _nav.TargetPosition = Player.Instance.GlobalPosition - d * (LungeRange - 1f);
-        _nav.FollowPath();
+        Anim.Play("chase");
+        Pathfinding.TargetPosition = Player.Instance.GlobalPosition - d * (LungeRange - 1f);
+        Pathfinding.FollowPath();
         
         if (!IsLunging) {
             _lungeTimer -= Game.DeltaTime;
@@ -68,9 +65,9 @@ public partial class Accensus : Enemy
     {
         var y = LinearVelocity.Y;
         if (!_isLungeAnim) {
-            LinearVelocity = _nav.CachedDir * MoveSpeed;
+            LinearVelocity = Pathfinding.CachedDir * MoveSpeed;
         } else {
-            LinearVelocity = (_lungeDir * LungeDistance) / _anim.GetAnimation("lunge").Length;
+            LinearVelocity = _lungeDir * LungeDistance / Anim.GetAnimation("lunge").Length;
         }
         LinearVelocity = LinearVelocity.WithY(y);
     }
@@ -86,16 +83,16 @@ public partial class Accensus : Enemy
 
         _lungeDir = (Player.Instance.GlobalPosition - GlobalPosition).WithY(0).Normalized();
 
-        _anim.Stop();
-        _anim.Play("lunge_charge");
-        await ToSignal(_anim, AnimationPlayer.SignalName.AnimationFinished);
+        Anim.Stop();
+        Anim.Play("lunge_charge");
+        await ToSignal(Anim, AnimationPlayer.SignalName.AnimationFinished);
         GD.Print("END LUNGE CHARGE");
 
         GD.Print("START LUNGE");
 
         IsLunging = true;
-        _anim.Stop();
-        _anim.Play("lunge");
+        Anim.Stop();
+        Anim.Play("lunge");
 
         // var t = GetTree().CreateTween();
         // var s = GetNode<Node3D>("_localPos").Position;
@@ -113,9 +110,9 @@ public partial class Accensus : Enemy
         //         bb = e;
         //     }
         //     GetNode<Node3D>("_localPos").Position = aa.Lerp(bb, t1);
-        // }), 0.0f, 2.0f, _anim.GetAnimation("lunge").Length);
+        // }), 0.0f, 2.0f, Anim.GetAnimation("lunge").Length);
         // t.Play();
-        await ToSignal(_anim, AnimationPlayer.SignalName.AnimationFinished);
+        await ToSignal(Anim, AnimationPlayer.SignalName.AnimationFinished);
         // t.Kill();
         
         // _doFrickThis = true;

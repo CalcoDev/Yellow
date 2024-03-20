@@ -31,27 +31,30 @@ bg_color = Color(1, 0.901961, 0, 1)
 
 [node name="GameAL" type="Node" node_paths=PackedStringArray("_pauseMenu")]
 script = ExtResource("1_k3ljx")
-_pauseMenu = NodePath("Control/SubViewportContainer/SubViewport/ui")
+_pauseMenu = NodePath("CanvasLayer/Control/SubViewportContainer/SubViewport/ui")
 
-[node name="Control" type="Control" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 50
+
+[node name="Control" type="Control" parent="CanvasLayer"]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="SubViewportContainer" type="SubViewportContainer" parent="Control"]
+[node name="SubViewportContainer" type="SubViewportContainer" parent="CanvasLayer/Control"]
 material = SubResource("ShaderMaterial_qfuta")
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="SubViewport" type="SubViewport" parent="Control/SubViewportContainer"]
+[node name="SubViewport" type="SubViewport" parent="CanvasLayer/Control/SubViewportContainer"]
 transparent_bg = true
 handle_input_locally = false
 size = Vector2i(1920, 1080)
 render_target_update_mode = 4
 
-[node name="ui" type="Control" parent="Control/SubViewportContainer/SubViewport" node_paths=PackedStringArray("_resume", "_options", "_quit", "_musicSlider", "_sfxSlider", "_optionsBack", "_main", "_opt")]
+[node name="ui" type="Control" parent="CanvasLayer/Control/SubViewportContainer/SubViewport" node_paths=PackedStringArray("_resume", "_options", "_quit", "_musicSlider", "_sfxSlider", "_optionsBack", "_main", "_opt")]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
@@ -66,7 +69,7 @@ _optionsBack = NodePath("options/opt back")
 _main = NodePath("main")
 _opt = NodePath("options")
 
-[node name="ColorRect" type="ColorRect" parent="Control/SubViewportContainer/SubViewport/ui"]
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/Control/SubViewportContainer/SubViewport/ui"]
 custom_minimum_size = Vector2(1920, 1080)
 layout_mode = 1
 anchors_preset = 15
@@ -78,14 +81,14 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.498039)
 
-[node name="options" type="Control" parent="Control/SubViewportContainer/SubViewport/ui"]
+[node name="options" type="Control" parent="CanvasLayer/Control/SubViewportContainer/SubViewport/ui"]
 visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Label" type="Label" parent="Control/SubViewportContainer/SubViewport/ui/options"]
+[node name="Label" type="Label" parent="CanvasLayer/Control/SubViewportContainer/SubViewport/ui/options"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -103,7 +106,7 @@ text = "settings"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Button" type="Label" parent="Control/SubViewportContainer/SubViewport/ui/options"]
+[node name="Button" type="Label" parent="CanvasLayer/Control/SubViewportContainer/SubViewport/ui/options"]
 layout_mode = 2
 offset_left = 702.0
 offset_top = 531.0
@@ -117,7 +120,7 @@ theme_override_font_sizes/font_size = 48
 text = "music
 "
 
-[node name="Button2" type="Label" parent="Control/SubViewportContainer/SubViewport/ui/options"]
+[node name="Button2" type="Label" parent="CanvasLayer/Control/SubViewportContainer/SubViewport/ui/options"]
 layout_mode = 2
 offset_left = 702.0
 offset_top = 635.0
@@ -130,7 +133,7 @@ theme_override_fonts/font = ExtResource("4_kbsy5")
 theme_override_font_sizes/font_size = 48
 text = "sfx"
 
-[node name="music slider" type="HSlider" parent="Control/SubViewportContainer/SubViewport/ui/options"]
+[node name="music slider" type="HSlider" parent="CanvasLayer/Control/SubViewportContainer/SubViewport/ui/options"]
 custom_minimum_size = Vector2(321.16, 45.52)
 layout_mode = 2
 offset_left = 935.0
@@ -144,7 +147,7 @@ max_value = 1.0
 step = 0.01
 value = 0.56
 
-[node name="sfx slider" type="HSlider" parent="Control/SubViewportContainer/SubViewport/ui/options"]
+[node name="sfx slider" type="HSlider" parent="CanvasLayer/Control/SubViewportContainer/SubViewport/ui/options"]
 custom_minimum_size = Vector2(321.16, 45.52)
 layout_mode = 2
 offset_left = 935.0
@@ -158,7 +161,7 @@ max_value = 1.0
 step = 0.01
 value = 0.56
 
-[node name="opt back" type="Button" parent="Control/SubViewportContainer/SubViewport/ui/options"]
+[node name="opt back" type="Button" parent="CanvasLayer/Control/SubViewportContainer/SubViewport/ui/options"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -176,13 +179,13 @@ text = "back"
 flat = true
 script = ExtResource("5_6hk6k")
 
-[node name="main" type="Control" parent="Control/SubViewportContainer/SubViewport/ui"]
+[node name="main" type="Control" parent="CanvasLayer/Control/SubViewportContainer/SubViewport/ui"]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Label" type="Label" parent="Control/SubViewportContainer/SubViewport/ui/main"]
+[node name="Label" type="Label" parent="CanvasLayer/Control/SubViewportContainer/SubViewport/ui/main"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -200,7 +203,7 @@ text = "yellow"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="play" type="Button" parent="Control/SubViewportContainer/SubViewport/ui/main"]
+[node name="play" type="Button" parent="CanvasLayer/Control/SubViewportContainer/SubViewport/ui/main"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -218,7 +221,7 @@ text = "play"
 flat = true
 script = ExtResource("5_6hk6k")
 
-[node name="options" type="Button" parent="Control/SubViewportContainer/SubViewport/ui/main"]
+[node name="options" type="Button" parent="CanvasLayer/Control/SubViewportContainer/SubViewport/ui/main"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -236,7 +239,7 @@ text = "options"
 flat = true
 script = ExtResource("5_6hk6k")
 
-[node name="quit" type="Button" parent="Control/SubViewportContainer/SubViewport/ui/main"]
+[node name="quit" type="Button" parent="CanvasLayer/Control/SubViewportContainer/SubViewport/ui/main"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5

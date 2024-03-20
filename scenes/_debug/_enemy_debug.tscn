@@ -1,9 +1,10 @@
-[gd_scene load_steps=32 format=3 uid="uid://dfqw6ddryed0b"]
+[gd_scene load_steps=33 format=3 uid="uid://dfqw6ddryed0b"]
 
-[ext_resource type="Script" path="res://scripts/Managers/InputManager.cs" id="1_tfck5"]
 [ext_resource type="Resource" uid="uid://yf2osyn4pvt3" path="res://resources/input/player_input.tres" id="2_ski01"]
 [ext_resource type="PackedScene" uid="uid://bsgwkv72xs4ab" path="res://scenes/game_objects/entities/player.tscn" id="3_7vnnb"]
+[ext_resource type="Script" path="res://scripts/Managers/InputManager.cs" id="6_i2uol"]
 [ext_resource type="PackedScene" uid="uid://dl0vqm2gthln1" path="res://scenes/game_objects/entities/enemies/accensus.tscn" id="7_g8q3i"]
+[ext_resource type="PackedScene" uid="uid://bmpiknsykjrpv" path="res://scenes/game_objects/entities/enemies/ranged.tscn" id="8_6r25t"]
 [ext_resource type="Script" path="res://addons/qodot/src/nodes/qodot_map.gd" id="10_awk5a"]
 [ext_resource type="Resource" uid="uid://c36hv0o6g0udo" path="res://definitions/qodot_fgd.tres" id="11_rxm5y"]
 [ext_resource type="Texture2D" uid="uid://cxoqhsrxebcve" path="res://textures/grid/dark/texture_08.png" id="12_hmspt"]
@@ -101,7 +102,7 @@ points = PackedVector3Array(36, 21, -44, 36, 1, -44, 40, 1, -44, 40, 21, -44, 36
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0993204, 0.0205519, 0.0939817)
 
 [node name="InputManager" type="Node" parent="."]
-script = ExtResource("1_tfck5")
+script = ExtResource("6_i2uol")
 _input = ExtResource("2_ski01")
 _update = true
 
@@ -111,9 +112,6 @@ camera_attributes = SubResource("CameraAttributesPractical_1keek")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.895841, -0.132147, -0.424271, 0.284018, -0.564027, 0.775376, -0.341764, -0.815114, -0.467746, 0, 22.7694, 0)
-
-[node name="Player" parent="." instance=ExtResource("3_7vnnb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.284029, 2.34086, 3.98297)
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
 navigation_mesh = SubResource("NavigationMesh_fv4oj")
@@ -178,4 +176,12 @@ shape = SubResource("ConvexPolygonShape3D_ewwun")
 [node name="entity_0_brush_14_collision_shape" type="CollisionShape3D" parent="NavigationRegion3D/QodotMap/entity_0_worldspawn"]
 shape = SubResource("ConvexPolygonShape3D_j0aon")
 
-[node name="Accensus" parent="." instance=ExtResource("7_g8q3i")]
+[node name="Player" parent="." instance=ExtResource("3_7vnnb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.98507, 0)
+
+[node name="Accensus2" parent="." instance=ExtResource("7_g8q3i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.29486, 2.91806, 11.0605)
+visible = false
+
+[node name="Ranged" parent="." instance=ExtResource("8_6r25t")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.72269, 1.45287, 48.7499)
